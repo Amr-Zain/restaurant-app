@@ -1,0 +1,184 @@
+{
+  "lang": "ltr",
+  "locale": {
+    "ar": "En",
+    "en": "عربي"
+  },
+  "NAV": {
+    "lang": "ع",
+
+    "home": "Home",
+    "about": "About us",
+    "Services": "Services",
+    "news": "News",
+    "contact": "Contact Us",
+    "mainlinks": "Main Links",
+    "quickAccess": "Quick Access",
+    "Reservation": "Reservation",
+    "Menu": "Menu",
+    "mainNavigation": "Main Navigation",
+    "menu": "Menu",
+    "login": "Log In"
+  },
+  "reservation": {
+    "title": {
+      "reservations": "reservations",
+      "bookTable": "Book a Table"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "phone": "Phone",
+      "phonePlaceholder": "Your phone number",
+      "guests": "Guests",
+      "guestsPlaceholder": "1 Person",
+      "person": "Person",
+      "people": "People",
+      "date": "Date",
+      "datePlaceholder": "01/08/2023",
+      "fromTime": "From",
+      "toTime": "To",
+      "selectTime": "06:00 pm",
+      "bookTable": "Book a Table",
+      "cancel": "Cancel",
+      "ok": "OK"
+    },
+    "validation": {
+      "nameMin": "Name must be at least 2 characters.",
+      "phoneMin": "Phone number must be at least 10 digits.",
+      "guestsRequired": "Please select number of guests.",
+      "dateRequired": "Please select a date.",
+      "fromTimeRequired": "Please select start time.",
+      "toTimeRequired": "Please select end time."
+    }
+  },
+  "TEXT": {
+    "noAccount": "don’t have an account?",
+    "haveAccount": "have an account?",
+    "signUpNow": " sign up now"
+  },
+  "Footer": {
+    "sectionsHeading": "Sections",
+    "linksHeading": "Links",
+    "contactHeading": "Contact",
+    "menu": "Menu",
+    "offers": "Offers",
+    "reservation": "Reservation",
+    "favorite": "Favorite",
+    "privacyPolicy": "Privacy Policy",
+    "faqs": "FAQs",
+    "termsConditions": "Terms & Conditions",
+    "callCenter": "Call Center",
+    "email": "Email",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Commodo libero viverra dapibus odio sit malesuada in quis. Arcu tristique elementum viverra integer id.",
+    "companyName": "Your Company Name",
+    "rightsReserved": "All rights reserved"
+  },
+  "labels": {
+    "email": "Email",
+    "phone": "Phone",
+    "phoneNumber": "Phone",
+    "rememberMe": "Remember me",
+    "forgetPassword": "Forget password?",
+    "name": "Name",
+    "phoneCode": "Code",
+    "password": "Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "next": "Next",
+    "confirm": "Confirm",
+    "confirmPassword":"Confirm Password"
+  },
+  "buttons": {
+    "login": "Log In",
+    "loading": "Loading...",
+    "register": "Register",
+    "confirm": "Confirm",
+    "next":"Next",
+    "send": "Send"
+  },
+  "login": {
+    "welcomeBack": "Welcome Back",
+    "instructions": "Please enter your phone number and password"
+  },
+  "links": {
+    "forgotPassword": "Forgot password?",
+    "signUp": "Sign up",
+    "editPhoneNumber": "Edit Phone Number",
+    "resend": "Resend",
+    "login": "Login"
+  },
+  "verification": {
+    "title": "Verify Code",
+    "description": "We sent a 4-digit verification code to the added number. Enter the code in the box below to continue.",
+    "didntReceiveCode": "Didn't receive code?"
+  },
+  "registration": {
+    "title": "Create your account",
+    "haveAccount": "Have An Account?"
+  },
+  "changePassword": {
+    "title": "Change Password",
+    "description": "Please enter your new password"
+  },
+  "errors": {
+    "nameTooLong": "Name must be less than 50 characters",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidCodeLength": "Code must be 4 digits",
+    "invalidCodeDigits": "Code must contain only digits",
+    "passwordsMismatch": "Passwords do not match"
+  },
+  "enter": "Enter",
+  "requiredField": "{field} is required",
+  "invalidPhoneNumber": "Invalid phone number format",
+  "passwordTooShort": "Password must be at least 8 characters",
+
+  "BUTTONS": {
+    "getServiceNow": "get Service Now",
+    "getStart": "Get Start",
+    "subscribe": "Subscribe",
+    "introVideo": "Watch Video",
+    "Submit": "Submit",
+    "Leave us a Message": "Leave us a Message",
+    "try again": "Try again",
+    "deleteAccount": "Delete Account",
+    "logout": "Logout",
+    "noKeepMe": "No, keep it",
+    "yesLogout": "Yes, Logout",
+    "yesDelete": "Yes, delete",
+    "save": "Save"
+  },
+  "ERRORS": {
+    "shortPassword": "Password is short",
+    "phoneLength": "Phone number must be {value} numbers",
+    "isValidEmail": "Enter valid email address",
+    "verificationCode": "Verification Code Is Required",
+    "notEqualPasswords": "Passwords not matches",
+    "isRequired": "{name} is required",
+    "validEmailAddress": "Email address should be valid email"
+  },
+
+  "FOOTER": {
+    "rights": "Najid AL-Qimam All Rights Reserved"
+  },
+  "TITLES": {
+    "letsTalkTech": " Let’s Talk Tech",
+    "letsTalkTechDesc": "Got a question about IT solutions, custom software, or digital transformation? Our experts are ready to provide the support and answers you need.",
+    "yourPartnerInDigitalSuccess": "Your Partner In Digital Success",
+    "creativeServices": "Creative Services",
+    "aboutUs": "About Us",
+    "ourTechnologies": "Our Advanced Technologies",
+    "ourTechnologiesDesc": "We utilize the latest technologies and innovative solutions to ensure the highest levels of performance and efficiency.",
+    "descriptionServiceSection": "Turning your ideas into cutting-edge technologies. Turning your ideas into cutting-edge technologies",
+    "serviceSection": "Discover Our Services."
+  },
+  "Back_to_home": "Back to home",
+  "Years experience in serving people and mankind": "Years experience in serving people and mankind",
+  "rehabilitation long-term care": "rehabilitation & long-term care",
+  "Release The": "Release The",
+  "Pain Be More": "Pain Be More",
+  "Alive": "Alive.",
+  "Back to home": "Back to home",
+  "pleaseKindlyTryAgain": "Please Kindly Try Again",
+  "something went wrong": "something went wrong"
+}

@@ -1,0 +1,153 @@
+{
+  "lang": "rtl",
+  "locale": {
+    "ar": "En",
+    "en": "عربي"
+  },
+  "NAV": {
+    "lang": "EN",
+    "home": "الرئيسية",
+    "about": "من نحن",
+    "news": "الاخبار",
+    "Services": "الخدمات",
+    "contact": "اتصل بنا",
+    "mainlinks": " الروابط الرئيسية ",
+    "quickAccess": "الروابط الفرعية",
+    "Reservation": "الحجز",
+    "Menu": "القائمة",
+    "mainNavigation": "القائمة الرئيسية",
+    "menu": "القائمة",
+    "login": "نسجيل الدخول"
+  },
+  "reservation": {
+    "title": {
+      "reservations": "الحجوزات",
+      "bookTable": "احجز طاولة"
+    },
+    "form": {
+      "name": "الاسم",
+      "namePlaceholder": "اسمك الكريم",
+      "phone": "الهاتف",
+      "phonePlaceholder": "رقم هاتفك",
+      "guests": "الضيوف",
+      "guestsPlaceholder": "شخص واحد",
+      "person": "شخص",
+      "people": "أشخاص",
+      "date": "التاريخ",
+      "datePlaceholder": "01/08/2023",
+      "fromTime": "من",
+      "toTime": "إلى",
+      "selectTime": "06:00 مساءً",
+      "bookTable": "احجز طاولة",
+      "cancel": "إلغاء",
+      "ok": "موافق"
+    },
+    "validation": {
+      "nameMin": "يجب أن يكون الاسم على الأقل حرفين.",
+      "phoneMin": "يجب أن يكون رقم الهاتف على الأقل 10 أرقام.",
+      "guestsRequired": "يرجى اختيار عدد الضيوف.",
+      "dateRequired": "يرجى اختيار التاريخ.",
+      "fromTimeRequired": "يرجى اختيار وقت البداية.",
+      "toTimeRequired": "يرجى اختيار وقت النهاية."
+    }
+  },
+  "TEXT": {},
+  "Footer": {
+    "sectionsHeading": "الأقسام",
+    "linksHeading": "الروابط",
+    "contactHeading": "اتصل بنا",
+    "menu": "القائمة",
+    "offers": "العروض",
+    "reservation": "الحجز",
+    "favorite": "المفضلة",
+    "privacyPolicy": "سياسة الخصوصية",
+    "faqs": "الأسئلة الشائعة",
+    "termsConditions": "الشروط والأحكام",
+    "callCenter": "مركز الاتصال",
+    "email": "البريد الإلكتروني",
+    "description": "لوريم إيبسوم دولور سيت أميت، كونسيكتيتور أديبيسسينغ إيليت. كومودو ليبرو فيفيرا دابيبوس أوديو سيت ماليسوادا إن كويس. أركو تريستيكي إليمنتوم فيفيرا إنتجر إد.",
+    "companyName": "اسم شركتك",
+    "rightsReserved": "جميع الحقوق محفوظة"
+  },
+  "labels": {
+    "phone": "رقم الهاتف",
+    "phoneCode": "رمز الدولة",
+    "phoneNumber": "رقم الهاتف",
+    "password": "كلمة المرور"
+  },
+  "buttons": {
+    "login": "تسجيل الدخول",
+    "loading": "جاري التحميل..."
+  },
+  "login": {
+    "welcomeBack": "مرحبًا بعودتك",
+    "instructions": "يرجى إدخال رقم الهاتف وكلمة المرور"
+  },
+  "enter": "أدخل",
+  "requiredField": "{field} مطلوب",
+  "invalidPhoneNumber": "صيغة رقم الهاتف غير صالحة",
+  "passwordTooShort": "يجب أن تكون كلمة المرور 8 أحرف على الأقل"
+,
+  "SectionsDescription": {
+    "mainHeaderP": "نحن نحول أفكارك الى حقيقة. كن شريكنا في رحلة تحولك للحياة الرقمية بالأبتكار والتكنولوجيا",
+    "footerdesc": "نحن حريصون على تزويدك بحلول رقمية مبتكرة ؛ اعتمادًا على خبرتنا الواسعة في مجال تقنية المعلومات.",
+
+    "copyRights": "  جميع الحقوق محفوظة لشركة العالمية الحرة ",
+    "SubscribeSection": "اشترك في النشرة الإخبارية لدينا للحصول على التطورات الجديدة",
+    "SubscribeSectionP": "ابقَ على اتصال مع فريقنا هنا في العالمية الحرة وتعرف على أحدث إبداعاتنا ومشاريعنا من نشرتنا الإخبارية .",
+    "popUpFormH": "أخبرنا عن مشروعك",
+    "congratulations": "تهانينا",
+    "yourRequestHas": "تم أرسال طلبك بنجاح تستطيع المتابعة معانا من خلال هذا الرقم ",
+    "popUpFormP": "اتخذ خطوة نحو تحويل فكرتك إلى تطبيق لتحقيق الربح",
+    "numberOfOurYears": " سنوات من الخبرة في خدمات البرمجيات. "
+  },
+  "BUTTONS": {
+    "getServiceNow": "احصل علي الخدمة الأن",
+    "getStart": "ابدأ الان",
+    "subscribe": "اشترك",
+    "introVideo": "مشاهدة الفيديو",
+    "Submit": "إرسال",
+    "Leave us a Message": "اترك لنا رسالة",
+    "try again": "حاول مجددا",
+    "deleteAccount": "حذف الحساب",
+    "logout": "تسجيل الخروج",
+    "noKeepMe": "لا اريد",
+    "yesLogout": "نعم, سجل خروجي",
+    "yesDelete": "نعم, احذف",
+    "confirm": "تأكيد",
+    "save": "حفظ"
+  },
+  "ERRORS": {
+    "shortPassword": "كلمة المرور قصيره",
+    "phoneLength": "رقم الموبايل يجب ان يكون {value} ارقام",
+    "isValidEmail": "ادخل بريد الكتروني صحيح",
+    "verificationCode": "كود التحقق مطلوب",
+    "notEqualPasswords": "كلمات المرور غير متطابقة",
+    "isRequired": "{name} مطلوب",
+    "validEmailAddress": "يجب أن يكون عنوان البريد الإلكتروني بريدا إلكترونيا صالحا"
+  },
+
+  "FOOTER": {
+    "rights": "جميع الحقوق محفوظة"
+  },
+  "TITLES": {
+    "letsTalkTech": "دعنا نتحدث عن التقنية",
+    "letsTalkTechDesc": "هل لديك سؤال حول الحلول التقنية، البرمجيات المخصصة، أو التحول الرقمي؟ فريقنا من الخبراء جاهز للإجابة وتقديم الدعم.",
+    "yourPartnerInDigitalSuccess": "شريكك في النجاح الرقمي",
+    "creativeServices": "الخدمات الإبداعية",
+    "aboutUs": "من نحن",
+    "ourTechnologies": "تقنياتنا المتقدمة",
+    "ourTechnologiesDesc": "نستخدم أحدث التقنيات والحلول المبتكرة لضمان أعلى مستويات الأداء والكفاءة",
+    "descriptionServiceSection": "حول أفكارك إلى تقنيات متطورة",
+    "serviceSection": "اكتشف خدماتنا."
+  },
+  "Back_to_home": "العودة للرئيسية",
+  "Years experience in serving people and mankind": "سنوات من الخبرة في خدمة الناس والبشرية",
+  "rehabilitation long-term care": "إعادة التأهيل والرعاية طويلة الأمد",
+  "Release The": "تخلص من",
+  "Pain Be More": "الالم وكن أكثر",
+  "Alive": "حيوية.",
+  "Back to home": "العودة للرئيسية",
+  "pleaseKindlyTryAgain": "برجاء اعادة المحاولة",
+  "something went wrong": "خطأ ما حدث"
+}

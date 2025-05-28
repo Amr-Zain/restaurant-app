@@ -1,0 +1,30 @@
+.side_menu {
+  @apply bg-[#fbfafc] w-full end-[-500px] max-w-[500px]  h-screen overflow-y-auto fixed top-0;
+  animation: show-menu 0.3s 0.1s forwards ease-in;
+  &.closing {
+    @apply end-0;
+    animation: hide-menu 0.3s 0.1s forwards ease-in;
+  }
+
+  @keyframes show-menu {
+    0% {
+      @apply end-[-500px] opacity-0;
+    }
+    100% {
+      @apply end-0 opacity-100;
+    }
+  }
+  @keyframes hide-menu {
+    0% {
+      @apply end-0 opacity-100;
+    }
+    100% {
+      @apply end-[-500px] opacity-0;
+    }
+  }
+  .side_menu_content {
+    height: calc(100vh - 6rem);
+    overflow-y: auto;
+    @apply pt-4;
+  }
+}

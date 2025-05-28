@@ -1,0 +1,47 @@
+
+.footer_section {
+  @apply container py-16 lg:py-14;
+  .about_section {
+    @apply col-span-3 xl:col-span-1;
+  }
+  .social {
+    @apply flex flex-wrap items-center gap-2;
+    a {
+      @apply inline-flex h-9 w-9 items-center justify-center rounded-full border border-primary text-primary transition-all duration-300 ease-in-out;
+      &:hover {
+        @apply bg-primary text-white;
+      }
+    }
+  }
+  .access_links {
+    ul {
+      li {
+        @apply mb-1 last:mb-0;
+        a {
+          @apply transition ease-in-out hover:text-primary;
+          &.router-link-active.router-link-exact-active {
+            @apply text-primary;
+          }
+        }
+      }
+    }
+  }
+  .top_title {
+    @apply mb-2 text-lg font-bold text-black;
+  }
+  .subscribe_form {
+    @apply rounded-full bg-white;
+    .input_wrapper_home {
+      @apply mb-0;
+      input {
+        @apply rounded-full border-none py-2;
+        &:-internal-autofill-selected {
+          background-color: #fff !important;
+        }
+      }
+    }
+    button {
+      @apply bg-primary p-4;
+    }
+  }
+}

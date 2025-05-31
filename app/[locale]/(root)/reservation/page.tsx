@@ -8,7 +8,7 @@ export default async function HomePage() {
   return (
     <div className="space-y-12">
         <HeroSection title={t('NAV.Reservation')} home={t('NAV.home')} section={t('NAV.Reservation')} href="/reservation" />
-      <div className="mx-auto w-full sm:w-[90%]">
+      <div className="mx-auto w-full sm:w-[90%] mb-12">
         <ReservationForm />
       </div>
     </div>

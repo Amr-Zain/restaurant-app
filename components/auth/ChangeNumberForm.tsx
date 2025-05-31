@@ -11,27 +11,47 @@ import {
 } from "@/components/ui/dialog";
 import { useTranslations } from "next-intl";
 import PhoneNumber from "../util/formFields/PhoneInput";
-import { Control, FieldValues } from "react-hook-form";
+import { FieldPath, FieldValues, useForm } from "react-hook-form";
+import usePhoneCode from "@/hooks/usePhoneCode";
 
 export function ChangeNumberForm<T extends FieldValues>({
-  isLoading,
-  control,
+  form,
   onClick,
 }: {
-  isLoading: boolean;
-  control: Control<T>;
-  onClick: () => Promise<void>;
+  form: ReturnType<typeof useForm<T>>;
+  onClick: ({
+    phone_code,
+    phone,
+  }: {
+    phone_code: string;
+    phone: string;
+  }) => Promise<SubmissionResult>;
 }) {
   const t = useTranslations();
+  const [currentPhoneLimit, setCurrentPhoneLimit] = useState<number | null>(
+    null,
+  );
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { countries } = usePhoneCode({ form, setCurrentPhoneLimit });
 
   const handleClick = async () => {
-    await onClick();
-    setIsOpen(false);
+    setIsLoading(true);
+    try {
+      const res = await onClick({
+        phone_code: form.watch("phone_code" as FieldPath<T>) as string,
+        phone: form.watch("phone" as FieldPath<T>) as string,
+      });
+      if (res.status === "success") setIsOpen(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen || isLoading} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <div className="text-primary cursor-pointer text-sm font-medium underline">
           {t("links.editPhoneNumber")}
@@ -41,11 +61,18 @@ export function ChangeNumberForm<T extends FieldValues>({
         <DialogHeader>
           <DialogTitle>Change Number</DialogTitle>
           <DialogDescription>
-            please enter your phone number so we can verify it
+            Please enter your phone number so we can verify it.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <PhoneNumber control={control} />
+          <PhoneNumber
+            control={form.control}
+            phoneCodeName={"phone_code" as FieldPath<T>}
+            phoneNumberName={"phone" as FieldPath<T>}
+            countries={countries}
+            currentPhoneLimit={currentPhoneLimit}
+            isLoading={isLoading}
+          />
         </div>
         <DialogFooter>
           <Button

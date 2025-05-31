@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -42,7 +44,6 @@ function DateFields<TFieldValues extends FieldValues>({
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <FormLabel className="font-medium text-gray-700">
-            {/* {t("form.date")} */}
             {label}
           </FormLabel>
           <Popover>
@@ -51,7 +52,7 @@ function DateFields<TFieldValues extends FieldValues>({
                 <Button
                   variant="outline"
                   className={cn(
-                    "h-12 border-gray-200 text-left font-normal focus:border-primary ",
+                    "h-12 border-gray-200 text-left font-normal focus:border-primary !pr-0",
                     !field.value && "text-muted-foreground",
                     className
                   )}
@@ -59,9 +60,9 @@ function DateFields<TFieldValues extends FieldValues>({
                   {field.value ? (
                     format(field.value, "dd/MM/yyyy")
                   ) : (
-                    <span>{/* t("form.datePlaceholder") */ placeholder}</span>
+                    <span>{/* t("labels.datePlaceholder") */ placeholder}</span>
                   )}
-                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  <CalendarIcon className="ml-auto h-4 w-4  !text-text" />
                 </Button>
               </FormControl>
             </PopoverTrigger>

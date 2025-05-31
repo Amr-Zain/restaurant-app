@@ -6,7 +6,30 @@ interface General {
     content: string;
     image: string;
 }
+interface SubmissionResult {
+    data: unknown; 
+    message: string;
+    status?: string; 
+}
+interface OtpFormValues extends FieldValues {
+    phone_code: string;
+    phone: string;
+    reset_code: string;
+}
 
+interface ApiErrorResponseData {
+    message?: string;
+    messages?: {
+        [key: string]: string[];
+    };
+}
+interface CountryCodeData {
+  id: number;
+  name: string;
+  phone_code: string;
+  phone_limit: number;
+  flag: string;
+}
 
 
 interface Features {
@@ -29,7 +52,6 @@ interface Service {
     id: number
 }
 
-interface TopIntro extends Page { }
 interface MiddleIntro extends Page {
     button_name: string;
     video: string;

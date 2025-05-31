@@ -1,3 +1,5 @@
+'use client';
+
 import { FormControl, FormField, FormItem, FormMessage } from "../../ui/form";
 import type { Control, FieldPath, FieldValues } from "react-hook-form";
 
@@ -11,54 +13,95 @@ import {
 import { Input } from "../../ui/input";
 import { useTranslations } from "next-intl";
 
+interface CountryCodeData {
+  id: number;
+  name: string;
+  phone_code: string;
+  phone_limit: number;
+  flag: string;
+}
+
+interface PhoneNumberProps<T extends FieldValues> {
+  control: Control<T>;
+  phoneCodeName: FieldPath<T>;
+  phoneNumberName: FieldPath<T>;
+  countries: CountryCodeData[];
+  currentPhoneLimit?: number | null;
+  isLoading?:boolean;
+}
+
 function PhoneNumber<T extends FieldValues>({
   control,
-}: {
-  control: Control<T>;
-}) {
+  phoneCodeName,
+  phoneNumberName,
+  countries,
+  currentPhoneLimit,
+  isLoading
+}: PhoneNumberProps<T>) {
   const t = useTranslations();
-
+  
   return (
-    <FormField<T>
-      control={control}
-      name={"phoneNumber" as FieldPath<T>}
-      render={({ field }) => (
-        <FormItem>
-          <div className="flex gap-2">
-            <FormField
-              control={control}
-              name={"phoneCode" as FieldPath<T>}
-              render={({ field: phoneCodeField }) => (
-                <Select
-                  onValueChange={phoneCodeField.onChange}
-                  defaultValue={phoneCodeField.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-1/4">
-                      <SelectValue placeholder={t("labels.phoneCode")} />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="+20">+20</SelectItem>
-                    <SelectItem value="+1">+1</SelectItem>
-                    <SelectItem value="+44">+44</SelectItem>
-                    <SelectItem value="+91">+91</SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
-            />
+    <div className="flex gap-2">
+      <FormField<T>
+        control={control}
+        name={phoneCodeName}
+        render={({ field }) => (
+          <FormItem className="w-1/4">
+            <Select
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+              value={field.value}
+              disabled={isLoading}
+            >
+              <FormControl>
+                <SelectTrigger className="text-text">
+                  <SelectValue placeholder={t("labels.phoneCode")} />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {countries?.map((country) => (
+                  <SelectItem
+                    key={country.id}
+                    value={`${country.phone_code}`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span>{`+${country.phone_code}`}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField<T>
+        control={control}
+        name={phoneNumberName}
+        render={({ field }) => (
+          <FormItem className="w-3/4">
             <FormControl>
               <Input
                 {...field}
-                placeholder={t("labels.phone")}
-                className="w-3/4"
+                onChange={(e)=>{
+                  field.onChange(e);
+                }}
+                value={field.value || ''}
+                disabled={isLoading}
+                placeholder={
+                  currentPhoneLimit
+                    ? t("labels.phoneNumberWithLimit", { limit: currentPhoneLimit })
+                    : t("labels.phoneNumber")
+                }
+                type="tel"
               />
             </FormControl>
-          </div>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </div>
   );
 }
 

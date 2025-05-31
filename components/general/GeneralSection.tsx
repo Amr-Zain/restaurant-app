@@ -5,7 +5,7 @@ import { Link } from "@/i18n/routing";
 
 type Props = {
   item: {
-    image: string | StaticImageData;
+    image?: string | StaticImageData;
     title: string;
     heading?: string;
     desc: string;
@@ -16,35 +16,35 @@ type Props = {
   children?: React.ReactNode;
 };
 
-const GeneralSection = ({ ...props }: Props) => {
+const GeneralSection = ({ item, className, to, children }: Props) => {
   return (
     <div className="bg-bottom-right bg-no-repeat">
       <div className="bg-position-[left_3rem_top] bg-no-repeat">
         <div
           className={
-            "container grid grid-cols-1 items-center gap-10 bg-top-left bg-no-repeat md:grid-cols-2"
+            `container items-center gap-10 bg-top-left bg-no-repeat ${item?.image?'grid grid-cols-1 md:grid-cols-2':''}`
           }
         >
-          <div className={"h-full w-full " + props.className}>
+         { item.image&&<div className={"h-full w-full " + className}>
             <Image
               width={560}
               height={700}
-              src={props.item.image}
-              alt={props.item.title}
+              src={item.image}
+              alt={item.title}
               className="animated wow fadeInLeft mx-auto h-[700px] max-h-full w-[560px] max-w-full rounded-t-[300px] rounded-b-[300px] object-cover"
               data-wow-duration="1.3s"
               data-wow-delay="0s"
             />
-          </div>
-          <div className="max-w-[600px] space-y-5 bg-bottom-right bg-no-repeat">
-            {props.item.heading && (
+          </div>}
+          <div className="max-w-[800px] space-y-5 bg-bottom-right bg-no-repeat">
+            {item.heading && (
               <div
                 className="animated wow fadeInRight font-500 text-primary flex items-center gap-4 whitespace-nowrap uppercase"
                 v-if="welcome"
                 data-wow-duration="1.3s"
                 data-wow-delay="0s"
               >
-                {props.item.heading}
+                {item.heading}
                 <hr className="border-primary hidden w-[50%] md:flex" />
               </div>
             )}
@@ -53,7 +53,7 @@ const GeneralSection = ({ ...props }: Props) => {
               data-wow-duration="1.3s"
               data-wow-delay="0s"
               dangerouslySetInnerHTML={{
-                __html: props.item.title,
+                __html: item.title,
               }}
             ></h3>
             <div
@@ -61,7 +61,7 @@ const GeneralSection = ({ ...props }: Props) => {
               data-wow-duration="1.3s"
               data-wow-delay="0s"
               dangerouslySetInnerHTML={{
-                __html: props.item.desc,
+                __html: item.desc,
               }}
             ></div>
             <div
@@ -69,16 +69,16 @@ const GeneralSection = ({ ...props }: Props) => {
               data-wow-duration="1.3s"
               data-wow-delay="0s"
             >
-              {props.item.desc2}
+              {item.desc2}
             </div>
-            {props?.to && (
-              <Link href={props.to}>
+            {to && (
+              <Link href={to}>
                 <Button variant={"outline"} className="h-14 px-6 !py-4 text-lg">
                   Discover More
                 </Button>
               </Link>
             )}
-            {props.children}
+            {children}
           </div>
         </div>
       </div>

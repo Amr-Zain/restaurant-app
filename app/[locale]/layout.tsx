@@ -10,6 +10,7 @@ import ToastProvider from "@/utils/providers/toastProvider";
 import "animate.css";
 import "aos/dist/aos.css";
 import "../globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 export async function generateMetadata({
   params,
@@ -45,7 +46,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <head>
-       {/*  <link rel="icon" href="/logo.png" /> */}
+        <link rel="icon" href="/logo.png" />
       </head>
       <body className="bg-backgroud overflow-x-hidden ">
         <NextIntlClientProvider messages={messages}>
@@ -53,6 +54,7 @@ export default async function RootLayout({
             <AosWrapper>
               <div className="flex min-h-screen flex-col" id="app_wrapper">
                 {children}
+                <Toaster position="top-right" />
               </div>
             </AosWrapper>
             <ScrollBtn />

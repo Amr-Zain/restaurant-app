@@ -36,39 +36,35 @@ function SliderSection({ title, to, items }: { title: string, to: string, items:
       <Swiper
         modules={[Autoplay]}
         spaceBetween={5}
-        slidesPerView={1}
+        slidesPerView={1.2}
         autoplay={{
           delay: 3000,
           disableOnInteraction: false,
         }}
         breakpoints={{
-          445: {
-            slidesPerView: 1.2,
+          400:{
             spaceBetween: 10,
+            slidesPerView: 1.8,
           },
           555: {
-            slidesPerView: 1.5,
+            slidesPerView: 2.5,
             spaceBetween: 10,
           },
           
           740: {
-            slidesPerView: 2,
+            slidesPerView: 3,
             spaceBetween: 10,
           },
           930: {
-            slidesPerView: 2.5,
+            slidesPerView: 3.5,
             spaceBetween: 10,
           },
           1150: {
-            slidesPerView: 3,
-            spaceBetween: 20,
-          },
-          1300: {
-            slidesPerView: 3.5,
-            spaceBetween: 20,
+            slidesPerView: 4.5,
+            spaceBetween: 10,
           },
           1536: {
-            slidesPerView: 4,
+            slidesPerView: 5,
             spaceBetween: 30,
           },
         }}

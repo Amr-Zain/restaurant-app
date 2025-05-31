@@ -12,15 +12,15 @@ import { TimePickerField } from "./TimePickr";
 import DateFields from "../util/formFields/DateField";
 import SelectField from "../util/formFields/SelectField";
 export default function ReservationForm() {
-  const t = useTranslations("reservation");
+  const t = useTranslations();
   const guests = [
-    { value: "1", label: "1 " + t("form.person") },
-    { value: "2", label: "2 " + t("form.people") },
-    { value: "3", label: "3 " + t("form.people") },
-    { value: "4", label: "4 " + t("form.people") },
-    { value: "5", label: "5 " + t("form.people") },
-    { value: "6", label: "6 " + t("form.people") },
-    { value: "7", label: "7 " + t("form.people") },
+    { value: "1", label: "1 " + t("labels.person") },
+    { value: "2", label: "2 " + t("labels.people") },
+    { value: "3", label: "3 " + t("labels.people") },
+    { value: "4", label: "4 " + t("labels.people") },
+    { value: "5", label: "5 " + t("labels.people") },
+    { value: "6", label: "6 " + t("labels.people") },
+    { value: "7", label: "7 " + t("labels.people") },
   ];
   const formSchema = z.object({
     name: z.string().min(2, {
@@ -68,9 +68,9 @@ export default function ReservationForm() {
         {/* Header */}
         <div className="text-text mb-8 text-center">
           <div className="mb-2 font-serif text-lg italic">
-            {t("title.reservations")}
+            {t("labels.reservations")}
           </div>
-          <h1 className="mb-2 text-3xl font-bold">{t("title.bookTable")}</h1>
+          <h1 className="mb-2 text-3xl font-bold">{t("labels.bookTable")}</h1>
         </div>
 
         <Form {...form}>
@@ -81,17 +81,17 @@ export default function ReservationForm() {
             <Field
               control={form.control}
               name="name"
-              placeholder={t("form.namePlaceholder")}
+              placeholder={t("labels.namePlaceholder")}
               label=""
-              className="reserv-input"
+              className="reserv-input !placeholder-text"
             />
 
             <Field
               control={form.control}
               name="phone"
-              placeholder={t("form.phonePlaceholder")}
+              placeholder={t("labels.phonePlaceholder")}
               label=""
-              className="reserv-input"
+              className="reserv-input !placeholder-text"
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -122,7 +122,8 @@ export default function ReservationForm() {
               control={form.control}
               label=""
               name={"date"}
-              className={"reserv-input"}
+              placeholder={t("labels.date")}
+              className={"reserv-input !placeholder-text hover:bg-transparent cursor-pointer"}
             />
             <div className="flex justify-between">
               <div></div>
@@ -130,7 +131,7 @@ export default function ReservationForm() {
                 type="submit"
                 className="text-md !h-10 font-semibold text-white transition-all duration-200"
               >
-                {t("form.bookTable")}
+                {t("labels.bookTable")}
               </Button>
             </div>
           </form>

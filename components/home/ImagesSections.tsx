@@ -24,7 +24,7 @@ function ImagesSection() {
             <Image
               src={img.img}
               alt={`secion image ${index}`}
-              className="h-[380px] w-full bg-cover"
+              className="h-[380px] w-full object-cover"
               width={100}
               height={100}
             />

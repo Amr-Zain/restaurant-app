@@ -1,3 +1,4 @@
+'use client';
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { Button } from "../../ui/button";
 import { FormControl, FormField, FormItem, FormMessage } from "../../ui/form";

@@ -1,6 +1,6 @@
 import AuthPageLayout from "@/components/auth/AuthComponent";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
 import { getTranslations } from "next-intl/server";
-import ChangePasswordForm from "@/components/auth/ChangePassword";
 const RegisterPage = async() => {
   const t = await getTranslations();
   return (
@@ -8,7 +8,7 @@ const RegisterPage = async() => {
       title={t("login.welcomeBack")}
       instructions={t("login.instructions")}
     >
-      <ChangePasswordForm />
+      <ForgotPasswordForm />
     </AuthPageLayout>
   );
 };

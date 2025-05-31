@@ -441,26 +441,29 @@ input[type="number"] {
  */
 
 .p-sec {
-  @apply  px-2 sm:px-6 lg:px-8 py-4 md:py-8;
+  @apply px-2 sm:px-6 lg:px-8 py-4 md:py-8;
 }
+
 .reserv-input {
-  @apply text-text focus:ring-0 placeholder:!text-text border-0 !border-b-[1.5px] ps-0 !border-input-primary rounded-none shadow-none h-10;
+  @apply text-text focus:ring-0 !placeholder-text border-0 !border-b-[1.5px] ps-0 !border-input-primary rounded-none shadow-none h-10;
 }
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
- 
+
 }
- .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
 
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

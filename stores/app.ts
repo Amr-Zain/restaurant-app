@@ -53,7 +53,9 @@ const inititals = {
         whatsapp: '',
         x: '',
         youtube: '',
-    }
+    },
+    
+
 }
 
 export const appStore = create<AppStore>((set) => ({

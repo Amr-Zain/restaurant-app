@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import { cookies } from "next/headers";
 
@@ -16,7 +17,6 @@ axiosInstance.interceptors.request.use(
     try {
       const serverCookies = await cookies();
       const locale = serverCookies.get("NEXT_LOCALE")?.value || "en";
-
 
       if (!config.params) {
         config.params = {};

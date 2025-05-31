@@ -119,6 +119,7 @@ export default function HomePage() {
           Egestas in velit nulla viverra turpis id ac. Amet faucibus tempus.`,
           image: drink,
         }}
+        className="mb-8"
       >
         <div className="relative">
           <Input

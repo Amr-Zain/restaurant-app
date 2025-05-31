@@ -1,5 +1,9 @@
 "use client";
-import AppError from "../utils/appError";
+import {
+  ForgatPasswordFormType,
+  LoginFormType,
+  RegisterFormType,
+} from "@/helper/schema";
 import axiosInstance from "./axiosClient";
 
 export const getAllServices = async () => {
@@ -7,6 +11,59 @@ export const getAllServices = async () => {
     .get("/all-services")
     .then((res) => res.data.data)
     .catch(() => []);
+};
+
+export const register = async (form: RegisterFormType) => {
+  const { data } = await axiosInstance.post("auth/register", {...form,password_confirmation:form.password});
+  return data;
+};
+
+export const forgotPassword = async (form: {
+  phone_code: string;
+  phone: string;
+}) => {
+  const { data } = await axiosInstance.post("auth/forgot_password", form);
+  return data;
+};
+export const verifyForgotPassword = async (form: {
+  phone_code: string;
+  phone: string;
+  reset_code:string
+}) => {
+  const { data } = await axiosInstance.post(
+    "auth/verify_forgot_password_code",
+    form,
+  );
+  return data;
+};
+export const resetPassword = async (form: ForgatPasswordFormType) => {
+  const { data } = await axiosInstance.post(
+    "auth/reset_password",
+    form,
+  );
+  return data;
+};
+
+export const login = async (form: LoginFormType) => {
+  const { data } = await axiosInstance.post("auth/login", {
+    ...form,
+    device_type: "web",
+  });
+  return data;
+};
+
+export const getCodes = async () => {
+  try {
+    const { data } = await axiosInstance.get("brand_country");
+    return data.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      //throw new AppError(error.message, 500);
+      console.log(error);
+    } else {
+      //throw new AppError("Field to fetch home", 500);
+    }
+  }
 };
 
 // export const getCategoryData = async (id: number) => {

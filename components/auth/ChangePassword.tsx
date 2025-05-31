@@ -1,70 +1,78 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-
 import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import PasswordField from "../util/formFields/PasswordField";
-import { Form } from "../ui/form";
+import { useFormSubmission } from "@/hooks/useFormSubmission";
+import { resetPassword } from "@/services/ClientApiHandler";
+import { ForgatPasswordFormType } from "@/helper/schema";
+import { useState } from "react";
+import { UseFormReturn } from "react-hook-form";
 
-const ChangePasswordForm = () => {
+interface ChangePasswordFormProps {
+  form: UseFormReturn<ForgatPasswordFormType>;
+  phone: string;
+  code: string;
+}
+
+const ChangePasswordForm = ({ form, phone, code }: ChangePasswordFormProps) => {
   const t = useTranslations();
-  const [isLoading, setIsLoading] = useState(false);
-  const formSchema = z
-    .object({
-      newPassword: z
-        .string()
-        .min(1, t("requiredField", { field: t("labels.newPassword") }))
-        .min(8, t("passwordTooShort")),
-      confirmPassword: z
-        .string()
-        .min(1, t("requiredField", { field: t("labels.confirmPassword") })),
-    })
-    .refine((data) => data.newPassword === data.confirmPassword, {
-      message: t("errors.passwordsMismatch"),
-      path: ["confirmPassword"],
-    });
+  const [localLoading, setLocalLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      newPassword: "",
-      confirmPassword: "",
-    },
+  const { handleSubmit } = useFormSubmission<ForgatPasswordFormType>(form, {
+    submitFunction: resetPassword,
+    onSuccessPath: "/auth/login",
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    setIsLoading(true);
-    console.log("Changing password:", values.newPassword);
-    setTimeout(() => {
-      setIsLoading(false);
-      console.log("Password changed successfully!");
-    }, 2000);
+  const submit = async () => {
+    form.clearErrors();
+    setLocalLoading(true);
+    try {
+      const data: ForgatPasswordFormType = {
+        phone_code: form.watch("phone_code"),
+        password: form.watch("password"),
+        password_confirmation: form.watch("password_confirmation"),
+        reset_code: code,
+        phone: phone,
+      };
+      await handleSubmit(data);
+    } finally {
+      setLocalLoading(false);
+    }
   };
 
+  const isSubmitting = form.formState.isSubmitting;
+
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <PasswordField
-          control={form.control}
-          name="newPassword"
-          placeholder={t("labels.newPassword")}
-          isLoading={isLoading}
-        />
-        <PasswordField
-          control={form.control}
-          name="confirmPassword"
-          placeholder={t("labels.confirmNewPassword")}
-          isLoading={isLoading}
-        />
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? t("buttons.loading") : t("buttons.confirm")}
-        </Button>
-      </form>
-    </Form>
+    <>
+      <PasswordField
+        control={form.control}
+        name="password"
+        placeholder={t("labels.newPassword")}
+        isLoading={isSubmitting || localLoading}
+      />
+      <PasswordField
+        control={form.control}
+        name="password_confirmation"
+        placeholder={t("labels.confirmNewPassword")}
+        isLoading={isSubmitting || localLoading}
+      />
+      {form.formState.errors.root && (
+        <p className="text-sm text-red-500">
+          {form.formState.errors.root.message}
+        </p>
+      )}
+      <Button
+        type="button"
+        className="w-full"
+        onClick={submit}
+        disabled={isSubmitting || localLoading}
+      >
+        {isSubmitting || localLoading
+          ? t("buttons.loading")
+          : t(`buttons.submit`)}
+      </Button>
+    </>
   );
 };
 

@@ -57,18 +57,17 @@ const TimePicker = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="reserv-input flex justify-between !px-0"
+        <button
+          className="reserv-input flex justify-between !px-0 cursor-pointer"
         >
-          <span>{value || t("form.selectTime")}</span>
+          <span>{value || t("labels.selectTime")}</span>
           <Clock className="h-4 w-4" />
-        </Button>
+        </button>
       </DialogTrigger>
-      <DialogContent className="bg-backgroud rounded-2xl border-0 shadow-xl sm:max-w-[400px]">
+      <DialogContent className="bg-backgroud w-fit rounded-2xl border-0 shadow-xl">
         <DialogHeader className="pb-4">
           <DialogTitle className="text-center text-xl font-semibold text-gray-800">
-            {t("form.selectTime")}
+            {t("labels.selectTime")}
           </DialogTitle>
         </DialogHeader>
 
@@ -104,13 +103,13 @@ const TimePicker = ({
             onClick={() => setOpen(false)}
             className="h-12 flex-1 text-gray-500 hover:bg-gray-100"
           >
-            {t("form.cancel")}
+            {t("labels.cancel")}
           </Button>
           <Button
             onClick={handleConfirm}
             className="h-12 flex-1 rounded-xl bg-blue-500 text-white hover:bg-blue-600"
           >
-            {t("form.ok")}
+            {t("labels.ok")}
           </Button>
         </div>
       </DialogContent>

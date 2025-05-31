@@ -1,6 +1,6 @@
 import AuthPageLayout from "@/components/auth/AuthComponent";
 import { getTranslations } from "next-intl/server";
-import VerifyPhoneForm from "@/components/auth/VirifyCodeForm";
+import VerifyPhoneForm from "@/components/auth/ForgotPasswordForm";
 const VerificationPage = async() => {
   const t = await getTranslations();
   return (

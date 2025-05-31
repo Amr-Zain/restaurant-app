@@ -1,5 +1,4 @@
 "use client";
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,11 +9,13 @@ interface FilterSidebarProps {
     mainCategories: string[];
     subCategories: { [key: string]: string[] };
   };
+  category?: string;
+  subCategory?: string;
 }
 
-const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters }) => {
-  const [selectedMainCategory, setSelectedMainCategory] = React.useState<string | undefined>(undefined);
-  const [selectedSubCategory, setSelectedSubCategory] = React.useState<string | undefined>(undefined);
+const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters,category,subCategory }) => {
+  const [selectedMainCategory, setSelectedMainCategory] = React.useState<string | undefined>(category);
+  const [selectedSubCategory, setSelectedSubCategory] = React.useState<string | undefined>(subCategory);
 
   const toggleButton = (
     type: 'mainCategory' | 'subCategory',
@@ -35,13 +36,12 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters }) => {
     }
   };
 
-  const removeSelectedFilter = (type: 'mainCategory' | 'subCategory', value: string) => {
-    if (type === 'mainCategory') {
-      setSelectedMainCategory(undefined);
+  const removeSelectedFilter = (type: 'mainCategory' | 'subCategory') => {
+    if (type === 'subCategory') {
       setSelectedSubCategory(undefined);
-    } else if (type === 'subCategory') {
-      setSelectedSubCategory(undefined);
+      return;
     }
+    setSelectedMainCategory(undefined);
   };
 
   const clearAllFilters = () => {
@@ -54,7 +54,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters }) => {
   const currentSubCategories = selectedMainCategory ? filters.subCategories[selectedMainCategory] || [] : [];
 
   return (
-    <div className="w-full md:w-64 p-6 bg-white rounded-2xl shadow-lg flex-shrink-0 sticky top-4 self-start">
+    <div className="w-full md:w-64 p-6 bg-white flex-shrink-0 rounded-2xl self-start">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Selected filters</h2>
         {hasSelectedFilters && (
@@ -80,7 +80,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters }) => {
           <span key={`main-${selectedMainCategory}`} className="text-xs text-primary bg-primary/10 px-3 py-2 rounded-sm flex items-center gap-1">
             {selectedMainCategory}
             <button
-              onClick={() => removeSelectedFilter('mainCategory', selectedMainCategory)}
+              onClick={() => removeSelectedFilter('mainCategory')}
             >
               <X size={12} strokeWidth={2.5} />
             </button>
@@ -90,7 +90,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters }) => {
           <span key={`sub-${selectedSubCategory}`} className="text-xs text-primary bg-primary/10 px-3 py-2 rounded-sm flex items-center gap-1">
             {selectedSubCategory}
             <button
-              onClick={() => removeSelectedFilter('subCategory', selectedSubCategory)}
+              onClick={() => removeSelectedFilter('subCategory')}
             >
               <X size={12} strokeWidth={2.5} />
             </button>

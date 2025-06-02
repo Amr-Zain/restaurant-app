@@ -26,9 +26,14 @@ export type SettingsType = {
     x?: string
     youtube?: string
 }
+
+type Verify = { type: 'register' | 'reset' | null; code: string | null; phone: string | null,resetCode:string| null }
+
 interface AppStore {
     settings: SettingsType;
+    verify: Verify
     setSettings: (settings: SettingsType) => void;
+    setVerify: (values: Verify) => void;
 }
 
 const inititals = {
@@ -54,12 +59,11 @@ const inititals = {
         x: '',
         youtube: '',
     },
-    
-
+    verify: { type: null, code: null, phone: null, resetCode:null }
 }
 
 export const appStore = create<AppStore>((set) => ({
     ...inititals,
     setSettings: (settings) => set(() => ({ settings })),
+    setVerify: (verify: Verify) => set(() => ({verify}))
 }));
-

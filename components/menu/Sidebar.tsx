@@ -54,7 +54,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters,category,subCateg
   const currentSubCategories = selectedMainCategory ? filters.subCategories[selectedMainCategory] || [] : [];
 
   return (
-    <div className="w-full md:w-64 p-6 bg-white flex-shrink-0 rounded-2xl self-start">
+    <div className="w-full md:w-58 p-6 bg-white flex-shrink-0 rounded-2xl self-start">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Selected filters</h2>
         {hasSelectedFilters && (

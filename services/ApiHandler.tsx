@@ -1,4 +1,4 @@
-// 'use server'
+'use server';
 import axiosInstance from "./instance";
 import AppError from "../utils/appError";
 
@@ -54,16 +54,15 @@ export const getSettingsData = async () => {
     }
   }
 };
-export const registerUser = async(form)=>{
+export const getProfile = async()=>{
   try {
-
-    const { data } = await axiosInstance.post("auth/register",form);
-
-    return data.data;
+    const { data } = await axiosInstance.get("profile");
+    console.log("data",data)
+    return data;
   } catch (error) {
     if (error instanceof Error) {
       //throw new AppError(error.message, 500);
-      console.log(error)
+      console.error(error)
     } else {
       //throw new AppError("Field to fetch home", 500);
     }

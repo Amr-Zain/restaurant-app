@@ -13,6 +13,8 @@ import { Button } from "../ui/button";
 import { FieldPath, useForm } from "react-hook-form";
 import usePhoneCode from "@/hooks/usePhoneCode";
 import PhoneNumber from "../util/formFields/PhoneInput";
+import { appStore } from "@/stores/app";
+import { useAuthStore } from "@/stores/auth";
 
 const VERIFICATION_CODE_LENGTH = 4;
 const RESEND_TIMER_SECONDS = 60;
@@ -29,24 +31,20 @@ function OTPForm<T extends OtpFormValues>({
   tab,
   currentPhoneLimit,
   setCurrentPhoneLimit,
-  setPhone,
-  phone: verifyPhone,
-  setCode,
 }: {
   form: ReturnType<typeof useForm<T>>;
   setTab: (value: "next" | "send" | "submit") => void;
   tab: "next" | "send" | "submit";
   currentPhoneLimit: number | null;
-  phone: string;
   setCurrentPhoneLimit: (value: number | null) => void;
-  setPhone: (value: string) => void;
-  setCode: (value: string) => void;
 }) {
   const [timeLeft, setTimeLeft] = useState(RESEND_TIMER_SECONDS);
   const [canResend, setCanResend] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations();
   const { countries } = usePhoneCode({ form, setCurrentPhoneLimit });
+  const verify = appStore((state) => state.verify);
+  const setVerify = appStore((state) => state.setVerify);
 
   const phoneCode = form.watch("phone_code" as FieldPath<T>);
   const phone = form.watch("phone" as FieldPath<T>);
@@ -64,14 +62,19 @@ function OTPForm<T extends OtpFormValues>({
       setIsLoading(false);
     }
   };
-
+  const setUser = useAuthStore((statue) => statue.setUser);
   const verifycode = async (formData: {
     phone_code: string;
     phone: string;
     reset_code: string;
   }) => {
-    setCode(resetCode);
-    return await verifyForgotPassword(formData);
+    setVerify({ ...verify, resetCode: formData.reset_code });
+    return await verifyForgotPassword(
+      formData,
+      verify.type === "register"
+        ? "verify_phone"
+        : "verify_forgot_password_code",
+    );
   };
 
   const { handleSubmit: resendCodeHandler } = useFormSubmission<
@@ -89,31 +92,43 @@ function OTPForm<T extends OtpFormValues>({
     form as unknown as ReturnType<typeof useForm<OtpFormValues>>,
     {
       submitFunction: verifycode,
+      onSuccessPath: verify.type === "register" ? "/" : undefined,
     },
   );
 
   const handleSubmit = async () => {
     form.clearErrors();
     if (tab === "send") {
-      setPhone(phone);
+      setVerify({ ...verify, phone,code:phoneCode });
       await resendCodeHandler({
         phone_code: phoneCode,
         phone: phone,
       });
       return;
     }
+    setVerify({
+      ...verify,
+      resetCode: resetCode,
+    })
     const res = await verifyHandler({
       phone_code: phoneCode,
-      phone: verifyPhone,
+      phone: verify.phone!,
       reset_code: resetCode,
     });
-    if (res.status === "success") setTab("submit");
+    if (res.status === "success") {
+      if (verify.type === "register") {
+        const user = res.data as User;
+        setUser(user);
+        return;
+      }
+      setTab("submit");
+    }
   };
 
   const handleResendCode = async () => {
     await resendCodeHandler({
-      phone_code: phoneCode,
-      phone: verifyPhone,
+      phone_code: verify.code!,
+      phone: verify.phone!,
     });
   };
 
@@ -146,6 +161,10 @@ function OTPForm<T extends OtpFormValues>({
       setCanResend(false);
     }
   }, [tab]);
+  useEffect(() => {
+    if (verify.type === "register")
+      resendCode({ phone: verify.phone!, phone_code: verify.code! });
+  }, [verify.type]);
 
   return (
     <>
@@ -159,9 +178,9 @@ function OTPForm<T extends OtpFormValues>({
         />
       ) : (
         <>
-          <div className="mb-6">
+         {verify.type !== 'register'&& <div className="mb-6">
             <ChangeNumberForm form={form} onClick={resendCodeHandler} />
-          </div>
+          </div>}
 
           <FormField
             control={form.control}

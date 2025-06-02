@@ -20,9 +20,10 @@ export default function HomePage() {
       <HomeSlider />
       <SliderSection
         title="View Our Menus"
-        to="/"
+        to="/menu"
         items={[...Array(9)].map((_, index) => (
           <MenuCard
+            id="1"
             key={index}
             image={img}
             desc="Delicious food item with premium ingredients and authentic flavors"
@@ -46,13 +47,14 @@ export default function HomePage() {
             Donec quam felis, ultricies nec, pellentesque eu.`,
           image: img,
         }}
-        to={"/"}
+        to={"/about-us"}
       />
       <SliderSection
         title="Popular Items"
-        to="/"
+        to="/menu"
         items={[...Array(9)].map((_, index) => (
           <MenuCard
+            id="1"
             key={index}
             image={img}
             desc="Delicious food item with premium ingredients and authentic flavors"
@@ -62,7 +64,7 @@ export default function HomePage() {
           />
         ))}
       />
-      <div className="w-full sm:w-[90%] mx-auto">
+      <div className="mx-auto w-full sm:w-[90%]">
         <ReservationForm />
       </div>
       <GeneralSection
@@ -96,9 +98,10 @@ export default function HomePage() {
       <ImagesSection />
       <SliderSection
         title="Offers"
-        to="/"
+        to="/menu"
         items={[...Array(9)].map((_, index) => (
           <MenuCard
+            id="1"
             key={index}
             isOffer
             image={img}
@@ -127,7 +130,9 @@ export default function HomePage() {
             placeholder="enter your email"
             className="h-16 rounded-full border-none bg-white shadow-none"
           />
-          <Button className="absolute end-1 top-1 font-bold">SUBCRIBE</Button>
+          <Button className="absolute end-1 top-1 mb-6 font-bold">
+            SUBCRIBE
+          </Button>
         </div>
       </GeneralSection>
     </div>

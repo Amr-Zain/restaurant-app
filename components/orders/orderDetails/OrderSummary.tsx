@@ -15,12 +15,12 @@ function OrderSummary({ title, items, totalAmount }: Props) {
       <h3 className="font-semibold">{title}</h3>
       <ul className="border-primary/20 rounded-3xl border-1 p-4">
         {items.map((items, i) => (
-          <li className="flex justify-between py-1 font-semibold text-text" key={i}>
+          <li className="flex justify-between py-1  text-text" key={i}>
             <h4>{items.label}</h4>
             <div className="">{items.value.toFixed(2)}EGP</div>
           </li>
         ))}
-      <li className="flex justify-between pt-2 font-semibold text-text border-t-1 border-primary/20">
+      <li className="flex justify-between pt-2 text-text border-t-1 border-primary/20">
         <h3  >{totalAmount.label}</h3>
         <div>{totalAmount.value.toFixed(2)}EGP</div>
       </li>

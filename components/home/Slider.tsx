@@ -12,10 +12,11 @@ import "swiper/css/pagination";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import SocialLinks from "../general/SocialLinks";
+import type { Swiper as SwiperType } from "swiper/types";
 
 const HomeSlider = () => {
   const slides = [slide1, slide2, slide3, slide4];
-  const swiperRef = React.useRef(null);
+  const swiperRef = React.useRef<SwiperType | null>(null);
 
   return (
     <div className="relative mx-auto h-[600px] w-full">
@@ -70,22 +71,20 @@ const HomeSlider = () => {
             <path
               d="M5.86574 1.6942L14.4173 2.44237L13.6692 10.994M1.39459 13.3698L14.2871 2.55164"
               stroke="white"
-              stroke-width="1.5"
-              stroke-miterlimit="10"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1.5"
+              strokeMiterlimit="10"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
         </Link>
       </div>
 
-      {/* Bottom Bar with Social Links and Navigation Arrows */}
       <div className="absolute right-0 bottom-0 left-0 z-20 flex items-center justify-between p-4">
         <div className="flex text-white">
           <SocialLinks className="flex gap-2" />
         </div>
 
-        {/* Custom Navigation Arrows with Lucide Icons */}
         <div className="flex gap-2">
           <button
             onClick={() => swiperRef.current?.slidePrev()}

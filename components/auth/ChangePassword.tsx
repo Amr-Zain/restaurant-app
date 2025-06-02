@@ -8,16 +8,16 @@ import { resetPassword } from "@/services/ClientApiHandler";
 import { ForgatPasswordFormType } from "@/helper/schema";
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
+import { appStore } from "@/stores/app";
 
 interface ChangePasswordFormProps {
   form: UseFormReturn<ForgatPasswordFormType>;
-  phone: string;
-  code: string;
 }
 
-const ChangePasswordForm = ({ form, phone, code }: ChangePasswordFormProps) => {
+const ChangePasswordForm = ({ form }: ChangePasswordFormProps) => {
   const t = useTranslations();
   const [localLoading, setLocalLoading] = useState(false);
+  const { phone, code, resetCode } = appStore((state) => state.verify);
 
   const { handleSubmit } = useFormSubmission<ForgatPasswordFormType>(form, {
     submitFunction: resetPassword,
@@ -29,11 +29,11 @@ const ChangePasswordForm = ({ form, phone, code }: ChangePasswordFormProps) => {
     setLocalLoading(true);
     try {
       const data: ForgatPasswordFormType = {
-        phone_code: form.watch("phone_code"),
+        phone_code: code!,
         password: form.watch("password"),
         password_confirmation: form.watch("password_confirmation"),
-        reset_code: code,
-        phone: phone,
+        reset_code: resetCode!,
+        phone: phone!,
       };
       await handleSubmit(data);
     } finally {

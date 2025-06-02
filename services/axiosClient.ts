@@ -1,6 +1,7 @@
 // lib/axios.ts
 "use client"
-import axios from "axios";
+import { useAuthStore } from "@/stores/auth";
+import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -8,12 +9,9 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    let locale = Cookies.get("NEXT_LOCALE") || "en";
-
-
-
-
+    const locale = Cookies.get("NEXT_LOCALE") || "en";
     config.headers["Accept-Language"] = locale;
+      config.headers["os"]= "web";
     return config;
   },
   (error) => {
@@ -21,14 +19,18 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response interceptor to handle 401 errors
 axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+    (response) => response,
+    (error: AxiosError) => {
+      if (error.response?.status === 401) {
+        console.log("🚀 ~ error:", error)
+        Cookies.remove("token"); 
+        //logout();
+        useAuthStore.getState().clearUser();
+        window.location.replace("/login");
+      }
+      return Promise.reject(error);
+    }
+  );
 
 export default axiosInstance;

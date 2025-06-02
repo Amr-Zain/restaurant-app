@@ -6,17 +6,33 @@ interface General {
     content: string;
     image: string;
 }
+interface User {
+    id: number;
+    full_name: string;
+    avatar: string;
+    email: string;
+    phone_code: string;
+    phone: string;
+    user_type: string; //"customer"
+    notifiable: boolean;
+    token: string;
+}
 interface SubmissionResult {
-    data: unknown; 
+    data: unknown;
     message: string;
-    status?: string; 
+    status?: string;
 }
 interface OtpFormValues extends FieldValues {
     phone_code: string;
     phone: string;
     reset_code: string;
 }
-
+interface Topping {
+    name: string;
+    price: number | null;
+    quantity: number;
+    weight: number;
+}
 interface ApiErrorResponseData {
     message?: string;
     messages?: {
@@ -24,11 +40,11 @@ interface ApiErrorResponseData {
     };
 }
 interface CountryCodeData {
-  id: number;
-  name: string;
-  phone_code: string;
-  phone_limit: number;
-  flag: string;
+    id: number;
+    name: string;
+    phone_code: string;
+    phone_limit: number;
+    flag: string;
 }
 
 

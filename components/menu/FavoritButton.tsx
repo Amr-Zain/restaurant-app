@@ -2,9 +2,11 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
 
-function FavoritButton({ isFavorit }: { isFavorit: boolean }) {
+function FavoritButton({ isFavorit, itemId }: { isFavorit: boolean, itemId: number }) {
   const [favorit, setFavorat] = useState(isFavorit);
   const onClick = async () => {
+    console.log(itemId)
+    //set in the database
     setFavorat((prev) => !prev);
   };
   return (

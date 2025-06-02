@@ -14,7 +14,10 @@ export const getAllServices = async () => {
 };
 
 export const register = async (form: RegisterFormType) => {
-  const { data } = await axiosInstance.post("auth/register", {...form,password_confirmation:form.password});
+  const { data } = await axiosInstance.post("auth/register", {
+    ...form,
+    password_confirmation: form.password,
+  });
   return data;
 };
 
@@ -25,22 +28,28 @@ export const forgotPassword = async (form: {
   const { data } = await axiosInstance.post("auth/forgot_password", form);
   return data;
 };
-export const verifyForgotPassword = async (form: {
-  phone_code: string;
-  phone: string;
-  reset_code:string
-}) => {
+export const verifyForgotPassword = async (
+  form: {
+    phone_code: string;
+    phone: string;
+    reset_code: string;
+  },
+  url: string,
+) => {
+  const verify = {
+    phone_code: form.phone_code,
+    phone: form.phone,
+    verification_code: form.reset_code,
+    device_type: "web",
+  };
   const { data } = await axiosInstance.post(
-    "auth/verify_forgot_password_code",
-    form,
+    "auth/" + url,
+    url === "verify_phone" ? verify : form,
   );
   return data;
 };
 export const resetPassword = async (form: ForgatPasswordFormType) => {
-  const { data } = await axiosInstance.post(
-    "auth/reset_password",
-    form,
-  );
+  const { data } = await axiosInstance.post("auth/reset_password", form);
   return data;
 };
 

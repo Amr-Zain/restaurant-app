@@ -1,5 +1,5 @@
 
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { cookies } from "next/headers";
 
 
@@ -8,6 +8,7 @@ const axiosInstance = axios.create({
   headers: {
     common: {
       "Content-Type": "application/json",
+      "os": "web"
     },
   },
 });
@@ -16,13 +17,17 @@ axiosInstance.interceptors.request.use(
   async (config) => {
     try {
       const serverCookies = await cookies();
+      const token = JSON.parse(serverCookies.get('token')?.value as string);
+
       const locale = serverCookies.get("NEXT_LOCALE")?.value || "en";
+
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
 
       if (!config.params) {
         config.params = {};
       }
-
-
 
       config.headers["Accept-Language"] = locale;
     } catch (error) {
@@ -37,11 +42,15 @@ axiosInstance.interceptors.request.use(
 );
 
 // Response interceptor to handle 401 errors
+
 axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
+  (response) => response,
+  async (error: AxiosError) => {
+    if (error.response?.status === 401) {
+
+      (await cookies()).delete('token')
+      //logout();
+    }
     return Promise.reject(error);
   }
 );

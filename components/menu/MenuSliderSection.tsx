@@ -23,10 +23,10 @@ function SliderSection({ title, to, items }: { title: string, to: string, items:
               <path
                 d="M12.43 1.42969L18.5 7.49969L12.43 13.5697M1.5 7.49969H18.33"
                 stroke="#5A6AE8"
-                stroke-width="1.5"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.5"
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </span>

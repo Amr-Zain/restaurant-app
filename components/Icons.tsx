@@ -15,9 +15,28 @@ export const Envelop = () => (
     <path d="M3 7l9 6l9 -6" />
   </svg>
 );
-
-export const Youtube = () => (
+export const CartIcon = ({ className }: { className?: string }) => (
   <svg
+    className={className}
+    width="17"
+    height="18"
+    viewBox="0 0 17 18"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M4.74937 5.3918V4.58346C4.74937 2.70846 6.2577 0.866798 8.1327 0.691797C8.65368 0.640612 9.1796 0.699071 9.67663 0.863412C10.1736 1.02775 10.6308 1.29434 11.0185 1.646C11.4063 1.99767 11.7162 2.42663 11.9281 2.90527C12.1401 3.38392 12.2496 3.90164 12.2494 4.42513V5.57513M5.99937 17.3335H10.9994C14.3494 17.3335 14.9494 15.9918 15.1244 14.3585L15.7494 9.35847C15.9744 7.32513 15.391 5.6668 11.8327 5.6668H5.16603C1.6077 5.6668 1.02437 7.32513 1.24937 9.35847L1.87437 14.3585C2.04937 15.9918 2.64937 17.3335 5.99937 17.3335Z"
+      stroke="white"
+      strokeWidth="1.2"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+export const Youtube = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
     xmlns="http://www.w3.org/2000/svg"
     width="24"
     height="24"

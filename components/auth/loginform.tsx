@@ -14,6 +14,7 @@ import usePhoneCode from "@/hooks/usePhoneCode";
 import { LoginFormType, loginSchema } from "@/helper/schema";
 import { login } from "@/services/ClientApiHandler";
 import { useFormSubmission } from "@/hooks/useFormSubmission";
+import { useAuthStore } from "@/stores/auth";
 
 const LoginForm = () => {
   const t = useTranslations();
@@ -27,17 +28,22 @@ const LoginForm = () => {
   );
 
   const form = useForm<LoginFormType>({
-    resolver: zodResolver(formSchema),defaultValues: {
+    resolver: zodResolver(formSchema),
+    defaultValues: {
       phone_code: "20",
     },
   });
   const { countries } = usePhoneCode({ form, setCurrentPhoneLimit });
   const isLoading = form.formState.isLoading;
-
-  const { handleSubmit } = useFormSubmission<LoginFormType>(form, {
+  const setAuthedUser = useAuthStore((state) => state.setUser);
+  const { handleSubmit: handleLogin } = useFormSubmission<LoginFormType>(form, {
     submitFunction: login,
     onSuccessPath: "/",
   });
+  const handleSubmit = async (data: LoginFormType) => {
+    const res = await handleLogin(data);
+    if (res.status === "success") setAuthedUser(res.data as User);
+  };
 
   return (
     <Form {...form}>
@@ -65,7 +71,7 @@ const LoginForm = () => {
               label={t("labels.rememberMe")}
               disabled={isLoading}
             />
-            <Link href="/auth/forgot-password">
+            <Link href="/auth/verification">
               <span className="text-primary cursor-pointer text-sm font-medium hover:underline">
                 {t("labels.forgetPassword")}
               </span>

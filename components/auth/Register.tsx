@@ -15,6 +15,7 @@ import { register } from "@/services/ClientApiHandler";
 import { createRegisterFormSchema, RegisterFormType } from "@/helper/schema";
 import { useFormSubmission } from "@/hooks/useFormSubmission";
 import usePhoneCode from "@/hooks/usePhoneCode";
+import { appStore } from "@/stores/app";
 
 const RegisterForm = () => {
   const t = useTranslations();
@@ -27,16 +28,27 @@ const RegisterForm = () => {
       phone_code: "20",
     },
   });
-  console.log(form.formState.errors)
   const { countries } = usePhoneCode({ form, setCurrentPhoneLimit });
-
+  const setVerify = appStore((state) => state.setVerify);
   const isPending = form.formState.isLoading;
-
-  const { handleSubmit } = useFormSubmission<RegisterFormType>(form, {
-    submitFunction: register,
-    onSuccessPath: "/auth/verification",
-  });
-
+  const { handleSubmit: registerUser } = useFormSubmission<RegisterFormType>(
+    form,
+    {
+      submitFunction: register,
+      onSuccessPath: "/auth/verification",
+    },
+  );
+  const handleSubmit = async (data: RegisterFormType) => {
+    const res = await registerUser(data);
+    if (res.status === "success") {
+      setVerify({
+        type: "register",
+        code: data.phone_code,
+        phone: data.phone,
+        resetCode: null,
+      });
+    }
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
@@ -70,7 +82,7 @@ const RegisterForm = () => {
           placeholder={t("labels.password")}
           isLoading={isPending}
         />
-       {/*  <PasswordField
+        {/*  <PasswordField
           control={form.control}
           name="password_confirmation"
           placeholder={t("labels.passwordConfirmation")}

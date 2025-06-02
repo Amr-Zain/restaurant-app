@@ -5,6 +5,7 @@ import FilterSidebar from "@/components/menu/Sidebar";
 import { getTranslations } from "next-intl/server";
 import img from "@/assets/images/login.jpg";
 import PaginationControls from "@/components/general/Pagenation";
+import { Filter } from "lucide-react";
 
 const filterOptions = {
   mainCategories: ["Food", "Drink", "Dessert"],
@@ -49,17 +50,31 @@ export default async function HomePage({
         section={t("NAV.menu")}
         href="/menu"
       />
-      <div className="p-sec mx-auto grid w-full grid-cols-[300px_1fr]">
-        <FilterSidebar
-          filters={filterOptions}
-          category={category}
-          subCategory={subCategory}
-        />
-        <div>
-          <CategoryTabs categories={categories} category={category||'All'} />
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="p-sec mx-auto grid w-full grid-cols-1 md:grid-cols-[230px_1fr] gap-4">
+        <div className="hidden md:block">
+          <FilterSidebar
+            filters={filterOptions}
+            category={category}
+            subCategory={subCategory}
+            
+            />
+            </div>
+          <div>
+            <div className="mx-8">
+
+            <CategoryTabs
+              categories={categories}
+              category={category || "All"}
+              className="bg-white"
+            />
+            </div>
+            <div className="block md:hidden">
+              <Filter />
+            </div>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
             {[...Array(9)].map((_, index) => (
               <MenuCard
+                id="1"
                 key={index}
                 image={img}
                 desc="Delicious food item with premium ingredients and authentic flavors"

@@ -1,8 +1,10 @@
 import Image, { StaticImageData } from "next/image";
 import { Card, CardDescription, CardTitle } from "../ui/card";
 import FavoritButton from "./FavoritButton";
+import { Link } from "@/i18n/routing";
 
 interface MenuCardProps {
+  id: string,
   image: string | StaticImageData;
   title: string;
   desc: string;
@@ -21,6 +23,7 @@ function MenuCard({
   price,
   rating,
   isFavorit,
+  id,
   isOffer,
   oldPrice,
   offPercentage,
@@ -50,7 +53,7 @@ function MenuCard({
           <span>{rating}</span>
         </div>
       </div>
-      <CardTitle className="text-lg">{title}</CardTitle>
+      <CardTitle className="text-lg"><Link href={`/menu/${id}`}>{title}</Link></CardTitle>
       <CardDescription className="line-clamp-2 text-sm">{desc}</CardDescription>
       <div className="flex items-center justify-between pt-2">
         <div className="flex flex-col gap-1">
@@ -67,7 +70,7 @@ function MenuCard({
             <span>{offPercentage}</span>
           </div>
         ) : (
-          <FavoritButton isFavorit={isFavorit!} />
+          <FavoritButton isFavorit={isFavorit!} itemId={+id} />
         )}
       </div>
     </Card>

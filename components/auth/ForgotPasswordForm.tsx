@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ForgatPasswordFormType, ForgatPasswordSchema } from "@/helper/schema";
 import dynamic from "next/dynamic";
 import ChangePasswordForm from "./ChangePassword";
+import { appStore } from "@/stores/app";
 
 const OTPForm = dynamic(() => import("./OTPForm"), {
   ssr: false,
@@ -16,25 +17,27 @@ const OTPForm = dynamic(() => import("./OTPForm"), {
 
 const ForgotPasswordForm = () => {
   const t = useTranslations();
-  const [tab, setTab] = useState<"send" | "next" | "submit">("send");
+  const { phone, code, type } = appStore((state) => state.verify);
+  const [tab, setTab] = useState<"send" | "next" | "submit">(
+    type === "register" ? "next" : "send",
+  );
   const [currentPhoneLimit, setCurrentPhoneLimit] = useState<number | null>(
     null,
   );
-  const [phone, setPhone] = useState("");
-  const [code, setCode] = useState("");
   const formSchema = ForgatPasswordSchema({ t, currentPhoneLimit });
 
   const form = useForm<ForgatPasswordFormType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       reset_code: "",
-      phone: phone,
+      phone: type === 'register'?phone as string:'',
       password_confirmation: "",
       password: "",
-      phone_code: "20",
+      phone_code: type === 'register'?code as string:"20",
     },
     mode: "onChange",
   });
+
   return (
     <Form {...form}>
       <form className="space-y-6">
@@ -42,15 +45,12 @@ const ForgotPasswordForm = () => {
           <OTPForm
             form={form as unknown as ReturnType<typeof useForm<OtpFormValues>>}
             setTab={setTab}
-            setCode={setCode}
-            setPhone={setPhone}
             tab={tab}
-            phone={phone}
             currentPhoneLimit={currentPhoneLimit}
             setCurrentPhoneLimit={setCurrentPhoneLimit}
           />
         ) : (
-         <ChangePasswordForm code={code} phone={phone} form={form} />
+          <ChangePasswordForm form={form} />
         )}
       </form>
     </Form>

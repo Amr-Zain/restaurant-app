@@ -17,14 +17,11 @@ axiosInstance.interceptors.request.use(
   async (config) => {
     try {
       const serverCookies = await cookies();
-      const token = JSON.parse(serverCookies.get('token')?.value as string);
-
+      const token = serverCookies.get('token')?.value;
       const locale = serverCookies.get("NEXT_LOCALE")?.value || "en";
-
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-
       if (!config.params) {
         config.params = {};
       }

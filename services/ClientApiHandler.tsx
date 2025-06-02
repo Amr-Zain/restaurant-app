@@ -21,6 +21,13 @@ export const register = async (form: RegisterFormType) => {
   return data;
 };
 
+export const logout = async () => {
+  const { data } = await axiosInstance.post("auth/logout", {
+    device_type: "web",
+  });
+  return data;
+};
+
 export const forgotPassword = async (form: {
   phone_code: string;
   phone: string;

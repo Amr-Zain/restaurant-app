@@ -58,13 +58,11 @@ export const getProfile = async()=>{
   try {
     const { data } = await axiosInstance.get("profile");
     console.log("data",data)
-    return data;
+    return data.data;
   } catch (error) {
     if (error instanceof Error) {
-      //throw new AppError(error.message, 500);
       console.error(error)
     } else {
-      //throw new AppError("Field to fetch home", 500);
     }
   }
 }

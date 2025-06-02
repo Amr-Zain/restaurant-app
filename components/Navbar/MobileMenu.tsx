@@ -27,7 +27,6 @@ const MobileMenu = ({
       </SheetTrigger>
       <SheetContent side="left" className="border-r-1 rounded-r-2xl w-70">
         {" "}
-        {/*'left', 'right', 'top', or 'bottom' */}
         <SheetHeader>
           <SheetTitle>{t("NAV.Menu")}</SheetTitle>
         </SheetHeader>
@@ -38,7 +37,7 @@ const MobileMenu = ({
                 <Link
                   href={item.path}
                   onClick={() => setOpen(false)}
-                  className="text-list-color block text-base transition-colors hover:text-gray-400" // Adjusted font size
+                  className="text-text block text-base transition-colors hover:text-gray-400" // Adjusted font size
                 >
                   {item.value}
                 </Link>

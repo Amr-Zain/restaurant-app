@@ -11,7 +11,7 @@ import {
 
 const Notifications = () => {
   const [open, setOpen] = useState(false);
-
+ 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -40,8 +40,8 @@ const Notifications = () => {
         <SheetHeader>
           <SheetTitle>Notifications</SheetTitle>
         </SheetHeader>
-          <div className="flex list-none flex-col gap-2 p-4">
-            
+          <div className="flex flex-col gap-2 p-4">
+           
           </div>
       </SheetContent>
     </Sheet>

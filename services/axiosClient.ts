@@ -10,8 +10,12 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const locale = Cookies.get("NEXT_LOCALE") || "en";
+    const token = Cookies.get("token");
     config.headers["Accept-Language"] = locale;
-      config.headers["os"]= "web";
+    config.headers["os"] = "web";
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     return config;
   },
   (error) => {
@@ -20,17 +24,17 @@ axiosInstance.interceptors.request.use(
 );
 
 axiosInstance.interceptors.response.use(
-    (response) => response,
-    (error: AxiosError) => {
-      if (error.response?.status === 401) {
-        console.log("🚀 ~ error:", error)
-        Cookies.remove("token"); 
-        //logout();
-        useAuthStore.getState().clearUser();
-        window.location.replace("/login");
-      }
-      return Promise.reject(error);
+  (response) => response,
+  (error: AxiosError) => {
+    if (error.response?.status === 401) {
+      console.log("🚀 ~ error:", error)
+      Cookies.remove("token");
+      //logout();
+      useAuthStore.getState().clearUser();
+      window.location.replace("/auth/login");
     }
-  );
+    return Promise.reject(error);
+  }
+);
 
 export default axiosInstance;

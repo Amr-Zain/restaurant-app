@@ -10,8 +10,8 @@ function ImagesSection() {
     { img: image1, span: false },
     { img: image2, span: false },
     { img: image3, span: false },
-    { img: image5, span: false },
     { img: image4, span: true },
+    { img: image5, span: false },
   ];
   return (
     <section>
@@ -24,14 +24,14 @@ function ImagesSection() {
             <Image
               src={img.img}
               alt={`secion image ${index}`}
-              className="h-[380px] w-full object-cover"
+              className=" h-[220px] sm:h-[380px] w-full object-cover"
               width={100}
               height={100}
             />
           </div>
         ))}
-        <div className="bg-primary absolute top-[50%] left-[50%] size-56 -translate-[50%] rounded-full flex justify-center items-center">
-          <p className="text-backgroud text-2xl text-center">follow us on instagram</p>
+        <div className="bg-primary absolute  top-[50%] left-[50%]  size-36 sm:size-56 -translate-[50%] rounded-full flex justify-center items-center">
+          <p className="text-backgroud text-lg sm:text-2xl text-center">follow us on instagram</p>
         </div>
       </div>
     </section>

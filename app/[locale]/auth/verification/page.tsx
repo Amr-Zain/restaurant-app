@@ -1,6 +1,6 @@
 import AuthPageLayout from "@/components/auth/AuthComponent";
 import { getTranslations } from "next-intl/server";
-import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
+import VerifyForm from "@/components/auth/VerifyForm";
 const VerificationPage = async() => {
   const t = await getTranslations();
   return (
@@ -8,7 +8,7 @@ const VerificationPage = async() => {
       title={t("login.welcomeBack")}
       instructions={t("login.instructions")}
     >
-      <ForgotPasswordForm />
+      <VerifyForm />
     </AuthPageLayout>
   );
 };

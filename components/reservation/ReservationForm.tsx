@@ -1,71 +1,68 @@
 "use client";
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-
 import { useTranslations } from "next-intl";
 import Field from "../util/formFields/FormField";
 import { TimePickerField } from "./TimePickr";
 import DateFields from "../util/formFields/DateField";
 import SelectField from "../util/formFields/SelectField";
+import { useFormSubmission } from "@/hooks/useFormSubmission";
+import { postReservation } from "@/services/ClientApiHandler";
+import PhoneNumber from "../util/formFields/PhoneInput";
+import usePhoneCode from "@/hooks/usePhoneCode";
+import { ReservationFromType, reservationSchema } from "@/helper/schema";
+import { useBranchStore } from "@/stores/branchs";
+
 export default function ReservationForm() {
   const t = useTranslations();
-  const guests = [
-    { value: "1", label: "1 " + t("labels.person") },
-    { value: "2", label: "2 " + t("labels.people") },
-    { value: "3", label: "3 " + t("labels.people") },
-    { value: "4", label: "4 " + t("labels.people") },
-    { value: "5", label: "5 " + t("labels.people") },
-    { value: "6", label: "6 " + t("labels.people") },
-    { value: "7", label: "7 " + t("labels.people") },
-  ];
-  const formSchema = z.object({
-    name: z.string().min(2, {
-      message: t("validation.nameMin"),
-    }),
-    branch: z.string().min(1, {
-      message: t("validation.nameMin"),
-    }),
-    phone: z.string().min(10, {
-      message: t("validation.phoneMin"),
-    }),
-    guests: z.string({
-      required_error: t("validation.guestsRequired"),
-    }),
-    date: z.date({
-      required_error: t("validation.dateRequired"),
-    }),
-    from: z.string({
-      required_error: t("validation.fromTimeRequired"),
-    }),
-    to: z.string({
-      required_error: t("validation.toTimeRequired"),
-    }),
-  });
+  const [currentPhoneLimit, setCurrentPhoneLimit] = useState<number | null>(
+    null,
+  );
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const guests = useMemo(
+    () => [
+      { value: "1", label: "1 " + t("labels.person") },
+      { value: "2", label: "2 " + t("labels.people") },
+      { value: "3", label: "3 " + t("labels.people") },
+      { value: "4", label: "4 " + t("labels.people") },
+      { value: "5", label: "5 " + t("labels.people") },
+      { value: "6", label: "6 " + t("labels.people") },
+      { value: "7", label: "7 " + t("labels.people") },
+    ],
+    [t],
+  );
+  const branches = useBranchStore(state=>state.branchs)
+  const form = useForm<ReservationFromType>({
+    resolver: zodResolver(reservationSchema({ t, currentPhoneLimit })),
     defaultValues: {
       name: "",
+      phone_code: "20",
       phone: "",
-      guests: "1",
-      from: "06:00:00 PM",
-      branch: "",
-      to: "",
+      guests_number: "1",
+      store_id: "",
+      from_time: "06:00 PM",
+      to_time: "07:00 PM",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
+  const { countries } = usePhoneCode({ form, setCurrentPhoneLimit });
+  const isLoading = form.formState.isSubmitting;
+
+  const { handleSubmit: handleReservationSubmit } =
+    useFormSubmission<ReservationFromType>(form, {
+      submitFunction: (data:ReservationFromType)=>postReservation({form:data,id:data.store_id}),
+    });
+
+  const onSubmit = async (data: ReservationFromType) => {
+    await handleReservationSubmit(data);
+  };
 
   return (
-    <div className="w-full h-full rounded-3xl bg-gradient-to-br bg-[url('@/assets/images/table.png')] p-4 md:p-8">
+    <div className="h-full w-full rounded-3xl bg-gradient-to-br bg-[url('@/assets/images/table.png')] p-4 md:p-8">
       <div className="relative z-10 mx-auto max-w-full">
-        {/* Header */}
         <div className="text-text mb-8 text-center">
           <div className="mb-2 font-serif text-lg italic">
             {t("labels.reservations")}
@@ -76,7 +73,7 @@ export default function ReservationForm() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-128 space-y-4 p-4 mx-auto max-w-full"
+            className="mx-auto w-128 max-w-full space-y-4 p-4"
           >
             <Field
               control={form.control}
@@ -84,54 +81,64 @@ export default function ReservationForm() {
               placeholder={t("labels.namePlaceholder")}
               label=""
               className="reserv-input !placeholder-text"
+              disabled={isLoading}
             />
 
-            <Field
+            <PhoneNumber
               control={form.control}
-              name="phone"
-              placeholder={t("labels.phonePlaceholder")}
-              label=""
-              className="reserv-input !placeholder-text"
+              phoneCodeName="phone_code"
+              phoneNumberName="phone"
+              countries={countries}
+              currentPhoneLimit={currentPhoneLimit}
             />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <SelectField
                 control={form.control}
-                name="guests"
+                name="guests_number"
                 items={guests}
+                placeholder={t("labels.guests")}
                 triggerClassName="reserv-input w-full"
               />
               <SelectField
                 control={form.control}
-                name="branch"
-                placeholder="Branch"
-                items={[
-                  { label: "Branch 1", value: "branch1" },
-                  { label: "Branch 2", value: "branch2" },
-                  { label: "Branch 3", value: "branch3" },
-                ]}
+                name="store_id"
+                placeholder={t("labels.branch")}
+                items={branches.map((b) => ({ label: b.name, value: String(b.id) }))}
                 triggerClassName="reserv-input w-full"
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <TimePickerField control={form.control} name="from" />
-              <TimePickerField control={form.control} name="to" />
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <TimePickerField
+                control={form.control}
+                name="from_time" 
+              />
+              <TimePickerField control={form.control} name="to_time" />
             </div>
             <DateFields
               control={form.control}
               label=""
               name={"date"}
               placeholder={t("labels.date")}
-              className={"reserv-input !placeholder-text hover:bg-transparent cursor-pointer"}
+              className={
+                "reserv-input !placeholder-text cursor-pointer hover:bg-transparent"
+              }
+              disabled={isLoading}
             />
+            {form.formState.errors.root && (
+              <p className="text-center text-sm text-red-500">
+                {form.formState.errors.root.message}
+              </p>
+            )}
             <div className="flex justify-between">
-              <div></div>
+              <div></div>{" "}
               <Button
                 type="submit"
                 className="text-md !h-10 font-semibold text-white transition-all duration-200"
+                disabled={isLoading}
               >
-                {t("labels.bookTable")}
+                {isLoading ? t("buttons.loading") : t("labels.bookTable")}
               </Button>
             </div>
           </form>

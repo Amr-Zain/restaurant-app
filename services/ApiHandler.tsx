@@ -66,6 +66,15 @@ export const getProfile = async()=>{
     }
   }
 }
+
+  export const getBranchs = async ():Promise<Branch[]> => {
+    try {
+      const { data } = await axiosInstance.get(`/stores`);
+      return data.data || [];
+    } catch {
+      throw "Failed to fetch Sort data";
+    }
+  };
 // export const getCategoriesData = async () => {
 //   try {
 //     const { data } = await axiosInstance.get("/categories");

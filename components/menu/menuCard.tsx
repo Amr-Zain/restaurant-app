@@ -29,7 +29,7 @@ function MenuCard({
   offPercentage,
 }: MenuCardProps) {
   return (
-    <Card className="max-w-full gap-2 overflow-hidden p-2 shadow-sm transition-shadow hover:shadow-md">
+    <Card className="max-w-[380px] mx-auto gap-2 overflow-hidden p-2 shadow-sm transition-shadow hover:shadow-md">
       <div className="relative h-58 max-h-62">
         <Image
           src={image}

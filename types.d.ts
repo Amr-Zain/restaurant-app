@@ -17,6 +17,16 @@ interface User {
     notifiable: boolean;
     token: string;
 }
+interface Branch  {
+  id: number;
+  image: string;
+  name: string;
+  phone: string;
+  phone_code: string;
+  lat: number;
+  lng: number;
+  location_description: string;
+}
 interface SubmissionResult {
     data: unknown;
     message: string;

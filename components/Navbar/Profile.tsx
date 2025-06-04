@@ -12,7 +12,7 @@ import { LogOut } from "lucide-react";
 import { logout } from "@/services/ClientApiHandler";
 import { useAuthStore } from "@/stores/auth";
 import { toast } from "sonner";
-import { useRouter } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
 
 
 const Pofile = () => {
@@ -25,8 +25,7 @@ const Pofile = () => {
       toast.success(res.message);
       clearUser();
       router.refresh();
-
-      //router.replace("/auth/login");
+      router.replace("/auth/login");
       return;
     }
     toast.success(res.message);
@@ -61,7 +60,10 @@ const Pofile = () => {
         <SheetHeader>
           <SheetTitle>Profile</SheetTitle>
         </SheetHeader>
-        <div className="flex flex-col gap-2 p-4">
+        <div className="flex flex-col justify-between gap-2 p-4">
+          <div className="flex flex-col gap-2 p-4">
+            <Link className="flex gap-1 items-center cursor-pointer text-base transition-colors hover:text-gray-400" href={'/orders'}>orders</Link>
+          </div>
           <div className="flex gap-1 items-center cursor-pointer text-base transition-colors hover:text-gray-400" onClick={handleLogout}>
             <LogOut className="size-6"/>
             <div>logout</div>

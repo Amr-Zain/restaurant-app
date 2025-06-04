@@ -71,7 +71,7 @@ const LoginForm = () => {
               label={t("labels.rememberMe")}
               disabled={isLoading}
             />
-            <Link href="/auth/verification">
+            <Link href="/auth/forgot-password">
               <span className="text-primary cursor-pointer text-sm font-medium hover:underline">
                 {t("labels.forgetPassword")}
               </span>

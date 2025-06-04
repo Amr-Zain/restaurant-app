@@ -32,8 +32,8 @@ function OrderCard({
       </div>
       <div>
         <div className="flex flex-col-reverse sm:flex-row items-start sm:items-center  gap-2">
-          <div className="flex flex-col items-center justify-center gap-2">
-            <OverlappingImages images={images} size={64} overlap={64 * (0.2 * (images.length))} />
+          <div className="flex flex-row sm:flex-col items-center justify-center gap-2">
+            <OverlappingImages images={images} size={50} overlap={50 * (0.2 * (images.length))} />
             <div className="text-sub text-sm">
               {images.length} {images.length === 1 ? "item" : "items"}
             </div>

@@ -7,28 +7,13 @@ import CartModal from "./Cart";
 import Notifications from "./Notifications";
 import MobileMenu from "./MobileMenu";
 import { getTranslations } from "next-intl/server";
-//import { getProfile } from "@/services/ApiHandler";
-import { cookies } from "next/headers";
 import AuthdUser from "./AuthedUser";
 
 
-const getUserFromCookie = async (): Promise<User | null> => {
-  const userCookie = (await cookies()).get('user')?.value;
-  if (!userCookie) {
-    return null;
-  }
-  try {
-    const user = JSON.parse(userCookie) as User;
-    return user;
-  } catch (error) {                                                                                         
-    console.error("Error parsing user cookie:", error);
-    return null;
-  }
-};
+
 async function NavBar() {
   const T = await getTranslations("NAV");
-  const user = await getUserFromCookie();
-  console.log('user', user)
+  //const user = await getUserFromCookie();
   const navItems = [
     { value: T("about"), path: "/about-us" },
     { value: T("Reservation"), path: "/reservation" },

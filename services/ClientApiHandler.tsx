@@ -1,10 +1,15 @@
 "use client";
 import {
+  ContactFormType,
   ForgatPasswordFormType,
   LoginFormType,
+  OTPSchemaType,
+  PhoneFormType,
   RegisterFormType,
+  ReservationFromType,
 } from "@/helper/schema";
 import axiosInstance from "./axiosClient";
+import { format } from "date-fns";
 
 export const getAllServices = async () => {
   return await axiosInstance
@@ -55,7 +60,7 @@ export const verifyForgotPassword = async (
   );
   return data;
 };
-export const resetPassword = async (form: ForgatPasswordFormType) => {
+export const resetPassword = async (form:ForgatPasswordFormType&PhoneFormType&OTPSchemaType ) => {
   const { data } = await axiosInstance.post("auth/reset_password", form);
   return data;
 };
@@ -81,7 +86,23 @@ export const getCodes = async () => {
     }
   }
 };
-
+export const postReservation = async ({
+  form,
+  id,
+}: {
+  form: ReservationFromType;
+  id: string;
+}) => {
+  const { data } = await axiosInstance.post(`/reservations?store_id=${id}`, {
+    ...form,
+    date: format(form.date, "yyyy-MM-dd"),
+  });
+  return data || [];
+};
+export const postContactForm = async (form: ContactFormType) => {
+  const { data } = await axiosInstance.post(`contact_us`, form);
+  return data || [];
+};
 // export const getCategoryData = async (id: number) => {
 //     try {
 //       const { data } = await axiosInstance.get(`/categories?category_id=${id}`);
@@ -103,14 +124,14 @@ export const getCodes = async () => {
 //     }
 //   };
 
-//   export const getSortData = async () => {
-//     try {
-//       const { data } = await axiosInstance.get(`/sort`);
-//       return data || [];
-//     } catch {
-//       throw new CustomError("Failed to fetch Sort data", 500, "APIError");
-//     }
-//   };
+export const getBranchs = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/stores`);
+    return data.data || [];
+  } catch {
+    throw "Failed to fetch Sort data";
+  }
+};
 
 //   export const getBrandsData = async (key?:number) => {
 //     try {

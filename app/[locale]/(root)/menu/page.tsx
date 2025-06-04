@@ -1,11 +1,11 @@
 import HeroSection from "@/components/general/HeroSection";
-import CategoryTabs from "@/components/menu/CategoryTabs";
+//import CategoryTabs from "@/components/menu/CategoryTabs";
 import MenuCard from "@/components/menu/menuCard";
 import FilterSidebar from "@/components/menu/Sidebar";
 import { getTranslations } from "next-intl/server";
 import img from "@/assets/images/login.jpg";
 import PaginationControls from "@/components/general/Pagenation";
-import { Filter } from "lucide-react";
+import FilterModal from "@/components/menu/FilterModal";
 
 const filterOptions = {
   mainCategories: ["Food", "Drink", "Dessert"],
@@ -15,17 +15,6 @@ const filterOptions = {
     Dessert: ["Cake", "Ice Cream", "Pastry", "Cookies", "Brownie"],
   },
 };
-
-const categories = [
-  "All",
-  "Breakfast",
-  "Lunch",
-  "Dinner",
-  "Maxican",
-  "Italian",
-  "Desserts",
-  "Drinks",
-];
 export default async function HomePage({
   searchParams,
 }: {
@@ -41,7 +30,6 @@ export default async function HomePage({
     category = "all",
     subCategory = "all",
   } = await searchParams;
-  //requst
   return (
     <div className="space-y-12">
       <HeroSection
@@ -50,28 +38,18 @@ export default async function HomePage({
         section={t("NAV.menu")}
         href="/menu"
       />
-      <div className="p-sec mx-auto grid w-full grid-cols-1 md:grid-cols-[230px_1fr] gap-4">
+      <div className="p-sec mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-[250px_1fr]">
         <div className="hidden md:block">
           <FilterSidebar
             filters={filterOptions}
             category={category}
             subCategory={subCategory}
-            
-            />
-            </div>
-          <div>
-            <div className="mx-8">
-
-            <CategoryTabs
-              categories={categories}
-              category={category || "All"}
-              className="bg-white"
-            />
-            </div>
-            <div className="block md:hidden">
-              <Filter />
-            </div>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          />
+        </div>
+        <div>
+          
+          <FilterModal category={category} subCategory={subCategory} />
+          <div className="grid sm:grid-cols-2 gap-4 lg:grid-cols-3">
             {[...Array(9)].map((_, index) => (
               <MenuCard
                 id="1"

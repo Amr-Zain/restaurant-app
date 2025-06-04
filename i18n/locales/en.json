@@ -21,17 +21,17 @@
     "orders": "Orders",
     "login": "Log In",
     "privacy": "PRIVACY POLICY",
-    "terms":"TERMS & CINDITIONS"
+    "terms": "TERMS & CINDITIONS"
   },
-  
-    "validation": {
-      "nameMin": "Name must be at least 2 characters.",
-      "phoneMin": "Phone number must be at least 10 digits.",
-      "guestsRequired": "Please select number of guests.",
-      "dateRequired": "Please select a date.",
-      "fromTimeRequired": "Please select start time.",
-      "toTimeRequired": "Please select end time."
-    },
+
+  "validation": {
+    "nameMin": "Name must be at least 2 characters.",
+    "phoneMin": "Phone number must be at least 10 digits.",
+    "guestsRequired": "Please select number of guests.",
+    "dateRequired": "Please select a date.",
+    "fromTimeRequired": "Please select start time.",
+    "toTimeRequired": "Please select end time."
+  },
   "TEXT": {
     "noAccount": "don’t have an account?",
     "haveAccount": "have an account?",
@@ -71,7 +71,8 @@
     "fullName": "Full Name",
     "phoneNumberWithLimit": "Phone Number ({limit} digits)",
     "digits": "digits",
-
+    "chooseTypeOfMessage": "Choose Type of Message",
+    "enterYourMessageHere": "Enter Your Message Here",
     "passwordConfirmation": "Confirm Password",
     "namePlaceholder": "Your name",
     "phonePlaceholder": "Your phone number",
@@ -96,7 +97,8 @@
     "confirm": "Confirm",
     "next": "Next",
     "send": "Send",
-    "submit": "Submit"
+    "submit": "Submit",
+    "sendMessage": "Send message"
   },
   "login": {
     "welcomeBack": "Welcome Back",
@@ -129,7 +131,14 @@
     "invalidCodeDigits": "Code must contain only digits",
     "passwordsMismatch": "Passwords do not match",
     "phoneNumberLength": "Phone number must be exactly {length} digits.",
-    "passwordMismatch": "Password confirmation does not match."
+    "passwordMismatch": "Password confirmation does not match.",
+    "fullNameRequired": "Full name is required.",
+    "phoneCodeRequired": "Phone code is required.",
+    "phoneRequired": "Phone number is required.",
+    "phoneInvalidLength": "Phone number must be {length} digits long.",
+    "messageTypeRequired": "Please select a message type.",
+    "messageRequired": "Message content is required.",
+    "messageTooLong": "Message cannot exceed {max} characters."
   },
   "enter": "Enter",
   "requiredField": "{field} is required",

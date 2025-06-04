@@ -46,7 +46,7 @@ function PhoneNumber<T extends FieldValues>({
         control={control}
         name={phoneCodeName}
         render={({ field }) => (
-          <FormItem className="w-1/4">
+          <FormItem className="min-w-8 ">
             <Select
               onValueChange={field.onChange}
               defaultValue={field.value}
@@ -80,7 +80,7 @@ function PhoneNumber<T extends FieldValues>({
         control={control}
         name={phoneNumberName}
         render={({ field }) => (
-          <FormItem className="w-3/4">
+          <FormItem className="grow-1">
             <FormControl>
               <Input
                 {...field}

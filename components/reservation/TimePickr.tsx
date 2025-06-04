@@ -19,28 +19,40 @@ import { generateNumbers } from "@/helper/functions";
 const TimePicker = ({
   value,
   onChange,
+  placeholder, 
+  disabled,
 }: {
   value: string;
   onChange: (value: string) => void;
+  placeholder?: string; 
+  disabled?: boolean; 
 }) => {
   const t = useTranslations();
   const [open, setOpen] = useState(false);
   const [time, setTime] = useState({
     hours: "06",
     minutes: "00",
-    seconds: "00",
     period: "PM",
   });
 
   useEffect(() => {
     if (value) {
-      const [timePart, period] = value.split(" ");
-      const [hours, minutes, seconds] = timePart.split(":");
+      const parts = value.split(" ");
+      const timePart = parts[0]; 
+      const period = parts[1] || "PM"; 
+
+      const [hours, minutes] = timePart.split(":");
+
       setTime({
         hours: hours.padStart(2, "0"),
         minutes: minutes.padStart(2, "0"),
-        seconds: (seconds || "00").padStart(2, "0"),
-        period: period || "PM",
+        period: period,
+      });
+    } else {
+      setTime({
+        hours: "06",
+        minutes: "00",
+        period: "PM",
       });
     }
   }, [value]);
@@ -50,7 +62,7 @@ const TimePicker = ({
   };
 
   const handleConfirm = () => {
-    onChange(`${time.hours}:${time.minutes}:${time.seconds} ${time.period}`);
+    onChange(`${time.hours}:${time.minutes} ${time.period}`);
     setOpen(false);
   };
 
@@ -58,9 +70,10 @@ const TimePicker = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <button
-          className="reserv-input flex justify-between !px-0 cursor-pointer"
+          className="reserv-input flex cursor-pointer justify-between !px-0"
+          disabled={disabled} 
         >
-          <span>{value || t("labels.selectTime")}</span>
+          <span>{value || placeholder || t("labels.selectTime")}</span>{" "}
           <Clock className="h-4 w-4" />
         </button>
       </DialogTrigger>
@@ -73,22 +86,17 @@ const TimePicker = ({
 
         <div className="flex items-center justify-center gap-1 py-4">
           <ScrollableTimeColumn
-            items={generateNumbers(1, 12)}
+            items={generateNumbers(1, 12).map((n) => String(n).padStart(2, "0"))} // Ensure 2-digit hours
             value={time.hours}
             onChange={(val) => handleTimeChange("hours", val)}
           />
           <div className="px-1 text-2xl font-light text-gray-400">:</div>
           <ScrollableTimeColumn
-            items={generateNumbers(0, 59)}
+            items={generateNumbers(0, 59).map((n) => String(n).padStart(2, "0"))} // Ensure 2-digit minutes
             value={time.minutes}
             onChange={(val) => handleTimeChange("minutes", val)}
           />
-          <div className="px-1 text-2xl font-light text-gray-400">:</div>
-          <ScrollableTimeColumn
-            items={generateNumbers(0, 59)}
-            value={time.seconds}
-            onChange={(val) => handleTimeChange("seconds", val)}
-          />
+
           <div className="w-4"></div>
           <ScrollableTimeColumn
             items={["AM", "PM"]}
@@ -127,19 +135,18 @@ const ScrollableTimeColumn = ({
   onChange: (value: string) => void;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const itemHeight = 40; // Height of each item
+  const itemHeight = 40;
   const [isScrolling, setIsScrolling] = useState(false);
 
   useEffect(() => {
     if (containerRef.current && !isScrolling) {
       const index = items.findIndex((item) => item === value);
       if (index !== -1) {
-        // Center the selected item
         const scrollTop = index * itemHeight;
         containerRef.current.scrollTop = scrollTop;
       }
     }
-  }, [value, items, isScrolling]);
+  }, [value, items, isScrolling, itemHeight]);
 
   const handleScroll = () => {
     if (containerRef.current) {
@@ -152,8 +159,8 @@ const ScrollableTimeColumn = ({
         onChange(items[clampedIndex]);
       }
 
-      // Clear scrolling flag after a short delay
-      setTimeout(() => setIsScrolling(false), 150);
+      clearTimeout((containerRef.current as any).scrollTimeout);
+      (containerRef.current as any).scrollTimeout = setTimeout(() => setIsScrolling(false), 200); // Increased delay slightly
     }
   };
 
@@ -175,8 +182,8 @@ const ScrollableTimeColumn = ({
             className={cn(
               "relative z-30 flex items-center justify-center transition-all duration-200",
               value === item
-                ? "text-lg font-medium text-gray-800"
-                : "text-base text-gray-400",
+                ? "text-lg font-medium text-text"
+                : "text-base text-sub",
             )}
             style={{
               height: `${itemHeight}px`,
@@ -191,19 +198,20 @@ const ScrollableTimeColumn = ({
   );
 };
 
-//ScrollableTimeColumn.displayName = "ScrollableTimeColumn";
-
 function TimePickerField<TFieldValues extends FieldValues>({
   control,
   name,
   label,
   className,
+  placeholder, 
+  disabled, 
 }: {
   control: Control<TFieldValues>;
-
   name: FieldPath<TFieldValues>;
   label?: string;
   className?: string;
+  placeholder?: string; 
+  disabled?: boolean; 
 }) {
   return (
     <FormField
@@ -211,9 +219,14 @@ function TimePickerField<TFieldValues extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          {label && <FormLabel>{label}</FormLabel>} 
           <FormControl className={className}>
-            <TimePicker value={field.value || ""} onChange={field.onChange} />
+            <TimePicker
+              value={field.value || ""}
+              onChange={field.onChange}
+              placeholder={placeholder} 
+              disabled={disabled} 
+            />
           </FormControl>
           <FormMessage />
         </FormItem>

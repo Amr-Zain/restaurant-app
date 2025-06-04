@@ -3,6 +3,7 @@ import BranchCard from "@/components/branches/BranchCard";
 import HeroSection from "@/components/general/HeroSection";
 import { getBranchs } from "@/services/ApiHandler";
 import { getTranslations } from "next-intl/server";
+import GoogleMapWithBranches from "@/components/contact/Map";
 export default async function AboutPage() {
   const t = await getTranslations();
   const branches = await getBranchs();
@@ -10,6 +11,11 @@ export default async function AboutPage() {
     "https://saas.khlod.aait-d.com/front_brand/api/app/contact-data",
   );
   console.log(await contactData.json()); */
+  const locations = branches.map((branch) => ({
+    id: branch.id,
+    name: branch.name,
+    position: { lat: branch.lat, lng: branch.lng! },
+  }));
   return (
     <div className="space-y-16">
       <HeroSection
@@ -28,8 +34,9 @@ export default async function AboutPage() {
             <p className="text-sub text-center">No branches found.</p>
           )}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2">
+        <div className="container grid grid-cols-1 gap-4 rounded-2xl bg-white p-4 md:grid-cols-2">
           <ContactUsForm />
+          <GoogleMapWithBranches locations={locations} />
         </div>
       </div>
     </div>

@@ -18,14 +18,16 @@ function Field<TFieldValues extends FieldValues>({
   name,
   checkbox,
   textarea,
+  rows,
   ...rest
 }: {
-  control: Control<TFieldValues>; 
+  control: Control<TFieldValues>;
   label?: string;
   placeholder?: string;
   name: FieldPath<TFieldValues>;
   checkbox?: boolean;
   textarea?: boolean;
+  rows?: number;
   [key: string]: unknown;
 }) {
   return (
@@ -45,9 +47,9 @@ function Field<TFieldValues extends FieldValues>({
             ) : textarea ? (
               <Textarea
                 placeholder={placeholder}
-                rows={5}
-                {...field}
+                rows={rows || 7}
                 {...rest}
+                {...field}
               />
             ) : (
               <Input placeholder={placeholder} {...field} {...rest} />

@@ -53,6 +53,7 @@ const ContactUsForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleContactSubmit)} className="space-y-4">
+        <h2 className="text-text text-3xl font-bold">Contact Us</h2>
         <div className="space-y-4">
           <Field
             control={form.control}

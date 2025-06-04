@@ -11,22 +11,27 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
+import Image from "next/image";
 
-const MobileMenu = ({
-  items,
-}: {
-  items: Array<{ value: string; path: string }>;
-}) => {
+interface NavItem {
+  value: string;
+  path: string;
+  icon: React.ReactNode | string;
+}
+
+const MobileMenu = ({ items }: { items: NavItem[] }) => {
   const t = useTranslations();
   const [open, setOpen] = useState(false);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <MenuIcon className='block md:hidden w-8 h-8 text-primary cursor-pointer' aria-hidden="true" />
+        <MenuIcon
+          className="text-primary block h-8 w-8 cursor-pointer lg:hidden"
+          aria-hidden="true"
+        />
       </SheetTrigger>
-      <SheetContent side="left" className="border-r-1 rounded-r-2xl w-70">
-        {" "}
+      <SheetContent side="left" className="w-70 rounded-r-2xl border-r-1">
         <SheetHeader>
           <SheetTitle>{t("NAV.Menu")}</SheetTitle>
         </SheetHeader>
@@ -37,8 +42,23 @@ const MobileMenu = ({
                 <Link
                   href={item.path}
                   onClick={() => setOpen(false)}
-                  className="text-text block text-base transition-colors hover:text-gray-400" // Adjusted font size
+                  className="text-text hover:text-primary flex items-center gap-2 text-base transition-colors"
                 >
+                  {item.icon && (
+                    <span className="flex-shrink-0">
+                      {typeof item.icon === "string" ? (
+                        <Image
+                          src={item.icon}
+                          width={20}
+                          height={20}
+                          alt={`${item.value} icon`}
+                          className="size-5 object-contain"
+                        />
+                      ) : (
+                        item.icon
+                      )}
+                    </span>
+                  )}
                   {item.value}
                 </Link>
               </li>
@@ -49,4 +69,5 @@ const MobileMenu = ({
     </Sheet>
   );
 };
+
 export default MobileMenu;

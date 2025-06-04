@@ -21,6 +21,7 @@
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
+    "@react-google-maps/api": "^2.20.6",
     "@types/aos": "^3.0.7",
     "@types/axios": "^0.14.4",
     "@types/js-cookie": "^3.0.6",

@@ -1,19 +1,23 @@
 import { Link } from "@/i18n/routing";
 
+interface NavItem {
+  value: string;
+  path: string;
+}
+
 const DesktopNavigation = ({
   items,
 }: {
-  items: Array<{ value: string; path: string }>;
-  ariaLabel: string;
+  items: NavItem[];
 }) => (
-  <div className="hidden items-center gap-7 md:flex">
-    <ul className="flex list-none items-center gap-7">
+  <div className="hidden items-center gap-7 lg:flex">
+    <ul className="flex list-none items-center gap-4 overflow-x-auto">
       {items.
-      map((item) => (
-        <li key={item.path}>
+      map((item,i) => (
+        <li key={item.path +i}>
           <Link
             href={item.path}
-            className="text-sm font-light text-text transition-colors hover:text-gray-400"
+            className="text-sm font-light whitespace-nowrap text-text transition-colors hover:text-primary"
           >
             {item.value}
           </Link>

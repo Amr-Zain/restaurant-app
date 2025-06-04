@@ -1,4 +1,4 @@
-'use server';
+"use server";
 import axiosInstance from "./instance";
 import AppError from "../utils/appError";
 
@@ -54,27 +54,44 @@ export const getSettingsData = async () => {
     }
   }
 };
-export const getProfile = async()=>{
+export const getProfile = async () => {
   try {
     const { data } = await axiosInstance.get("profile");
-    console.log("data",data)
+    console.log("data", data);
     return data.data;
   } catch (error) {
     if (error instanceof Error) {
-      console.error(error)
+      console.error(error);
     } else {
     }
   }
-}
+};
 
-  export const getBranchs = async ():Promise<Branch[]> => {
-    try {
-      const { data } = await axiosInstance.get(`/stores`);
-      return data.data || [];
-    } catch {
-      throw "Failed to fetch Sort data";
-    }
-  };
+export const getBranchs = async (): Promise<Branch[]> => {
+  try {
+    const { data } = await axiosInstance.get(`/stores`);
+    return data.data || [];
+  } catch {
+    throw "Failed to fetch Sort data";
+  }
+};
+export const getCmsPages = async (): Promise<CMSPage[]> => {
+  try {
+    const { data } = await axiosInstance.get(`cms-pages`);
+    return data.data as CMSPage[] || [];
+  } catch {
+    throw "Failed to fetch Sort data";
+  }
+};
+export const getCmsPage = async (url:string): Promise<{data:CmsPageContent}> => {
+  try {
+    const { data } = await axiosInstance.get(url);
+    console.log(data)
+    return data as {data:CmsPageContent} || [];
+  } catch (error) {
+      throw error;
+  }
+};
 // export const getCategoriesData = async () => {
 //   try {
 //     const { data } = await axiosInstance.get("/categories");

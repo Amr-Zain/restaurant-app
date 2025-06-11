@@ -5,11 +5,13 @@ import {
   LoginFormType,
   OTPSchemaType,
   PhoneFormType,
+  profileFromType,
   RegisterFormType,
   ReservationFromType,
 } from "@/helper/schema";
 import axiosInstance from "./axiosClient";
 import { format } from "date-fns";
+import { AddressFormData } from "@/components/address/AddressForm";
 
 export const getAllServices = async () => {
   return await axiosInstance
@@ -40,6 +42,26 @@ export const forgotPassword = async (form: {
   const { data } = await axiosInstance.post("auth/forgot_password", form);
   return data;
 };
+
+export const sendProfileVerificationCode = async (form: {
+  phone_code: string;
+  phone: string;
+}) => {
+  const { data } = await axiosInstance.post(
+    "profile/send_verification_code",
+    form,
+  );
+  return data;
+};
+
+export const updatePhone = async (form: PhoneFormType & OTPSchemaType) => {
+  const { data } = await axiosInstance.post("profile/update_phone", {
+    phone_code: form.phone_code,
+    phone: form.phone,
+    verification_code: form.reset_code,
+  });
+  return data;
+};
 export const verifyForgotPassword = async (
   form: {
     phone_code: string;
@@ -60,7 +82,9 @@ export const verifyForgotPassword = async (
   );
   return data;
 };
-export const resetPassword = async (form:ForgatPasswordFormType&PhoneFormType&OTPSchemaType ) => {
+export const resetPassword = async (
+  form: ForgatPasswordFormType & PhoneFormType & OTPSchemaType,
+) => {
   const { data } = await axiosInstance.post("auth/reset_password", form);
   return data;
 };
@@ -103,27 +127,6 @@ export const postContactForm = async (form: ContactFormType) => {
   const { data } = await axiosInstance.post(`contact_us`, form);
   return data || [];
 };
-// export const getCategoryData = async (id: number) => {
-//     try {
-//       const { data } = await axiosInstance.get(`/categories?category_id=${id}`);
-//       return data?.data || [];
-//     } catch {
-//       throw new CustomError("Failed to fetch Category data", 500, "APIError");
-//     }
-//   };
-//   export const getProductsByCategory = async (id: number, params: any) => {
-//     console.log("🚀 ~ getProductsByCategory ~ params:", params);
-//     try {
-//       const { data } = await axiosInstance.get(`/products`, {
-//         params: { category_id: id, ...params },
-//       });
-//       return data || [];
-//     } catch (error) {
-//       console.error("Error fetching products by category:", error);
-//       return [];
-//     }
-//   };
-
 export const getBranchs = async () => {
   try {
     const { data } = await axiosInstance.get(`/stores`);
@@ -132,12 +135,84 @@ export const getBranchs = async () => {
     throw "Failed to fetch Sort data";
   }
 };
+export const taggleFavorit = async ({
+  favorit,
+  id,
+}: {
+  favorit: boolean;
+  id: number;
+}): Promise<{ data: Product; status: string }> => {
+  try {
+    let data = null;
+    if (favorit) {
+      data = (await axiosInstance.post(`favourite`, { product_id: id })).data;
+    } else {
+      data = (await axiosInstance.delete(`/favourite/${id}`)).data;
+    }
+    return data as { data: Product; status: string };
+  } catch (error: unknown) {
+    console.error(error);
+    throw error instanceof Error ? error.message : "unexpected error";
+  }
+};
+export const getFavourites = async (): Promise<{
+  data: Product[];
+  status: string;
+}> => {
+  try {
+    const data = (await axiosInstance.get(`favourite`))?.data;
+    return data as { data: Product[]; status: string };
+  } catch (error: unknown) {
+    console.error(error);
+    throw error instanceof Error ? error.message : "unexpected error";
+  }
+};
+export const getAddress = async (): Promise<{
+  data: Address[];
+  success: string;
+}> => {
+  try {
+    const data = (await axiosInstance.get(`address`))?.data;
+    return data as { data: Address[]; success: string };
+  } catch (error: unknown) {
+    console.error(error);
+    throw error instanceof Error ? error.message : "unexpected error";
+  }
+};
+export const deleteAddress = async (id: number) => {
+  try {
+    const data = (await axiosInstance.delete(`address/${id}`))?.data;
+    return data;
+  } catch (error: unknown) {
+    console.error(error);
+    throw error instanceof Error ? error.message : "unexpected error";
+  }
+};
+export const updateProfileImage = async (formData: FormData) => {
+  const data = await axiosInstance.post(`store_attachment`, formData);
+  return data.data;
+};
+export const updateUserProfile = async (form: profileFromType) => {
+  try {
+    const { data } = await axiosInstance.post(`profile`, {
+      ...form,
+      _method: "patch",
+    });
 
-//   export const getBrandsData = async (key?:number) => {
-//     try {
-//       const { data } = await axiosInstance.get(`/brands_without_paginate${key?`?keyword=${key}` : ""}`);
-//       return data || [];
-//     } catch {
-//       throw new CustomError("Failed to fetch brands data", 500, "APIError");
-//     }
-//   };
+    return data;
+  } catch (error: unknown) {
+    console.error(error);
+    throw error instanceof Error ? error.message : "unexpected error";
+  }
+};
+export const postAddress = async (form: AddressFormData) => {
+  if (!form.is_default) delete form.is_default;
+  const { data } = await axiosInstance.post(`address`, form);
+  return data;
+};
+export const updateAddress = async (form: AddressFormData, id: number) => {
+  if (!form.is_default) delete form.is_default;
+
+  const { data } = await axiosInstance.patch(`address/${id}`, form);
+  return data;
+};

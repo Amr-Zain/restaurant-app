@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -16,25 +16,28 @@ import usePhoneCode from "@/hooks/usePhoneCode";
 import { ReservationFromType, reservationSchema } from "@/helper/schema";
 import { useBranchStore } from "@/stores/branchs";
 
-export default function ReservationForm() {
+export default function ReservationForm({
+  className,
+  onClick,
+}: {
+  className?: string;
+  onClick?: () => void;
+}) {
   const t = useTranslations();
   const [currentPhoneLimit, setCurrentPhoneLimit] = useState<number | null>(
     null,
   );
 
-  const guests = useMemo(
-    () => [
-      { value: "1", label: "1 " + t("labels.person") },
-      { value: "2", label: "2 " + t("labels.people") },
-      { value: "3", label: "3 " + t("labels.people") },
-      { value: "4", label: "4 " + t("labels.people") },
-      { value: "5", label: "5 " + t("labels.people") },
-      { value: "6", label: "6 " + t("labels.people") },
-      { value: "7", label: "7 " + t("labels.people") },
-    ],
-    [t],
-  );
-  const branches = useBranchStore(state=>state.branchs)
+  const guests = [
+    { value: "1", label: "1 " + t("labels.person") },
+    { value: "2", label: "2 " + t("labels.people") },
+    { value: "3", label: "3 " + t("labels.people") },
+    { value: "4", label: "4 " + t("labels.people") },
+    { value: "5", label: "5 " + t("labels.people") },
+    { value: "6", label: "6 " + t("labels.people") },
+    { value: "7", label: "7 " + t("labels.people") },
+  ];
+  const branches = useBranchStore((state) => state.branchs);
   const form = useForm<ReservationFromType>({
     resolver: zodResolver(reservationSchema({ t, currentPhoneLimit })),
     defaultValues: {
@@ -53,28 +56,33 @@ export default function ReservationForm() {
 
   const { handleSubmit: handleReservationSubmit } =
     useFormSubmission<ReservationFromType>(form, {
-      submitFunction: (data:ReservationFromType)=>postReservation({form:data,id:data.store_id}),
+      submitFunction: (data: ReservationFromType) =>
+        postReservation({ form: data, id: data.store_id }),
     });
 
   const onSubmit = async (data: ReservationFromType) => {
     await handleReservationSubmit(data);
+    if (onClick) onClick();
   };
 
   return (
-    <div className="h-full w-full rounded-3xl bg-gradient-to-br bg-[url('@/assets/images/table.png')] p-4 md:p-8">
-      <div className="relative z-10 mx-auto max-w-full">
-        <div className="text-text mb-8 text-center">
-          <div className="mb-2 font-serif text-lg italic">
-            {t("labels.reservations")}
-          </div>
-          <h1 className="mb-2 text-3xl font-bold">{t("labels.bookTable")}</h1>
-        </div>
-
+    <div
+      className={`h-full w-full rounded-3xl bg-[url('@/assets/images/table.png')] p-4 md:p-8 ${className}`}
+    >
+      <div className="mx-auto max-w-full">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="mx-auto w-128 max-w-full space-y-4 p-4"
+            className="mx-auto max-w-full space-y-4 p-4"
           >
+            <div className="text-text mb-8 text-center">
+              <div className="mb-2 font-serif text-lg italic">
+                {t("labels.reservations")}
+              </div>
+              <h1 className="mb-2 text-3xl font-bold">
+                {t("labels.bookTable")}
+              </h1>
+            </div>
             <Field
               control={form.control}
               name="name"
@@ -88,6 +96,8 @@ export default function ReservationForm() {
               control={form.control}
               phoneCodeName="phone_code"
               phoneNumberName="phone"
+              codeClass="reserv-input"
+              phoneClass="reserv-input !h-12 ms-4"
               countries={countries}
               currentPhoneLimit={currentPhoneLimit}
             />
@@ -104,16 +114,16 @@ export default function ReservationForm() {
                 control={form.control}
                 name="store_id"
                 placeholder={t("labels.branch")}
-                items={branches.map((b) => ({ label: b.name, value: String(b.id) }))}
+                items={branches.map((b) => ({
+                  label: b.name,
+                  value: String(b.id),
+                }))}
                 triggerClassName="reserv-input w-full"
               />
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <TimePickerField
-                control={form.control}
-                name="from_time" 
-              />
+              <TimePickerField control={form.control} name="from_time" />
               <TimePickerField control={form.control} name="to_time" />
             </div>
             <DateFields

@@ -7,10 +7,7 @@ import GoogleMapWithBranches from "@/components/contact/Map";
 export default async function AboutPage() {
   const t = await getTranslations();
   const branches = await getBranchs();
-  /* const contactData = await fetch(
-    "https://saas.khlod.aait-d.com/front_brand/api/app/contact-data",
-  );
-  console.log(await contactData.json()); */
+  
   const locations = branches.map((branch) => ({
     id: branch.id,
     name: branch.name,

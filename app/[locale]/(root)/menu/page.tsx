@@ -1,20 +1,34 @@
 import HeroSection from "@/components/general/HeroSection";
 //import CategoryTabs from "@/components/menu/CategoryTabs";
 import MenuCard from "@/components/menu/menuCard";
-import FilterSidebar from "@/components/menu/Sidebar";
 import { getTranslations } from "next-intl/server";
-import img from "@/assets/images/login.jpg";
-import PaginationControls from "@/components/general/Pagenation";
-import FilterModal from "@/components/menu/FilterModal";
-
-const filterOptions = {
-  mainCategories: ["Food", "Drink", "Dessert"],
-  subCategories: {
-    Food: ["Pizza", "Burger", "Pasta", "Salad", "Sushi", "Steak", "Soup"],
-    Drink: ["Coffee", "Tea", "Juice", "Soda", "Water"],
-    Dessert: ["Cake", "Ice Cream", "Pastry", "Cookies", "Brownie"],
+//import PaginationControls from "@/components/general/Pagenation";
+import {
+  getMenuFilter,
+  getMenuProducts,
+} from "@/services/ApiHandler";
+import FiltersLayout from "@/components/menu/FiltersLayout";
+/* const product: Product = {
+  id: 29,
+  name: "AAA",
+  slug: "aaaaaab",
+  desc: "This is a description for the AAA product. It's a sample item to demonstrate how the data is passed to the MenuCard component.",
+  type: "regular",
+  image:
+    "https://saas.khlod.aait-d.com/storage/tenants/front_brand/images/products/2rv7dLbrAi9A5FmFMrG5SZxviCmmlFtgBQOTEDZc.jpg",
+  rating: 4.5, 
+  review_count: 120,
+  rate: 0, 
+  is_favourite: true,
+  price: {
+    price: 10, 
+    currency: "جنيه مصري",
+    percentage: 20,
+    discount_value: 2,
+    price_after: 8, 
+    offer: null,
   },
-};
+}; */
 export default async function HomePage({
   searchParams,
 }: {
@@ -22,16 +36,25 @@ export default async function HomePage({
     page?: number;
     category?: string;
     subCategory?: string;
+    keyword?: string;
   }>;
 }) {
   const t = await getTranslations();
-  const {
-    page = 1,
-    category = "all",
-    subCategory = "all",
-  } = await searchParams;
+  const params = await searchParams;
+
+  const [filters, menuList] = await Promise.all([
+    getMenuFilter(),
+    getMenuProducts(params),
+  ]);
+
+ /*  console.log(
+    await getOffers({
+      lat: 31.199999999999999289457264239899814128875732421875,
+      lng: 29.91799999999999926103555480949580669403076171875,
+    }),
+  ); */
   return (
-    <div className="space-y-12">
+    <div>
       <HeroSection
         title={t("NAV.menu")}
         home={t("NAV.home")}
@@ -39,31 +62,26 @@ export default async function HomePage({
         href="/menu"
       />
       <div className="p-sec mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-[250px_1fr]">
-        <div className="hidden md:block">
-          <FilterSidebar
-            filters={filterOptions}
-            category={category}
-            subCategory={subCategory}
-          />
-        </div>
-        <div>
-          
-          <FilterModal category={category} subCategory={subCategory} />
-          <div className="grid sm:grid-cols-2 gap-4 lg:grid-cols-3">
-            {[...Array(9)].map((_, index) => (
-              <MenuCard
-                id="1"
-                key={index}
-                image={img}
-                desc="Delicious food item with premium ingredients and authentic flavors"
-                rating={4.5}
-                price={200}
-                title={`Menu Item ${index + 1}`}
-                oldPrice={50}
-              />
-            ))}
-          </div>
-          <PaginationControls currentPage={+page} totalPages={8} />
+        <FiltersLayout
+          filters={filters?.content}
+          category={params?.category}
+          subCategory={params?.subCategory}
+          keyword={params?.keyword}
+        />
+        <div className="flex min-h-[70vh] flex-col items-center justify-between">
+          {!menuList.data.length ? (
+            <p className="text-sub mt-8 text-center">no results</p>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {menuList?.data.map((product, index) => (
+                <MenuCard key={product.id + `item ${index}`} product={product} />
+              ))}
+            </div>
+          )}
+          {/*  <PaginationControls
+              currentPage={Number(params?.page)}
+              totalPages={8}
+            /> */}
         </div>
       </div>
     </div>

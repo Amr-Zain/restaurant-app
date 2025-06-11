@@ -3,73 +3,87 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation"; // Import useRouter and useSearchParams
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface FilterSidebarProps {
-  filters: {
-    mainCategories: string[];
-    subCategories: { [key: string]: string[] };
-  };
-  category?: string;
-  subCategory?: string;
-  onFilter?:()=>void
+  filters: MenuCategory[];
+  categoryName?: string;
+  subCategoryName?: string;
+  searchQuery: string;
+  setSearchQuery: (value:string) => void;
+  onFilter?: () => void;
 }
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({
   filters,
-  category,
-  subCategory,
-  onFilter
+  categoryName='',
+  subCategoryName='',
+  searchQuery,
+  setSearchQuery,
+  onFilter,
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [selectedMainCategory, setSelectedMainCategory] = React.useState<
-    string | undefined
-  >(category);
-  const [selectedSubCategory, setSelectedSubCategory] = React.useState<
-    string | undefined
-  >(subCategory);
-  const [searchQuery, setSearchQuery] = React.useState<string>("");
+  const [selectedMainCategoryName, setSelectedMainCategoryName] = React.useState<
+    string 
+  >(categoryName);
+  const [selectedSubCategoryName, setSelectedSubCategoryName] = React.useState<
+    string 
+  >(subCategoryName);
+
+  const currentSelectedMainCategory = React.useMemo(() => {
+    return filters.find(
+      (cat) => cat.name === selectedMainCategoryName,
+    );
+  }, [filters, selectedMainCategoryName]);
+
+  const currentSubCategories = React.useMemo(() => {
+    return currentSelectedMainCategory?.subcategories || [];
+  }, [currentSelectedMainCategory]);
 
   const applyFilter = () => {
     const params = new URLSearchParams(searchParams);
-    if (selectedMainCategory) {
-      params.set("category", selectedMainCategory);
+
+    if (selectedMainCategoryName) {
+      params.set("category", selectedMainCategoryName);
     } else {
       params.delete("category");
     }
-    if (selectedSubCategory) {
-      params.set("subCategory", selectedSubCategory);
+
+    if (selectedSubCategoryName) {
+      params.set("subCategory", selectedSubCategoryName);
     } else {
       params.delete("subCategory");
     }
+
     if (searchQuery.trim()) {
-      params.set("search", searchQuery.trim());
+      params.set("keyword", searchQuery.trim());
     } else {
-      params.delete("search");
+      params.delete("keyword");
     }
+
     params.set("page", "1");
     router.push(`?${params.toString()}`);
-    if(onFilter)onFilter();
+    if (onFilter) onFilter();
   };
 
   const toggleButton = (
     type: "mainCategory" | "subCategory",
-    value: string,
+    valueName: string, 
   ) => {
     if (type === "mainCategory") {
-      if (selectedMainCategory === value) {
-        setSelectedMainCategory(undefined);
-        setSelectedSubCategory(undefined);
+      if (selectedMainCategoryName === valueName) {
+        setSelectedMainCategoryName('');
+        setSelectedSubCategoryName(''); 
       } else {
-        setSelectedMainCategory(value);
-        setSelectedSubCategory(undefined);
+        setSelectedMainCategoryName(valueName);
+        setSelectedSubCategoryName('');
       }
     } else if (type === "subCategory") {
-      if (selectedMainCategory) {
-        setSelectedSubCategory(
-          selectedSubCategory === value ? undefined : value,
+      if (selectedMainCategoryName) {
+        setSelectedSubCategoryName(
+          selectedSubCategoryName === valueName ? '' : valueName,
         );
       }
     }
@@ -77,26 +91,30 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
   const removeSelectedFilter = (type: "mainCategory" | "subCategory") => {
     if (type === "subCategory") {
-      setSelectedSubCategory(undefined);
-      return;
+      setSelectedSubCategoryName('');
+    } else if (type === "mainCategory") {
+      setSelectedMainCategoryName('');
+      setSelectedSubCategoryName(''); 
     }
-    setSelectedMainCategory(undefined);
   };
 
   const clearAllFilters = () => {
-    setSelectedMainCategory(undefined);
-    setSelectedSubCategory(undefined);
+    setSelectedMainCategoryName('');
+    setSelectedSubCategoryName('');
     setSearchQuery("");
+    const params = new URLSearchParams(searchParams);
+    params.delete("category");
+    params.delete("subCategory");
+    params.delete("keyword");
+    params.set("page", "1");
+    router.push(`?${params.toString()}`);
+    if (onFilter) onFilter();
   };
 
   const hasSelectedFilters =
-    selectedMainCategory !== undefined ||
-    selectedSubCategory !== undefined ||
+    selectedMainCategoryName !== '' ||
+    selectedSubCategoryName !== '' ||
     searchQuery.trim() !== "";
-
-  const currentSubCategories = selectedMainCategory
-    ? filters.subCategories[selectedMainCategory] || []
-    : [];
 
   return (
     <div className="w-full flex-shrink-0 self-start rounded-2xl bg-white p-4 md:w-58">
@@ -117,7 +135,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
       </div>
 
       <div className="space-y-6">
-        <div>
+        <div className="hidden md:block">
           <label
             htmlFor="search-filter"
             className="text-text-primary/40 mb-2 block text-sm font-medium"
@@ -127,35 +145,35 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           <Input
             id="search-filter"
             placeholder="Search..."
-            className="rounded-xl border-gray-300 focus:border-blue-400 focus:ring-blue-400"
+            className="rounded-xl"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
         <div className="mb-6 flex flex-wrap gap-2">
-          {selectedMainCategory && (
+          {selectedMainCategoryName && (
             <span
-              key={`main-${selectedMainCategory}`}
+              key={`main-${selectedMainCategoryName}`}
               className="text-primary bg-primary/10 flex items-center gap-1 rounded-sm px-3 py-2 text-xs"
             >
-              {selectedMainCategory}
+              {selectedMainCategoryName}
               <button
                 onClick={() => {
                   removeSelectedFilter("mainCategory");
-                  applyFilter();
-                }} // Apply filter immediately
+                  applyFilter(); // Apply filter immediately
+                }}
               >
                 <X size={12} strokeWidth={2.5} />
               </button>
             </span>
           )}
-          {selectedSubCategory && (
+          {selectedSubCategoryName && (
             <span
-              key={`sub-${selectedSubCategory}`}
+              key={`sub-${selectedSubCategoryName}`}
               className="text-primary bg-primary/10 flex items-center gap-1 rounded-sm px-3 py-2 text-xs"
             >
-              {selectedSubCategory}
+              {selectedSubCategoryName}
               <button
                 onClick={() => {
                   removeSelectedFilter("subCategory");
@@ -176,35 +194,41 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
             Select main Categories
           </h3>
           <div className="grid grid-cols-2 gap-2">
-            {filters.mainCategories.map((cat) => (
+            {filters.map((categoryItem) => (
               <Button
-                key={cat}
-                variant={selectedMainCategory === cat ? "default" : "outline"}
-                className={`!h-10 rounded-xl ${selectedMainCategory === cat ? "bg-primary text-white" : "text-primary/40 border-gray-300 hover:bg-gray-200"}`}
-                onClick={() => toggleButton("mainCategory", cat)}
+                key={categoryItem.id} // Use id for key for better performance and uniqueness
+                variant={
+                  selectedMainCategoryName === categoryItem.name
+                    ? "default"
+                    : "outline"
+                }
+                className={`!h-10 rounded-xl ${selectedMainCategoryName === categoryItem.name ? "bg-primary text-white" : "text-primary/40 border-gray-300 hover:bg-gray-200"}`}
+                onClick={() => toggleButton("mainCategory", categoryItem.name)}
               >
-                {cat}
+                {categoryItem.name}
               </Button>
             ))}
           </div>
         </div>
 
-        {selectedMainCategory && currentSubCategories.length > 0 && (
+        {selectedMainCategoryName && currentSubCategories.length > 0 && (
           <div>
             <h3 className="text-primary/40 bg-text-primary/10 mb-2 text-sm font-medium">
-              {selectedMainCategory} Select sub category{" "}
+              {selectedMainCategoryName} Select sub category{" "}
             </h3>
             <div className="grid grid-cols-2 gap-2">
-              {currentSubCategories.map((subCat) => (
+              {currentSubCategories.map((subCatItem) => (
                 <Button
-                  key={subCat}
+                  key={subCatItem.id} // Use id for key
                   variant={
-                    selectedSubCategory === subCat ? "default" : "outline"
+                    selectedSubCategoryName === subCatItem.name
+                      ? "default"
+                      : "outline"
                   }
-                  className={`!h-10 rounded-xl ${selectedSubCategory === subCat ? "bg-primary text-white" : "text-primary/40 border-gray-300 hover:bg-gray-200"}`}
-                  onClick={() => toggleButton("subCategory", subCat)}
+                  className={`!h-10 rounded-xl ${selectedSubCategoryName === subCatItem.name ? "bg-primary text-white" : "text-primary/40 border-gray-300 hover:bg-gray-200"}`}
+                  onClick={() => toggleButton("subCategory", subCatItem.name)}
                 >
-                  {subCat}
+                  {subCatItem.name}
                 </Button>
               ))}
             </div>

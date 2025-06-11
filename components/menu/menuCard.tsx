@@ -1,39 +1,39 @@
-import Image, { StaticImageData } from "next/image";
+// MenuCard.tsx
+
+"use client";
+import Image from "next/image";
 import { Card, CardDescription, CardTitle } from "../ui/card";
 import FavoritButton from "./FavoritButton";
 import { Link } from "@/i18n/routing";
 
 interface MenuCardProps {
-  id: string,
-  image: string | StaticImageData;
-  title: string;
-  desc: string;
-  price: number;
-  rating: number;
-  isFavorit?: boolean;
+  product: Product;
   isOffer?: boolean;
-  oldPrice?: number;
-  offPercentage?: string;
 }
 
-function MenuCard({
-  image,
-  title,
-  desc,
-  price,
-  rating,
-  isFavorit,
-  id,
-  isOffer,
-  oldPrice,
-  offPercentage,
-}: MenuCardProps) {
+function MenuCard({ product, isOffer =false }: MenuCardProps) {
+  const {
+    id,
+    image,
+    name,
+    desc,
+    rating,
+    is_favourite: isFavorit,
+    price: priceDetails,
+  } = product;
+
+  const displayPrice = priceDetails.price_after;
+  const oldPrice = priceDetails.price;
+  const offPercentage = isOffer
+    ? `${priceDetails.percentage.toFixed(0)}%`
+    : undefined;
+
   return (
-    <Card className="max-w-[380px] mx-auto gap-2 overflow-hidden p-2 shadow-sm transition-shadow hover:shadow-md">
+    <Card className="mx-auto max-w-[380px] gap-2 overflow-hidden p-2">
       <div className="relative h-58 max-h-62">
         <Image
           src={image}
-          alt={title}
+          alt={name}
           fill
           className="h-full rounded-xl object-cover"
         />
@@ -53,24 +53,38 @@ function MenuCard({
           <span>{rating}</span>
         </div>
       </div>
-      <CardTitle className="text-lg"><Link href={`/menu/${id}`}>{title}</Link></CardTitle>
+      <CardTitle className="text-lg">
+        <Link href={`/menu/${id}`}>{name}</Link>
+      </CardTitle>
       <CardDescription className="line-clamp-2 text-sm">{desc}</CardDescription>
       <div className="flex items-center justify-between pt-2">
-        <div className="flex flex-col gap-1">
-          {isOffer && oldPrice && (
-            <>
-              <span className="text-sub line-through">{oldPrice}EGP</span>
-              <span className="text-text font-bold">{price}EGP</span>
-            </>
-          )}
-        </div>
         {isOffer ? (
+          <div className="flex flex-col gap-1">
+            <span className="text-sub line-through">
+              {oldPrice}
+              {priceDetails.currency}
+            </span>
+            <span className="text-text font-bold">
+              {displayPrice}
+              {priceDetails.currency}
+            </span>
+          </div>
+        ) : (
+          <div className="flex w-full items-center justify-between">
+            <span className="text-text font-bold">
+              {displayPrice}
+              {priceDetails.currency}
+            </span>
+            <FavoritButton isFavorit={isFavorit!} itemId={id} />
+          </div>
+        )}
+        {isOffer && offPercentage ? (
           <div className="bg-primary text-backgroud flex size-12 flex-col items-center justify-center rounded-full text-[12px] font-bold">
             <span>off</span>
             <span>{offPercentage}</span>
           </div>
         ) : (
-          <FavoritButton isFavorit={isFavorit!} itemId={+id} />
+          <div className="text-text font-bold"></div>
         )}
       </div>
     </Card>

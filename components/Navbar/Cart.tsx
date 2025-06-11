@@ -17,7 +17,7 @@ const CartModal = () => {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <div className="relative flex size-10 cursor-pointer items-center justify-center rounded-full bg-[#F6F6FD] sm:size-12">
+        <div className="relative flex cursor-pointer items-center justify-center rounded-full bg-[#F6F6FD] size-12">
           <svg
             width="24"
             height="25"

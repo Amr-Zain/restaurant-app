@@ -27,7 +27,7 @@ export type SettingsType = {
     youtube?: string
 }
 
-type Verify = { type: 'register' | 'reset' | null; code: string | null; phone: string | null, resetCode: string | null }
+type Verify = { type: 'register' | 'reset' | null; code: string | null; phone: string | null, resetCode: string | null, updated: boolean }
 
 interface AppStore {
     settings: SettingsType;
@@ -60,12 +60,12 @@ const inititals = {
         x: '',
         youtube: '',
     },
-    verify: { type: null, code: null, phone: null, resetCode: null }
+    verify: { type: null, code: null, phone: null, resetCode: null, updated: false }
 }
 
 export const appStore = create<AppStore>((set) => ({
     ...inititals,
     setSettings: (settings) => set(() => ({ settings })),
     setVerify: (verify: Verify) => set(() => ({ verify })),
-    clearVerify: () => set(() => ({ verify: { type: null, code: null, phone: null, resetCode: null } }))
+    clearVerify: () => set(() => ({ verify: { type: null, code: null, phone: null, resetCode: null, updated: false } }))
 }));

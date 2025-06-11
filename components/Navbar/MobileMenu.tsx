@@ -10,8 +10,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { MenuIcon } from "lucide-react";
+import { CalendarCheck, MenuIcon } from "lucide-react";
 import Image from "next/image";
+import Reservation from "./Reservations";
+import LangSwitcher from "../LangSwitcher";
 
 interface NavItem {
   value: string;
@@ -27,7 +29,7 @@ const MobileMenu = ({ items }: { items: NavItem[] }) => {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <MenuIcon
-          className="text-primary block h-8 w-8 cursor-pointer lg:hidden"
+          className="text-primary block h-8 w-8 cursor-pointer xl:hidden"
           aria-hidden="true"
         />
       </SheetTrigger>
@@ -37,6 +39,12 @@ const MobileMenu = ({ items }: { items: NavItem[] }) => {
         </SheetHeader>
         <nav>
           <ul className="flex list-none flex-col gap-2 p-4">
+            <li className="text-text hover:text-primary flex items-center gap-2 text-base transition-colors">
+              <span>
+                <CalendarCheck className="h-4 w-4" />
+              </span>
+              <Reservation />
+            </li>
             {items.map((item) => (
               <li key={item.path}>
                 <Link
@@ -63,6 +71,7 @@ const MobileMenu = ({ items }: { items: NavItem[] }) => {
                 </Link>
               </li>
             ))}
+            <LangSwitcher className="justify-start text-text hover:text-primary flex items-center gap-2 text-base transition-colors" />
           </ul>
         </nav>
       </SheetContent>

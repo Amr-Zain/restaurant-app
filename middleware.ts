@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 import { routing } from "./i18n/routing";
+import { cookies } from "next/headers";
+import { v4 } from 'uuid';
 
 export async function middleware(request: NextRequest) {
     const response = NextResponse.next();
@@ -11,15 +13,18 @@ export async function middleware(request: NextRequest) {
     if (request.nextUrl.pathname.startsWith("/en")) {
         const newPathname = request.nextUrl.pathname.replace("/en", "");
         const url = new URL(request.nextUrl.origin + newPathname);
-
         return NextResponse.redirect(url);
     }
 
     response.cookies.set("NEXT_LOCALE", isArabicLocale ? "ar" : "en");
 
     // Handle guest token
-
-
+    const serverCookies = await cookies();
+    let guest_token = serverCookies.get('guest_token')?.value;
+    if (!guest_token) {
+        guest_token = v4();
+        serverCookies.set('guest_token', guest_token);
+    }
 
     // Handle internationalization routing
     const handleI18nRouting = createMiddleware(routing);

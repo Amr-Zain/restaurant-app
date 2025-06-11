@@ -1,5 +1,4 @@
 // lib/axios.ts
-"use client"
 import { useAuthStore } from "@/stores/auth";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
@@ -14,8 +13,11 @@ axiosInstance.interceptors.request.use(
     config.headers["Accept-Language"] = locale;
     config.headers["os"] = "web";
     if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    else {
+      config.params = { ...config.params ,guest_token: Cookies.get('guest_token') }
+    }
     return config;
   },
   (error) => {

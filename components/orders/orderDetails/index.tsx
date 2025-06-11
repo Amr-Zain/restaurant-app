@@ -1,4 +1,4 @@
-import OrderItem from "./OredrItem";
+import OrderItem from "./Item";
 import img from "@/assets/images/imgeSection/1.jpg";
 import OrderSummary from "./OrderSummary";
 /* 
@@ -27,11 +27,12 @@ function OrderDetails({ id }: { id: string }) {
           {[...Array(4)].map((_, i) => (
             <OrderItem
               key={i}
-              id={`${i}`}
+              id={i}
               price={400}
               title="dfssdf"
               desc="dfssdf dfssdf dfssdf"
               image={img}
+              currency="EGP"
             />
           ))}
         </div>

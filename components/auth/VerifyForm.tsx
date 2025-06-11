@@ -6,10 +6,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { OTPSchema, OTPSchemaType } from "@/helper/schema";
 import { useEffect, useState } from "react";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../ui/form";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 import {
   forgotPassword,
+  sendProfileVerificationCode,
+  updatePhone,
   verifyForgotPassword,
 } from "@/services/ClientApiHandler";
 import { useFormSubmission } from "@/hooks/useFormSubmission";
@@ -23,7 +31,13 @@ import { useRouter } from "@/i18n/routing";
 const VERIFICATION_CODE_LENGTH = 4;
 const RESEND_TIMER_SECONDS = 60;
 
-const VerifyForm = () => {
+const VerifyForm = ({
+  isProfile = false,
+  onClose,
+}: {
+  isProfile?: boolean;
+  onClose?: () => void;
+}) => {
   const t = useTranslations();
   const formSchema = OTPSchema({ t });
 
@@ -41,11 +55,13 @@ const VerifyForm = () => {
   const setVerify = appStore((state) => state.setVerify);
 
   const resetCode = form.watch("reset_code");
-  const router = useRouter()
+  const router = useRouter();
   const resendCode = async (data: { phone_code: string; phone: string }) => {
     setIsLoading(true);
     try {
-      const res = await forgotPassword(data);
+      let res = null;
+      if (isProfile) res = await sendProfileVerificationCode(data);
+      else res = await forgotPassword(data);
       setTimeLeft(RESEND_TIMER_SECONDS);
       setCanResend(false);
       return res;
@@ -60,6 +76,12 @@ const VerifyForm = () => {
     reset_code: string;
   }) => {
     setVerify({ ...verify, resetCode: formData.reset_code });
+    if (isProfile) {
+      if(onClose)onClose!();
+      const res = await updatePhone(formData);
+      if(res.status ==='success')setVerify({ ...verify,updated:true });
+      return res;
+    }
     return await verifyForgotPassword(
       formData,
       verify.type === "register"
@@ -83,7 +105,11 @@ const VerifyForm = () => {
     form as unknown as ReturnType<typeof useForm<OtpFormValues>>,
     {
       submitFunction: verifycode,
-      onSuccessPath: verify.type === "register" ? "/" : "/auth/forgot-password",
+      onSuccessPath: isProfile
+        ? undefined
+        : verify.type === "register"
+          ? "/"
+          : "/auth/forgot-password",
       onSuccess: (res) => {
         if (res.status !== "success") return;
         if (verify.type === "register") {
@@ -133,7 +159,7 @@ const VerifyForm = () => {
   }, [timeLeft]);
 
   useEffect(() => {
-    if(!verify.code || !verify.phone ) return router.back();
+    if (!verify.code || !verify.phone) return router.back();
     (async () => {
       if (verify.type === "register")
         await resendCode({ phone: verify.phone!, phone_code: verify.code! });
@@ -147,7 +173,7 @@ const VerifyForm = () => {
       <form className="space-y-6" onSubmit={form.handleSubmit(handleSubmit)}>
         {verify.type !== "register" && (
           <div className="mb-6">
-            <ChangePhoneModal />
+            <ChangePhoneModal isProfile={isProfile} />
           </div>
         )}
 

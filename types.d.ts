@@ -1,11 +1,56 @@
-interface General {
-    title: string,
-    id: string;
-    name: string;
-    desc: string;
-    content: string;
-    image: string;
+
+
+ interface PriceDetails {
+  price: number;
+  currency: string;
+  percentage: number;
+  discount_value: number;
+  price_after: number;
+  offer: null; // Or 'any' if 'offer' can be a different type, like an object
 }
+
+ interface Product {
+  id: number;
+  name: string;
+  slug: string;
+  desc: string | null; 
+  type: string;
+  image: string;
+  rating: number;
+  review_count: number;
+  rate: number;
+  is_favourite: boolean;
+  //favourite_id: number | null; 
+  price: PriceDetails;
+}
+interface Address {
+    id:number;
+    title: string;
+    desc: string;
+    lat: number;
+    lng: number
+    type: string;
+    building: number;
+    floor: number;
+    apartment: number;
+    is_default: boolean;
+}
+ interface Links {
+    first: string;
+    last: string;
+    prev: string | null;
+    next: string | null;
+  };
+ interface Meta {
+    current_page: number;
+    from: number;
+    last_page: number;
+    path: string;
+    per_page: number;
+    to: number;
+    total: number;
+  };
+
 interface User {
     id: number;
     full_name: string;
@@ -87,12 +132,6 @@ interface CountryCodeData {
 }
 
 
-interface Features {
-    name: string;
-    desc: string;
-    image: string;
-    id: number
-}
 
 interface Page {
     title: string;
@@ -107,19 +146,18 @@ interface Service {
     id: number
 }
 
-interface MiddleIntro extends Page {
-    button_name: string;
-    video: string;
+interface MenuSubcategory {
+  id: number;
+  name: string;
+  image: string;
 }
 
-interface HomeType {
-    features: Features[];
-    top_intro: TopIntro;
-    middle_intro: MiddleIntro;
-    services: Service[];
-    technology: Features[]
-    partners: Features[]
-    visions: General[]
+interface MenuCategory {
+  id: number;
+  name: string;
+  image: string;
+  icon: string;
+  subcategories: MenuSubcategory[];
 }
 
 interface Section {

@@ -18,7 +18,7 @@ export const getServiceBySlug = async (slug: string) => {
 export const getHomeData = async () => {
   try {
     const { data } = await axiosInstance.get("/home");
-
+    console.log(data)
     return data.data;
   } catch (error) {
     if (error instanceof Error) {
@@ -78,18 +78,74 @@ export const getBranchs = async (): Promise<Branch[]> => {
 export const getCmsPages = async (): Promise<CMSPage[]> => {
   try {
     const { data } = await axiosInstance.get(`cms-pages`);
-    return data.data as CMSPage[] || [];
+    return (data.data as CMSPage[]) || [];
   } catch {
     throw "Failed to fetch Sort data";
   }
 };
-export const getCmsPage = async (url:string): Promise<{data:CmsPageContent}> => {
+
+export const getCmsPage = async (
+  url: string,
+): Promise<{ data: CmsPageContent }> => {
   try {
     const { data } = await axiosInstance.get(url);
-    console.log(data)
-    return data as {data:CmsPageContent} || [];
+    console.log(data);
+    return (data as { data: CmsPageContent }) || [];
   } catch (error) {
-      throw error;
+    throw error;
+  }
+};
+export const getMenuFilter = async (): Promise<{
+  text: string;
+  content: MenuCategory[];
+}> => {
+  try {
+    const { data } = await axiosInstance.get("get-filter", {
+      headers: { os: "" },
+    });
+    return (
+      (data.data as { content: MenuCategory[]; text: string }) || {
+        content: [],
+        text: "",
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    throw "error loading data";
+  }
+};
+export const getMenuProducts = async (params: {
+  category?: string;
+  sub_category?: string;
+  keyword?: string;
+}): Promise<{ data: Product[]; meta: unknown }> => {
+  try {
+    const { data } = await axiosInstance.get("product", { params });
+    return (
+      (data as { data: Product[]; meta: unknown }) || {
+        content: [],
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    throw "error loading data";
+  }
+};
+export const getOffers = async (params: { lat: number; lng: number }) => {
+  try {
+    const { data } = await axiosInstance.get(`offers`, {
+      params,
+    });
+    console.log(data);
+    return (
+      (data as { data: Product[]; meta: Meta; links: Links }) || {
+        data: [],
+        meta: {},
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    throw "error loading data";
   }
 };
 // export const getCategoriesData = async () => {

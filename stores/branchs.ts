@@ -1,19 +1,42 @@
+import { getBranchs } from "@/services/ClientApiHandler";
 import { create } from "zustand";
 
 interface BranchStore {
     branchs: Branch[];
+    isLoading: boolean;
     currentBranch: Branch | null
     setBranchs: (values: Branch[]) => void;
     setCurrentBranch: (values: Branch) => void;
+    setLoading: (value: boolean) => void;
 }
 
 const inititals = {
-    branchs:[],
+    branchs: [],
+    isLoading: false,
     currentBranch: null,
-    token: localStorage.getItem('token'),
 }
 export const useBranchStore = create<BranchStore>((set) => ({
     ...inititals,
-    setBranchs: (branchs) => set(() =>( {branchs})),
-    setCurrentBranch: (currentBranch)=>set(()=>({currentBranch}))
-})); 
+    setBranchs: (branchs) => set(() => ({ branchs })),
+    setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
+    setLoading: (isLoading) => set(() => ({ isLoading })),
+}));
+
+const getBranchsReq = async () => {
+    try {
+        if (useBranchStore.getState().branchs.length) return;
+        useBranchStore.getState().setLoading(true);
+        const fetchedBranches = await getBranchs();
+        if (fetchedBranches && fetchedBranches.length) {
+            useBranchStore.getState().setBranchs(fetchedBranches);
+            if (!useBranchStore.getState().currentBranch) {
+                useBranchStore.getState().setCurrentBranch(fetchedBranches[0]);
+            }
+        }
+    } catch (error) {
+        console.error("Failed to fetch branches:", error);
+    } finally {
+        useBranchStore.getState().setLoading(false);
+    }
+};
+getBranchsReq();

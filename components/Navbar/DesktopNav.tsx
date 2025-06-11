@@ -1,23 +1,23 @@
+'use client'
 import { Link } from "@/i18n/routing";
+import Reservation from "./Reservations";
 
 interface NavItem {
   value: string;
   path: string;
 }
 
-const DesktopNavigation = ({
-  items,
-}: {
-  items: NavItem[];
-}) => (
-  <div className="hidden items-center gap-7 lg:flex">
-    <ul className="flex list-none items-center gap-4 overflow-x-auto">
-      {items.
-      map((item,i) => (
-        <li key={item.path +i}>
+const DesktopNavigation = ({ items }: { items: NavItem[] }) => (
+  <div className="hidden items-center gap-7 xl:flex">
+    <ul className="flex items-center gap-4 overflow-x-auto">
+      <li className="text-text hover:text-primary flex items-center gap-2 text-base transition-colors">
+        <Reservation />
+      </li>
+      {items.map((item, i) => (
+        <li key={item.path + i}>
           <Link
             href={item.path}
-            className="text-sm font-light whitespace-nowrap text-text transition-colors hover:text-primary"
+            className="text-text hover:text-primary text-sm font-light whitespace-nowrap transition-colors"
           >
             {item.value}
           </Link>

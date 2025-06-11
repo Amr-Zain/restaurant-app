@@ -1,4 +1,3 @@
-
 import axios, { AxiosError } from "axios";
 import { cookies } from "next/headers";
 
@@ -21,6 +20,9 @@ axiosInstance.interceptors.request.use(
       const locale = serverCookies.get("NEXT_LOCALE")?.value || "en";
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
+      }
+      else {
+        config.params = { ...config.params, guest_token: serverCookies.get('guest_token')?.value }
       }
       if (!config.params) {
         config.params = {};

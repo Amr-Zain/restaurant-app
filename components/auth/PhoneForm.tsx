@@ -12,9 +12,20 @@ import PhoneNumber from "../util/formFields/PhoneInput";
 import usePhoneCode from "@/hooks/usePhoneCode";
 import { Button } from "../ui/button";
 import { useFormSubmission } from "@/hooks/useFormSubmission";
-import { forgotPassword } from "@/services/ClientApiHandler";
+import {
+  forgotPassword,
+  sendProfileVerificationCode,
+} from "@/services/ClientApiHandler";
 
-const PhoneForm = ({ isModal,onClose }: { isModal?: boolean,onClose?:()=>void }) => {
+const PhoneForm = ({
+  isModal,
+  onClose,
+  isProfile,
+}: {
+  isProfile?: boolean;
+  isModal?: boolean;
+  onClose?: () => void;
+}) => {
   const t = useTranslations();
   const { phone, code } = appStore((state) => state.verify);
 
@@ -34,16 +45,17 @@ const PhoneForm = ({ isModal,onClose }: { isModal?: boolean,onClose?:()=>void })
   const { countries } = usePhoneCode({ form, setCurrentPhoneLimit });
   const setVerify = appStore((state) => state.setVerify);
   const { handleSubmit } = useFormSubmission<PhoneFormType>(form, {
-    submitFunction: forgotPassword,
+    submitFunction: isProfile ? sendProfileVerificationCode : forgotPassword,
     onSuccessPath: isModal ? undefined : "/auth/verification",
-    onSuccess: () =>{
+    onSuccess: () => {
       setVerify({
         type: "reset",
         code: form.watch("phone_code"),
         phone: form.watch("phone"),
         resetCode: null,
-      })
-      if(onClose)onClose();
+        updated:false,
+      });
+      if (onClose) onClose();
     },
   });
 

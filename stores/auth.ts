@@ -9,17 +9,17 @@ interface AuthStore {
     setUser: (user: User) => void;
     clearUser: () => void
 }
-
+const userCookie = Cookies.get("user")||'';
 const inititals = {
-    user: JSON.parse(localStorage.getItem('user')!) || null,
-    token: localStorage.getItem('token'),
+    user:userCookie ?  JSON.parse(userCookie) : null,
+    token: Cookies.get("token") || null,
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
     ...inititals,
     setUser: (user) => set(() => {
-        Cookies.set('user', JSON.stringify(user),{expires:30 })
-        Cookies.set('token', user.token,{expires:30 })
+        Cookies.set('user', JSON.stringify(user), { expires: 30 })
+        Cookies.set('token', user.token, { expires: 30 })
         return ({ user, token: user.token })
     }),
     clearUser: () => set(() => {

@@ -15,7 +15,7 @@ const Notifications = () => {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <div className="relative flex size-10 sm:size-12 items-center justify-center pt-1 rounded-full bg-[#F6F6FD] cursor-pointer">
+        <div className="relative flex size-12 items-center justify-center pt-1 rounded-full bg-[#F6F6FD] cursor-pointer">
             <svg
               width="20"
               height="20"

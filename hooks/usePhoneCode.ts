@@ -30,7 +30,7 @@ function usePhoneCode<T extends FieldValues>({
 
       if (selectedCountry) {
         setCurrentPhoneLimit(selectedCountry.phone_limit);
-        form.setValue("phone" as FieldPath<T>,"" as PathValue<T, FieldPath<T>>);
+        //form.setValue("phone" as FieldPath<T>,"" as PathValue<T, FieldPath<T>>);
         form.trigger("phone" as FieldPath<T>);
       } else {
         setCurrentPhoneLimit(null);

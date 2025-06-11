@@ -50,7 +50,7 @@ const Pofile = () => {
     <>
       <Sheet open={profileSheetOpen} onOpenChange={setProfileSheetOpen}>
         <SheetTrigger asChild>
-          <div className="relative flex size-12 cursor-pointer items-center justify-center rounded-full bg-[#F6F6FD] pt-1">
+          <div className="relative nav-icon">
             <svg
               width="24"
               height="25"

@@ -61,7 +61,7 @@ function PhoneNumber<T extends FieldValues>({
               disabled={isLoading||disabled}
             >
               <FormControl>
-                <SelectTrigger className={"text-text p-1 sm:p-4"+codeClass}>
+                <SelectTrigger className={"text-text p-1 sm:p-4 "+codeClass}>
                   <SelectValue placeholder={t("labels.phoneCode")} />
                 </SelectTrigger>
               </FormControl>

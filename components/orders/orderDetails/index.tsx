@@ -17,7 +17,7 @@ function OrderDetails({ id }: { id: string }) {
     totalAmount: { label: "Total", value: 410 },
   };
   return (
-    <div className="mr-4 ml-auto w-106 rounded-3xl bg-white">
+    <div className="w-106 rounded-3xl bg-white">
       <div className="border-primary/20 flex items-center justify-between border-b p-4">
         <h3 className="text-text text-2xl font-semibold">Order ID - {id}</h3>
         <div>booking</div>

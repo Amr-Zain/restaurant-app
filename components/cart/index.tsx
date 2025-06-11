@@ -13,22 +13,33 @@ function Cart() {
     ],
     totalAmount: { label: "Total", value: totalPrice },
   };
+  console.log(items)
   return (
-    <div className="flex flex-col justify-between h-full">
-      <div>
-        {items.map((item) => (
-          <CartItem
-            id={item.id}
-            title={item.name}
-            quantity={item.quantity}
-            selectedToppings={item.selectedToppings}
-            image={item.imageUrl}
-            price={item.price}
-            key={`cartItem ${item.id}`}
-          />
-        ))}
-      </div>
+    <div className="flex h-full flex-col justify-between px-4">
+      {!items.length ? (
+        <div className="flex flex-col justify-center items-center h-full ">
+          <h3 className="text-text font-medium">No products</h3>
+          <p className="text-sub">
+            {"You don't have any products yet in your cart"}
+          </p>
+        </div>
+      ) : (
+        <>
+        <div>
+          {items.map((item) => (
+            <CartItem
+              id={item.id}
+              title={item.name}
+              quantity={item.quantity}
+              selectedToppings={item.selectedToppings}
+              image={item.imageUrl}
+              price={item.price}
+              key={`cartItem ${item.id}`}
+            />
+          ))}
+        </div>
       <OrderSummary {...orderSummary} />
+      </>)}
     </div>
   );
 }

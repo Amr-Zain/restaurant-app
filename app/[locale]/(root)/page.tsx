@@ -91,7 +91,7 @@ export default async function HomePage() {
         ))}
       />
       {homeData?.subscription_content && (
-        <GeneralSection item={homeData.subscription_content} className="mb-8">
+        <GeneralSection item={homeData.subscription_content}>
           <div className="relative">
             <Input
               type="email"

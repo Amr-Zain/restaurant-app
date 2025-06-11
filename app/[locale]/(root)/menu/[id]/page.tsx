@@ -1,6 +1,7 @@
 import ItemDetails from "@/components/menu/itemDitals";
 import MenuCard from "@/components/menu/menuCard";
 import SliderSection from "@/components/menu/MenuSliderSection";
+import { getProfuctDeiltals } from "@/services/ApiHandler";
  const product: Product = {
   id: 29,
   name: "AAA",
@@ -29,6 +30,8 @@ export default async function ItemDetailsPage({
 }) {
   const { id } = await params;
   console.log(id);
+  const item = await getProfuctDeiltals(2)
+  console.log("item",item)
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
       <ItemDetails />

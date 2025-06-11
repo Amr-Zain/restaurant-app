@@ -84,15 +84,15 @@ const TimePicker = ({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex items-center justify-center gap-1 py-4">
+        <div className="flex items-center justify-center gap-1">
           <ScrollableTimeColumn
-            items={generateNumbers(1, 12).map((n) => String(n).padStart(2, "0"))} // Ensure 2-digit hours
+            items={generateNumbers(1, 12).map((n) => String(n).padStart(2, "0"))} 
             value={time.hours}
             onChange={(val) => handleTimeChange("hours", val)}
           />
           <div className="px-1 text-2xl font-light text-gray-400">:</div>
           <ScrollableTimeColumn
-            items={generateNumbers(0, 59).map((n) => String(n).padStart(2, "0"))} // Ensure 2-digit minutes
+            items={generateNumbers(0, 59).map((n) => String(n).padStart(2, "0"))}
             value={time.minutes}
             onChange={(val) => handleTimeChange("minutes", val)}
           />
@@ -105,17 +105,17 @@ const TimePicker = ({
           />
         </div>
 
-        <div className="flex gap-3 pt-4">
+        <div className="flex justify-end w-full gap-4 px-4">
           <Button
             variant="ghost"
             onClick={() => setOpen(false)}
-            className="h-12 flex-1 text-gray-500 hover:bg-gray-100"
+            className="!h-10 cursor-pointer"
           >
             {t("labels.cancel")}
           </Button>
           <Button
             onClick={handleConfirm}
-            className="h-12 flex-1 rounded-xl bg-blue-500 text-white hover:bg-blue-600"
+            className="!h-10 px-6 rounded-xl cursor-pointer"
           >
             {t("labels.ok")}
           </Button>
@@ -160,7 +160,7 @@ const ScrollableTimeColumn = ({
       }
 
       clearTimeout((containerRef.current as any).scrollTimeout);
-      (containerRef.current as any).scrollTimeout = setTimeout(() => setIsScrolling(false), 200); // Increased delay slightly
+      (containerRef.current as any).scrollTimeout = setTimeout(() => setIsScrolling(false), 200); 
     }
   };
 

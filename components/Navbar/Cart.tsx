@@ -17,7 +17,7 @@ const CartModal = () => {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <div className="relative flex cursor-pointer items-center justify-center rounded-full bg-[#F6F6FD] size-12">
+        <div className="relative nav-icon">
           <svg
             width="24"
             height="25"
@@ -50,7 +50,7 @@ const CartModal = () => {
       </SheetTrigger>
       <SheetContent
         side="left"
-        className="w-150 min-w-80 rounded-r-2xl border-r-1"
+        className="w-180 max-w-[100%] rounded-r-2xl border-r-1"
       >
         <SheetHeader>
           <SheetTitle className="flex gap-2 text-lg">
@@ -61,9 +61,7 @@ const CartModal = () => {
             </span>
           </SheetTitle>
         </SheetHeader>
-        <div className="flex list-none flex-col gap-2 p-4 grow-1">
           <Cart />
-        </div>
       </SheetContent>
     </Sheet>
   );

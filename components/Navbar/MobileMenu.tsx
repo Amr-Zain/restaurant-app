@@ -29,7 +29,7 @@ const MobileMenu = ({ items }: { items: NavItem[] }) => {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <MenuIcon
-          className="text-primary block h-8 w-8 cursor-pointer xl:hidden"
+          className="text-primary block size-6 sm:size-8 cursor-pointer xl:hidden"
           aria-hidden="true"
         />
       </SheetTrigger>

@@ -15,7 +15,7 @@ const Notifications = () => {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <div className="relative flex size-12 items-center justify-center pt-1 rounded-full bg-[#F6F6FD] cursor-pointer">
+        <div className="relative nav-icon">
             <svg
               width="20"
               height="20"
@@ -32,7 +32,7 @@ const Notifications = () => {
                 strokeLinejoin="round"
               />
             </svg>
-            <span className="absolute size-3 top-3 end-3 border-2 border-backgroud rounded-full bg-primary"></span>
+            <span className="absolute size-3 top-2 end-2 sm:top-3 sm:end-3 border-2 border-backgroud rounded-full bg-primary"></span>
           </div>
       </SheetTrigger>
       <SheetContent side="left" className="border-r-1 rounded-r-2xl">

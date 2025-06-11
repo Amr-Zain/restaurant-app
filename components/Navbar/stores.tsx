@@ -11,7 +11,7 @@ import { StoresRadioSkeleton } from "../stores/StoresRadioSkeleton";
 import { useTranslations } from "next-intl";
 
 const Stores = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const t = useTranslations();
   const { branchs, currentBranch, setCurrentBranch, isLoading } =
     useBranchStore((state) => state);
@@ -35,17 +35,17 @@ const Stores = () => {
             height={55}
             src={currentBranch?.image || profile}
             alt="Branch image"
-            className="size-10 rounded-full object-cover"
+            className="size-10 rounded-full object-cover shrink-0"
           />
           <div className="text-sub hidden w-24 items-center gap-1 sm:flex">
-            <div className="truncate text-sm !text-ellipsis">
-              <h3>
+            <div className=" text-sm text-ellipsis">
+              <h3 className="line-clamp-1">
                 {currentBranch?.name ||
-                  (isLoading ? "Loading..." : "No branch selected")}
+                  (isLoading ? "Loading..." : "No branch")}
               </h3>
-              <p>
+              <p className="line-clamp-1">
                 {currentBranch?.location_description ||
-                  (isLoading ? "Loading..." : "No branch selected")}
+                  (isLoading ? "Loading..." : "No branch")}
               </p>
             </div>
             <span>
@@ -66,9 +66,9 @@ const Stores = () => {
         </div>
       </DialogTrigger>
 
-      <DialogContent className="bg-backgroud w-fit !min-w-[300px] rounded-2xl border-0 px-4 shadow-xl">
+      <DialogContent className="bg-backgroud rounded-2xl w-128 max-w-[90%] border-0 px-4 shadow-xl">
         <DialogHeader className="pb-4">
-          <DialogTitle className="text-center text-xl font-semibold text-gray-800">
+          <DialogTitle className="text-center  text-xl font-semibold text-text">
             {t("labels.selectStore")}
           </DialogTitle>
         </DialogHeader>
@@ -76,7 +76,7 @@ const Stores = () => {
           <RadioGroup
             value={currentBranch?.id?.toString() || ""}
             onValueChange={handleBranchChange}
-            className="flex flex-col gap-4 w-128 max-w-[90%]"
+            className="flex flex-col gap-4 w-full"
           >
             {isLoading ? (
               <StoresRadioSkeleton length={3} />
@@ -89,7 +89,7 @@ const Stores = () => {
                 />
               ))
             ) : (
-              <p className="text-center text-gray-500">
+              <p className="text-center text-sub">
                 {t("TEXT.noBranches")}
               </p>
             )}

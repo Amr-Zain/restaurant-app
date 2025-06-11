@@ -24,7 +24,7 @@ function CartItem({
   return (
     <Card className="border-primary/20 mb-2 !w-full gap-2 bg-white p-2 shadow-none transition-shadow hover:shadow-sm sm:w-136">
       <div className="flex gap-2">
-        <div className="relative aspect-video w-28">
+        <div className="relative aspect-video w-28 shrink-0">
           <Image
             src={image}
             alt={title}

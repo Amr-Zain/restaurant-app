@@ -14,7 +14,7 @@ function AuthdUser() {
     <>
       {user?.id ? (
         <>
-          <div className="flex size-10 items-center justify-center rounded-full bg-[#F6F6FD] sm:size-12">
+          <div className="nav-icon">
             <Pofile />
           </div>
           <Stores />

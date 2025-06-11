@@ -145,7 +145,7 @@ export default function ReservationForm({
               <div></div>{" "}
               <Button
                 type="submit"
-                className="text-md !h-10 font-semibold text-white transition-all duration-200"
+                className="text-md !h-11 px-6 font-semibold cursor-pointer"
                 disabled={isLoading}
               >
                 {isLoading ? t("buttons.loading") : t("labels.bookTable")}

@@ -447,7 +447,9 @@ input[type="number"] {
 .reserv-input {
   @apply text-text focus:ring-0 !placeholder-text border-0 !border-b-[1.5px] ps-0 !border-input-primary rounded-none shadow-none h-10;
 }
-
+.nav-icon {
+  @apply flex size-10 items-center justify-center rounded-full bg-[#F6F6FD] sm:size-12 cursor-pointer
+}
 @layer base {
   * {
     @apply border-border outline-ring/50;

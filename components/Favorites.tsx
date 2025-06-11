@@ -1,4 +1,3 @@
-// Favorites.jsx
 "use client";
 import { useTranslations } from "next-intl";
 
@@ -54,7 +53,7 @@ const Favorites = ({
                   image={item.image}
                   price={item.price.price}
                   currency={item.price.currency}
-                  onDelete={() => deleteFromFavorites(item.id)}
+                  onDelete={() => deleteFromFavorites(item.id)}//there is favourite_id in the item 
                 />
               ))}
             </div>

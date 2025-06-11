@@ -148,6 +148,17 @@ export const getOffers = async (params: { lat: number; lng: number }) => {
     throw "error loading data";
   }
 };
+export const getProfuctDeiltals = async(id:number)=>{
+  try {
+    const { data } = await axiosInstance.get(`product/${id}`)
+    console.log(data);
+    return data as Product || {}
+
+  } catch (error) {
+    console.log(error);
+    return "error loading data";
+  }
+}
 // export const getCategoriesData = async () => {
 //   try {
 //     const { data } = await axiosInstance.get("/categories");

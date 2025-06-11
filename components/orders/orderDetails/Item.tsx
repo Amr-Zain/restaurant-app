@@ -20,7 +20,7 @@ function OrderItem({
   onUpdate?: () => Promise<void> | void;
 }) {
   return (
-    <Card className="border-primary/20 mb-2 !w-full gap-2 bg-transparent p-2 shadow-none transition-shadow hover:shadow-sm sm:w-136">
+    <Card className="border-primary/20 mb-2  gap-2 bg-transparent p-2 shadow-none transition-shadow hover:shadow-sm">
       <div className="flex items-start justify-between">
         <div className="flex gap-2">
           <div className="relative aspect-video w-28">

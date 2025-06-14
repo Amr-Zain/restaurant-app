@@ -1,5 +1,3 @@
-// MenuCard.tsx
-
 "use client";
 import Image from "next/image";
 import { Card, CardDescription, CardTitle } from "../ui/card";
@@ -11,21 +9,23 @@ interface MenuCardProps {
   isOffer?: boolean;
 }
 
-function MenuCard({ product, isOffer =false }: MenuCardProps) {
+function MenuCard({ product, isOffer = false }: MenuCardProps) {
   const {
     id,
+    favourite_id,
     image,
     name,
     desc,
     rating,
     is_favourite: isFavorit,
     price: priceDetails,
+    slug,
   } = product;
 
   const displayPrice = priceDetails.price_after;
   const oldPrice = priceDetails.price;
   const offPercentage = isOffer
-    ? `${priceDetails.percentage.toFixed(0)}%`
+    ? `${priceDetails.percentage!.toFixed(0)}%`
     : undefined;
 
   return (
@@ -54,7 +54,7 @@ function MenuCard({ product, isOffer =false }: MenuCardProps) {
         </div>
       </div>
       <CardTitle className="text-lg">
-        <Link href={`/menu/${id}`}>{name}</Link>
+        <Link href={`/menu/${slug}`}>{name}</Link>
       </CardTitle>
       <CardDescription className="line-clamp-2 text-sm">{desc}</CardDescription>
       <div className="flex items-center justify-between pt-2">
@@ -75,7 +75,7 @@ function MenuCard({ product, isOffer =false }: MenuCardProps) {
               {displayPrice}
               {priceDetails.currency}
             </span>
-            <FavoritButton isFavorit={isFavorit!} itemId={id} />
+            <FavoritButton isFavorit={isFavorit!} favId={favourite_id}  id={id}/>
           </div>
         )}
         {isOffer && offPercentage ? (

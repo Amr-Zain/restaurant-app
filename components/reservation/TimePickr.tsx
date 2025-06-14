@@ -21,10 +21,12 @@ const TimePicker = ({
   onChange,
   placeholder, 
   disabled,
+  className
 }: {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string; 
+  className?: string; 
   disabled?: boolean; 
 }) => {
   const t = useTranslations();
@@ -70,7 +72,7 @@ const TimePicker = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <button
-          className="reserv-input flex cursor-pointer justify-between !px-0"
+          className={"flex cursor-pointer justify-between !px-0 "+className}
           disabled={disabled} 
         >
           <span>{value || placeholder || t("labels.selectTime")}</span>{" "}

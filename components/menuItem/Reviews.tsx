@@ -2,51 +2,11 @@ import { Star } from "lucide-react";
 import { Progress } from "../ui/progress";
 import Image from "next/image";
 import ReviewStars from "./ReviewStars";
+import { getProductReviews } from "@/services/ApiHandler";
 
-const review = {
-  data: [
-    {
-      id: 3,
-      rate: 5,
-      review: "I think so",
-      note: "👏👏👏👌", // Not explicitly used in the current UI, but good to know it's there
-      created_at: "8 months ago",
-      user: {
-        id: 24,
-        full_name: "NEW",
-        avatar:
-          "https://saas.khlod.aait-d.com/storage/tenants/front_brand/images/users/FQ4oD4m1NXPyUi3z9zpJ5IUH8P0PM9id4xrE68lN.png",
-      },
-    },
-    {
-      id: 3,
-      rate: 5,
-      review: "I think so",
-      note: "👏👏👏👌", // Not explicitly used in the current UI, but good to know it's there
-      created_at: "8 months ago",
-      user: {
-        id: 24,
-        full_name: "NEW",
-        avatar:
-          "https://saas.khlod.aait-d.com/storage/tenants/front_brand/images/users/FQ4oD4m1NXPyUi3z9zpJ5IUH8P0PM9id4xrE68lN.png",
-      },
-    },
-  ],
-  status: "success",
-  message: "",
-  review_count: 2,
-  rate: 5,
-  star_rate: [
-    { key: "star_5", value: 50 },
-    { key: "star_4", value: 50 },
-    { key: "star_3", value: 0 },
-    { key: "star_2", value: 0 },
-    { key: "star_1", value: 0 },
-  ],
-};
-function ItemReviews({ itemId }: { itemId: number }) {
-  //get the reviews {itemId}
-  console.log(itemId);
+async function ItemReviews({ itemId }: { itemId: number }) {
+
+  const review = await getProductReviews(itemId);
   const customerReviews = review.data;
   const productRating = review.rate;
   const productTotalReviews = review.review_count;
@@ -62,7 +22,7 @@ function ItemReviews({ itemId }: { itemId: number }) {
     })
     .sort((a, b) => b.rating - a.rating);
   return (
-    <div className="border-primary/20 flex flex-col md:flex-row gap-6 rounded-xl border-1 p-6">
+    <div className="container border-primary/20 flex flex-col md:flex-row gap-6 rounded-xl border-1 p-6">
       <div className="mb-8 flex shrink-0 basis-80 flex-col items-center gap-8">
         <div className="flex flex-shrink-0 flex-col items-center">
           <h2 className="text-text mb-6 text-2xl font-bold">Customer Review</h2>

@@ -9,10 +9,12 @@ function OrderItem({
   currency,
   onDelete,
   onUpdate,
+  className
 }: {
   id: number;
   title: string;
   desc: string;
+  className?: string;
   image: string | StaticImageData;
   price?: number;
   currency?: string;
@@ -20,15 +22,15 @@ function OrderItem({
   onUpdate?: () => Promise<void> | void;
 }) {
   return (
-    <Card className="border-primary/20 mb-2  gap-2 bg-transparent p-2 shadow-none transition-shadow hover:shadow-sm">
+    <Card className={"border-primary/20 mb-2  gap-2 bg-transparent p-2 shadow-none transition-shadow hover:shadow-sm "+className}>
       <div className="flex items-start justify-between">
         <div className="flex gap-2">
-          <div className="relative aspect-video w-28">
+          <div className="relative aspect-video w-28 shrink-0">
             <Image
               src={image}
               alt={title}
               fill
-              className="h-full rounded-xl object-cover"
+              className="h-full rounded-xl object-cover "
             />
           </div>
           <div>

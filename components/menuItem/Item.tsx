@@ -10,16 +10,18 @@ function Item({
   review_count,
   name,
   isFavorit,
-  id,
   description,
-  rating,imageUrl
+  rating,imageUrl,
+  favourite_id,
+  id
 }: {
+  id: number;
   review_count: number;
   rating: number;
   name: string;
   imageUrl: string;
+  favourite_id: number |null;
   isFavorit: boolean;
-  id: number;
   description: string;
 }) {
   return (
@@ -46,7 +48,7 @@ function Item({
             />
           </div>
           <div className="flex gap-3">
-            <FavoritButton isFavorit={isFavorit} itemId={id} />
+            <FavoritButton isFavorit={isFavorit} favId={favourite_id!} id={id}/>
             <Button
               variant="ghost"
               className="bg-primary/5 size-8 cursor-pointer rounded-full"

@@ -1,196 +1,176 @@
+
 "use client";
+import Cookies from "js-cookie";
 
+import { addToCart, clearCart, deleteFromCart, getCart, updateCart } from "@/services/ClientApiHandler";
 import { create } from "zustand";
+import { toast } from "sonner";
 
-interface CartItem {
-  id: string;
-  name: string;
-  imageUrl: string;
-  price: number;
+export interface SelectedModifier {
+  sub_modifier_id: number;
+  item_modifier_id: number;
   quantity: number;
-  selectedSize: string;
-  selectedToppings: { name: string; price: number | null; quantity: number }[];
+  price: number;
 }
 
-interface CartState {
-  items: CartItem[];
+export interface CartItem {
+  product_id: number;
+  quantity: number;
+  price: number;
+  sub_modifiers: SelectedModifier[];
+}
+
+export interface CartState {
+  items: CartProduct[];
   totalItems: number;
-  totalPrice: number;
-  addItem: (item: CartItem) => void;
-  removeItem: (itemId: string) => void;
-  clearCart: () => void;
-  updateItemQuantity: (itemId: string, newQuantity: number) => void;
-  updateToppingQuantity: (
-    itemId: string,
-    itemSize: string | null,
-    itemToppings: { name: string; price: number | null; quantity: number }[],
-    toppingName: string,
-    newToppingQuantity: number,
-  ) => void;
+  price: PriceSummary | null;
+  currency: string;
+  isLoading: {
+    fetchCartItems: boolean;
+    addItem: boolean;
+    itemId: number;
+    removeItem: boolean;
+    updateItemQuantity: boolean;
+    clearCart: boolean;
+  };
+  error: string | null;
+  fetchCartItems: () => Promise<void>;
+  addItem: (item: CartItem) => Promise<void>;
+  removeItem: (itemId: number) => Promise<void>;
+  clearCart: () => Promise<void>;
+  updateItemQuantity: (itemId: number, newQuantity: number) => Promise<void>;
 }
 
-export const useCartStore = create<CartState>((set) => ({
+export const useCartStore = create<CartState>((set, get) => ({
   items: [],
   totalItems: 0,
-  totalPrice: 0,
-
-  addItem: (newItem) => {
-    set((state) => {
-      const existingItemIndex = state.items.findIndex(
-        (item) => item.id === newItem.id,
-      );
-
-      if (existingItemIndex > -1) {
-        const updatedItems = state.items.map((item, index) =>
-          index === existingItemIndex
-            ? { ...item, quantity: item.quantity + newItem.quantity }
-            : item,
-        );
-        return {
-          items: updatedItems,
-          totalItems: state.totalItems + newItem.quantity,
-          totalPrice:
-            state.totalPrice +
-            newItem.price * newItem.quantity +
-            newItem.selectedToppings.reduce(
-              (acc, curr) => acc + (curr.price || 0) * curr.quantity,
-              0,
-            ) *
-              newItem.quantity,
-        };
-      } else {
-        return {
-          items: [...state.items, newItem],
-          totalItems: state.totalItems + newItem.quantity,
-          totalPrice:
-            state.totalPrice +
-            newItem.price * newItem.quantity +
-            newItem.selectedToppings.reduce(
-              (acc, curr) => acc + (curr.price || 0) * curr.quantity,
-              0,
-            ) *
-              newItem.quantity,
-        };
-      }
-    });
+  currency: '',
+  price: null,
+  isLoading: {
+    fetchCartItems: false,
+    addItem: false,
+    itemId: 0,
+    removeItem: false,
+    updateItemQuantity: false,
+    clearCart: false,
   },
+  error: null,
 
-  removeItem: (itemId) => {
-    set((state) => {
-      const itemToRemove = state.items.find((item) => item.id === itemId);
-      if (!itemToRemove) return state;
-
-      const updatedItems = state.items.filter((item) => item.id !== itemId);
-      return {
-        items: updatedItems,
-        totalItems: state.totalItems - itemToRemove.quantity,
-        totalPrice:
-          state.totalPrice -
-          itemToRemove.price * itemToRemove.quantity -
-          itemToRemove.selectedToppings.reduce(
-            (acc, curr) => acc + (curr.price || 0) * curr.quantity,
-            0,
-          ) *
-            itemToRemove.quantity,
-      };
-    });
-  },
-
-  updateItemQuantity: (itemId, newQuantity) => {
-    set((state) => {
-
-      const updatedItems = state.items
-        .map((item) => {
-          if (item.id === itemId) {            
-            return { ...item, quantity: newQuantity };
-          }
-          return item;
-        })
-        .filter((item) => item.quantity > 0); 
-
-      const newTotalItems = updatedItems.reduce(
-        (sum, item) => sum + item.quantity,
-        0,
-      );
-      const newTotalPrice = updatedItems.reduce(
-        (sum, item) =>
-          sum +
-          item.price * item.quantity +
-          item.selectedToppings.reduce(
-            (acc, curr) => acc + (curr.price || 0) * curr.quantity,
-            0,
-          ) *
-            item.quantity,
-        0,
-      );
-
-      return {
-        items: updatedItems,
-        totalItems: newTotalItems,
-        totalPrice: newTotalPrice,
-      };
-    });
-  },
-
-  updateToppingQuantity: (
-    itemId,
-    itemSize,
-    itemToppings,
-    toppingName,
-    newToppingQuantity,
-  ) => {
-    set((state) => {
-      let priceChange = 0;
-
-      const updatedItems = state.items.map((cartItem) => {
-        if (cartItem.id === itemId) {
-          let toppingFound = false;
-          const updatedToppings = cartItem.selectedToppings
-            .map((topping) => {
-              if (topping.name === toppingName) {
-                toppingFound = true;
-                const oldToppingQuantity = topping.quantity;
-                const actualNewToppingQuantity = Math.max(
-                  0,
-                  newToppingQuantity,
-                ); 
-
-                priceChange +=
-                  (topping.price || 0) *
-                  (actualNewToppingQuantity - oldToppingQuantity) *
-                  cartItem.quantity;
-
-                return { ...topping, quantity: actualNewToppingQuantity };
-              }
-              return topping;
-            })
-            .filter((topping) => topping.quantity > 0);
-
-          if (!toppingFound && newToppingQuantity > 0) {
-            const newToppingPrice =
-              itemToppings.find((t) => t.name === toppingName)?.price || 0;
-            priceChange +=
-              newToppingPrice * newToppingQuantity * cartItem.quantity;
-            updatedToppings.push({
-              name: toppingName,
-              price: newToppingPrice,
-              quantity: newToppingQuantity,
-            });
-          }
-
-          return { ...cartItem, selectedToppings: updatedToppings };
-        }
-        return cartItem;
+  fetchCartItems: async () => {
+    set((state) => ({ isLoading: { ...state.isLoading, fetchCartItems: true }, error: null }));
+    try {
+      const data = await getCart();
+      set({
+        items: data.data.products,
+        price: data.price,
+        totalItems: data.data.item_count,
+        currency: data.currency,
       });
-
-      const newTotalPrice = state.totalPrice + priceChange;
-
-      return {
-        items: updatedItems,
-        totalPrice: newTotalPrice,
-      };
-    });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to fetch cart items.";
+      console.error("Error fetching cart items:", err);
+      set({ error: errorMessage });
+      toast.error(errorMessage);
+    } finally {
+      set((state) => ({ isLoading: { ...state.isLoading, fetchCartItems: false } }));
+    }
   },
 
-  clearCart: () => set({ items: [], totalItems: 0, totalPrice: 0 }),
+  addItem: async (newItem) => {
+    set((state) => ({ isLoading: { ...state.isLoading, addItem: true }, error: null }));
+    try {
+      const data = await addToCart({ ...newItem, store_id: 1 });
+      toast.success(data.message || "Item added to cart successfully!");
+      set({
+        items: data.data.products,
+        price: data.price,
+        totalItems: data.data.item_count,
+        currency: data.currency,
+      });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to add item to cart.";
+      console.error("Error adding item to cart:", err);
+      set({ error: errorMessage });
+      toast.error(errorMessage);
+    } finally {
+      set((state) => ({ isLoading: { ...state.isLoading, addItem: false } }));
+    }
+  },
+
+  removeItem: async (cart_product_id) => {
+    set((state) => ({ isLoading: { ...state.isLoading, removeItem: true, itemId: cart_product_id }, error: null }));
+    try {
+      const itemToRemove = get().items.find((item) => item.id === cart_product_id);
+      if (!itemToRemove) {
+        toast.info("Item not found in cart.");
+        return;
+      }
+      const data = await deleteFromCart(cart_product_id);
+      toast.success(data.message || "Item removed from cart successfully!");
+      const cart = {
+        items: data.data.products,
+        price: data.price,
+        totalItems: data.data.item_count,
+        currency: data.currency,
+      }
+      Cookies.set('cart', JSON.stringify(cart), { expires: 30 })
+      set(cart);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to remove item from cart.";
+      console.error("Error removing item from cart:", err);
+      set({ error: errorMessage });
+      toast.error(errorMessage);
+    } finally {
+      set((state) => ({ isLoading: { ...state.isLoading, removeItem: false, itemId: 0 } }));
+    }
+  },
+
+  updateItemQuantity: async (cart_product_id, quantity) => {
+    set((state) => ({ isLoading: { ...state.isLoading, updateItemQuantity: true, itemId: cart_product_id }, error: null }));
+    try {
+      const item = get().items.find((item) => item.id === cart_product_id);
+      if (!item) {
+        toast.info("Item not found in cart to update.");
+        return;
+      }
+      const data = await updateCart({ cart_product_id, quantity });
+      toast.success(data.message || "Cart item quantity updated successfully!");
+      const cart = {
+        items: data.data.products,
+        price: data.price,
+        totalItems: data.data.item_count,
+        currency: data.currency,
+      }
+      Cookies.set('cart', JSON.stringify(cart), { expires: 30 })
+      set(cart);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to update item quantity.";
+      console.error("Error updating item quantity:", err);
+      set({ error: errorMessage });
+      toast.error(errorMessage);
+    } finally {
+      set((state) => ({ isLoading: { ...state.isLoading, updateItemQuantity: false, itemId: 0 } }));
+    }
+  },
+
+  clearCart: async () => {
+    set((state) => ({ isLoading: { ...state.isLoading, clearCart: true }, error: null }));
+    try {
+      const data = await clearCart(); const cart = {
+        items: [], totalItems: 0, price: null, currency: ''
+      }
+      Cookies.set('cart', JSON.stringify(cart), { expires: 30 })
+      set(cart);
+      toast.success(data.message || "Cart cleared successfully!");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to clear cart.";
+      console.error("Error clearing cart:", err);
+      set({ error: errorMessage });
+      toast.error(errorMessage);
+    } finally {
+      set((state) => ({ isLoading: { ...state.isLoading, clearCart: false } }));
+    }
+  },
 }));
+
+useCartStore.getState().fetchCartItems();

@@ -12,51 +12,35 @@ import HomeSlider from "@/components/home/Slider";
 import ReservationForm from "@/components/reservation/ReservationForm";
 import { getHomeData } from "@/services/ApiHandler";
 import { getTranslations } from "next-intl/server";
-const product: Product = {
-  id: 2,
-  name: "AAA",
-  slug: "aaaaaab",
-  desc: "This is a description for the AAA product. It's a sample item to demonstrate how the data is passed to the MenuCard component.",
-  type: "regular",
-  image:
-    "https://saas.khlod.aait-d.com/storage/tenants/front_brand/images/products/2rv7dLbrAi9A5FmFMrG5SZxviCmmlFtgBQOTEDZc.jpg",
-  rating: 4.5,
-  review_count: 120,
-  rate: 0,
-  is_favourite: false,
-  price: {
-    price: 10,
-    currency: "جنيه مصري",
-    percentage: 20,
-    discount_value: 2,
-    price_after: 8,
-    offer: null,
-  },
-};
+
 export default async function HomePage() {
-  const homeData = await getHomeData();
+  const homeData = await getHomeData() ;
   const t = await getTranslations();
   return (
     <div className="space-y-12">
       <HomeSlider slides={homeData?.sliders} />
-      <SliderSection
-        title={"View Our Menus"}
-        to="/menu"
-        items={[...Array(9)].map((_, index) => (
-          <MenuCard key={product.id + ` ${index}`} product={product} />
-        ))}
-      />
+      {homeData?.products && (
+        <SliderSection
+          title={"View Our Menus"}
+          to="/menu"
+          items={homeData.products.map((product, index) => (
+            <MenuCard key={product.id + ` ${index}`} product={product} />
+          ))}
+        />
+      )}
 
       {homeData?.web_content && (
         <GeneralSection item={homeData.web_content} to={"/about-us"} />
       )}
-      <SliderSection
-        title="Popular Items"
-        to="/menu"
-        items={[...Array(9)].map((_, index) => (
-          <MenuCard key={product.id + ` ${index}`} product={product} />
-        ))}
-      />
+      {homeData?.popular_products && (
+        <SliderSection
+          title="Popular Items"
+          to="/menu"
+          items={homeData.popular_products.map((product, index) => (
+            <MenuCard key={product.id + ` ${index}`} product={product} />
+          ))}
+        />
+      )}
       <div className="mx-auto w-full sm:w-[90%]">
         <ReservationForm />
       </div>
@@ -83,13 +67,13 @@ export default async function HomePage() {
         </GeneralSection>
       )}
       <ImagesSection />
-      <SliderSection
+      {homeData?.offers&&<SliderSection
         title="Offers"
-        to="/menu"
-        items={[...Array(9)].map((_, index) => (
+        to="/offers"
+        items={homeData.offers.map((product, index) => (
           <MenuCard isOffer key={product.id + ` ${index}`} product={product} />
         ))}
-      />
+      />}
       {homeData?.subscription_content && (
         <GeneralSection item={homeData.subscription_content}>
           <div className="relative">

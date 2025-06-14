@@ -1,8 +1,9 @@
-import ItemDetails from "@/components/menu/itemDitals";
+import ItemDetails from "@/components/menuItem";
 import MenuCard from "@/components/menu/menuCard";
 import SliderSection from "@/components/menu/MenuSliderSection";
+import ItemReviews from "@/components/menuItem/Reviews";
 import { getProfuctDeiltals } from "@/services/ApiHandler";
- const product: Product = {
+const product: Product = {
   id: 29,
   name: "AAA",
   slug: "aaaaaab",
@@ -10,31 +11,32 @@ import { getProfuctDeiltals } from "@/services/ApiHandler";
   type: "regular",
   image:
     "https://saas.khlod.aait-d.com/storage/tenants/front_brand/images/products/2rv7dLbrAi9A5FmFMrG5SZxviCmmlFtgBQOTEDZc.jpg",
-  rating: 4.5, 
+  rating: 4.5,
   review_count: 120,
-  rate: 0, 
+  rate: 0,
+  favourite_id:11,
   is_favourite: true,
   price: {
-    price: 10, 
+    price: 10,
     currency: "جنيه مصري",
     percentage: 20,
     discount_value: 2,
-    price_after: 8, 
-    offer: null,
+    price_after: 8,
   },
-}; 
+};
 export default async function ItemDetailsPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await params;
-  console.log(id);
-  const item = await getProfuctDeiltals(2)
-  console.log("item",item)
+  const { slug } = await params;
+  console.log(slug);
+  const item = (await getProfuctDeiltals(slug)) as ProductData;
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
-      <ItemDetails />
+      <ItemDetails productData={item} />
+      <ItemReviews itemId={item.id} />
+
       <SliderSection
         title="Popular Items"
         to="/menu"

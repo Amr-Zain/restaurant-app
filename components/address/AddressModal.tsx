@@ -17,8 +17,10 @@ import { Button } from "../ui/button";
 const AddressModal = ({
   open,
   onOpenChange,
+  onAddressClick,
 }: {
   open: boolean;
+  onAddressClick?: (item: Address) => void;
   onOpenChange: (value: boolean) => void;
 }) => {
   const t = useTranslations();
@@ -41,7 +43,7 @@ const AddressModal = ({
               {t("profile.myAddress")}
             </SheetTitle>
           </SheetHeader>
-          <div className="flex flex-col justify-between h-full overflow-x-auto">
+          <div className="flex h-full flex-col justify-between overflow-x-auto">
             {isLoading ? (
               <CardsSkeleton length={2} />
             ) : !data.length ? (
@@ -49,23 +51,31 @@ const AddressModal = ({
             ) : (
               <div className="px-4">
                 {data.map((item) => (
-                  <Item
-                    key={`favorite ${item.id}`}
-                    id={item.id}
-                    title={item.title}
-                    desc={item.desc!}
-                    image={map}
-                    onDelete={() => deleteFromAdderss(item.id)}
-                    onUpdate={() => {
-                      setUpdate({ id: item.id });
-                      setIsFormOpen(true);
-                    }}
-                  />
+                  <div
+                    key={`address ${item.id}`}
+                    onClick={()=>{if(onAddressClick)onAddressClick(item)}}
+                  >
+                    <Item
+                      id={item.id}
+                      title={item.title}
+                      desc={item.desc!}
+                      image={map}
+                      onDelete={() => deleteFromAdderss(item.id)}
+                      onUpdate={() => {
+                        setUpdate({ id: item.id });
+                        setIsFormOpen(true);
+                      }}
+                    />
+                  </div>
                 ))}
               </div>
             )}
           </div>
-          <Button variant={"default"} className="m-4" onClick={() => setIsFormOpen(true)}>
+          <Button
+            variant={"default"}
+            className="m-4"
+            onClick={() => setIsFormOpen(true)}
+          >
             Add new address
           </Button>
         </SheetContent>

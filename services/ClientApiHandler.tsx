@@ -12,6 +12,7 @@ import {
 import axiosInstance from "./axiosClient";
 import { format } from "date-fns";
 import { AddressFormData } from "@/components/address/AddressForm";
+import { CartItem } from "@/stores/cart";
 
 export const getAllServices = async () => {
   return await axiosInstance
@@ -214,5 +215,36 @@ export const updateAddress = async (form: AddressFormData, id: number) => {
   if (!form.is_default) delete form.is_default;
 
   const { data } = await axiosInstance.patch(`address/${id}`, form);
+  return data;
+};
+export const getCart = async ():Promise<CartApiResponse> => {
+  const { data } = await axiosInstance.get("carts");
+  return data;
+};
+export const addToCart = async (item: CartItem&{store_id:number}):Promise<CartApiResponse> => {
+  const { data } = await axiosInstance.post("carts", item);
+  return data;
+};
+export const updateCart = async (body: {
+  cart_product_id: number;
+  quantity: number;
+}) :Promise<CartApiResponse>=> {
+  const { data } = await axiosInstance.post("carts/update-count", {
+    ...body,
+    _method: "put",
+  });
+  return data;
+};
+export const clearCart = async () => {
+  const { data } = await axiosInstance.delete("carts");
+  return data;
+};
+export const deleteFromCart = async (id: number) => {
+  const { data } = await axiosInstance.delete(`carts/delete-item/${id}`);
+  return data;
+};
+
+export const postOrder = async (form) => {
+  const data = axiosInstance.post("orders", form);
   return data;
 };

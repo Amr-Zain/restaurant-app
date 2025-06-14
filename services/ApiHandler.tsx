@@ -19,7 +19,7 @@ export const getHomeData = async () => {
   try {
     const { data } = await axiosInstance.get("/home");
     console.log(data)
-    return data.data;
+    return data.data as HomePageData;
   } catch (error) {
     if (error instanceof Error) {
       throw new AppError(error.message, 500);
@@ -131,7 +131,7 @@ export const getMenuProducts = async (params: {
     throw "error loading data";
   }
 };
-export const getOffers = async (params: { lat: number; lng: number }) => {
+export const getOffers = async (params?: { lat: number; lng: number }) => {
   try {
     const { data } = await axiosInstance.get(`offers`, {
       params,
@@ -148,17 +148,33 @@ export const getOffers = async (params: { lat: number; lng: number }) => {
     throw "error loading data";
   }
 };
-export const getProfuctDeiltals = async(id:number)=>{
+export const getProfuctDeiltals = async(slug:string)=>{
   try {
-    const { data } = await axiosInstance.get(`product/${id}`)
-    console.log(data);
-    return data as Product || {}
+    const { data } = await axiosInstance.get(`product/${slug}`)
+    console.log(data.data);
+    return data.data as ProductData || {}
 
   } catch (error) {
     console.log(error);
     return "error loading data";
   }
 }
+export const getProductReviews = async (id:number):Promise<ProductReviewsResponse>=>{
+  try {
+    const { data } = await axiosInstance.get(`products/${id}/reviews`)
+    return data as ProductReviewsResponse
+  
+  } catch (error) {
+    console.log(error);
+    return "error loading data";
+  }
+
+}
+export const getCartServer = async ():Promise<CartApiResponse> => {
+  const { data } = await axiosInstance.get("carts");
+  return data;
+};
+
 // export const getCategoriesData = async () => {
 //   try {
 //     const { data } = await axiosInstance.get("/categories");

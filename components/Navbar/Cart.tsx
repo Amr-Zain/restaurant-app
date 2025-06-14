@@ -13,7 +13,7 @@ import { useCartStore } from "@/stores/cart";
 
 const CartModal = () => {
   const [open, setOpen] = useState(false);
-  const cartItemsLen = useCartStore((state) => state.items.length);
+  const cartItemsLen = useCartStore((state) => state.totalItems);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -50,7 +50,7 @@ const CartModal = () => {
       </SheetTrigger>
       <SheetContent
         side="left"
-        className="w-180 max-w-[100%] rounded-r-2xl border-r-1"
+        className="w-180 max-w-[100%] rounded-r-2xl border-r-1 "
       >
         <SheetHeader>
           <SheetTitle className="flex gap-2 text-lg">

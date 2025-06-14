@@ -43,16 +43,16 @@ function DateFields<TFieldValues extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem className="flex flex-col">
-          <FormLabel className="font-medium text-gray-700">
+          {label&&<FormLabel className="font-medium text-gray-700">
             {label}
-          </FormLabel>
+          </FormLabel>}
           <Popover>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
                   variant="outline"
                   className={cn(
-                    "h-12 border-gray-200 text-left font-normal focus:border-primary !pr-0",
+                    "h-12 border-gray-200 text-left font-normal",
                     !field.value && "text-muted-foreground",
                     className
                   )}

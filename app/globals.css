@@ -450,6 +450,9 @@ input[type="number"] {
 .nav-icon {
   @apply flex size-10 items-center justify-center rounded-full bg-[#F6F6FD] sm:size-12 cursor-pointer
 }
+.checkout-input {
+  @apply flex justify-between gap-2 items-center hover:bg-backgroud hover:text-primary cursor-pointer rounded-2xl bg-white !px-4 py-4 transition-colors;
+}
 @layer base {
   * {
     @apply border-border outline-ring/50;

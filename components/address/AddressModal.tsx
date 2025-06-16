@@ -18,8 +18,10 @@ const AddressModal = ({
   open,
   onOpenChange,
   onAddressClick,
+  className,
 }: {
   open: boolean;
+  className?: string;
   onAddressClick?: (item: Address) => void;
   onOpenChange: (value: boolean) => void;
 }) => {
@@ -35,7 +37,7 @@ const AddressModal = ({
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent
           onClick={(e) => e.stopPropagation()}
-          className="rounded-r-2xl border-r-1"
+          className={"w-110 max-w-[95%] rounded-r-2xl border-r-1 " + className}
           side="left"
         >
           <SheetHeader className="pb-4">
@@ -43,7 +45,9 @@ const AddressModal = ({
               {t("profile.myAddress")}
             </SheetTitle>
           </SheetHeader>
-          <div className="flex h-full flex-col justify-between overflow-x-auto">
+          <div
+            className={"flex h-full flex-col justify-between overflow-x-auto"}
+          >
             {isLoading ? (
               <CardsSkeleton length={2} />
             ) : !data.length ? (
@@ -53,15 +57,26 @@ const AddressModal = ({
                 {data.map((item) => (
                   <div
                     key={`address ${item.id}`}
-                    onClick={()=>{if(onAddressClick)onAddressClick(item)}}
+                    onClick={() => {
+                      if (onAddressClick) onAddressClick(item);
+                    }}
                   >
                     <Item
                       id={item.id}
                       title={item.title}
                       desc={item.desc!}
                       image={map}
-                      onDelete={() => deleteFromAdderss(item.id)}
-                      onUpdate={() => {
+                      onDelete={(
+                        event: React.MouseEvent<HTMLButtonElement>,
+                      ) => {
+                        event.stopPropagation();
+                        deleteFromAdderss(item.id);
+                      }}
+                      onUpdate={(
+                        event: React.MouseEvent<HTMLButtonElement>,
+                      ) => {
+                        // Add type here
+                        event.stopPropagation();
                         setUpdate({ id: item.id });
                         setIsFormOpen(true);
                       }}

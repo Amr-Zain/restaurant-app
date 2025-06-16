@@ -18,7 +18,7 @@ function SliderSection({ title, to, items }: { title: string, to: string, items:
       offset: 100,
     });
   }, []);
-
+  if(!items.length) return;
   return (
     <div className="p-sec">
       <div 

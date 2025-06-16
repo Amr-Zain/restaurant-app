@@ -15,7 +15,7 @@ function ImagesSection() {
   ];
   return (
     <section>
-      <div className="relative grid grid-cols-2 gap-4 md:grid-cols-3">
+      <div className="relative grid grid-cols-2 gap-4 md:grid-cols-3 my-8">
         {images.map((img, index) => (
           <div
             key={index}

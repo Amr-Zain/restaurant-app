@@ -453,6 +453,9 @@ input[type="number"] {
 .checkout-input {
   @apply flex justify-between gap-2 items-center hover:bg-backgroud hover:text-primary cursor-pointer rounded-2xl bg-white !px-4 py-4 transition-colors;
 }
+.nav-item {
+  @apply text-text hover:text-primary flex cursor-pointer items-center gap-2 text-base transition-colors 
+}
 @layer base {
   * {
     @apply border-border outline-ring/50;

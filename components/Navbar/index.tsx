@@ -21,8 +21,7 @@ async function NavBar() {
       path: "/about-us",
       icon: <Info className="h-4 w-4" />,
     },
-    /*     { value: t("Reservation"), path: "/reservation", icon: <CalendarCheck className="h-4 w-4" /> },
-     */ { value: t("Menu"), path: "/menu", icon: <Book className="h-4 w-4" /> },
+     { value: t("Menu"), path: "/menu", icon: <Book className="h-4 w-4" /> },
     {
       value: t("contact"),
       path: "/contact-us",

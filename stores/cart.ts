@@ -61,10 +61,10 @@ export const useCartStore = create<CartState>((set, get) => ({
     try {
       const data = await getCart();
       set({
-        items: data.data.products,
-        price: data.price,
-        totalItems: data.data.item_count,
-        currency: data.currency,
+        items: data.data?.products||[],
+        price: data?.price||null,
+        totalItems: data.data?.item_count||0,
+        currency: data?.currency||'',
       });
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Failed to fetch cart items.";

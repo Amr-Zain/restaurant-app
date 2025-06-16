@@ -196,7 +196,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           <div className="grid grid-cols-2 gap-2">
             {filters.map((categoryItem) => (
               <Button
-                key={categoryItem.id} // Use id for key for better performance and uniqueness
+                key={categoryItem.id}
                 variant={
                   selectedMainCategoryName === categoryItem.name
                     ? "default"
@@ -216,10 +216,10 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
             <h3 className="text-primary/40 bg-text-primary/10 mb-2 text-sm font-medium">
               {selectedMainCategoryName} Select sub category{" "}
             </h3>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="flex flex-wrap gap-2">
               {currentSubCategories.map((subCatItem) => (
                 <Button
-                  key={subCatItem.id} // Use id for key
+                  key={subCatItem.id} 
                   variant={
                     selectedSubCategoryName === subCatItem.name
                       ? "default"

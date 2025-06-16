@@ -1,4 +1,3 @@
-import { StaticImageData } from "next/image";
 import OverlappingImages from "../general/OverlappedImages";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
@@ -9,21 +8,27 @@ function OrderCard({
   types,
   images,
   desc,
+  item_count,
+  order_num,
 }: {
-  id: string;
+  id: number;
+  order_num: string;
+  item_count: number;
   types: string[];
   desc: string;
-  images: string[] | StaticImageData[];
+  images: string[];
 }) {
   return (
-    <Card className="sm:w-136 max-w-[95%] mx-auto gap-2 border-0 p-2 shadow-none transition-shadow hover:shadow-sm">
+    <Card className="mx-auto w-full max-w-[95%] gap-2 border-0 p-4 shadow-none transition-shadow hover:shadow-sm sm:w-136">
       <div className="flex justify-between">
-        <p className="flex gap-1 text-sub whitespace-nowrap"><span className="hidden sm:block">order</span> #{id}</p>
+        <p className="text-sub flex gap-1 whitespace-nowrap">
+          <span className="hidden sm:block">order</span> #{order_num}
+        </p>
         <div className="flex gap-1">
           {types.map((type, index) => (
             <div
               key={index}
-              className="h-9 text-primary bg-primary/10 flex items-center gap-1 rounded-full px-3 py-2 text-xs"
+              className="text-primary bg-primary/10 flex h-9 items-center gap-1 rounded-full px-3 py-2 text-xs  font-medium capitalize"
             >
               {type}
             </div>
@@ -31,22 +36,26 @@ function OrderCard({
         </div>
       </div>
       <div>
-        <div className="flex flex-col-reverse sm:flex-row items-start sm:items-center  gap-2">
-          <div className="flex flex-row sm:flex-col items-center justify-center gap-2">
-            <OverlappingImages images={images} size={50} overlap={50 * (0.2 * (images.length))} />
+        <div className="flex flex-col-reverse items-start gap-2 sm:flex-row sm:items-center">
+          <div className="flex flex-row items-center justify-center gap-2 sm:flex-col">
+            <OverlappingImages
+              images={images}
+              size={50}
+              overlap={50 * (0.2 * images.length)}
+            />
             <div className="text-sub text-sm">
-              {images.length} {images.length === 1 ? "item" : "items"}
+              {item_count} {item_count === 1 ? "item" : "items"}
             </div>
           </div>
-          <div className="flex grow-1 justify-between">
+          <div className="flex w-full grow-1 justify-between">
             <div>
               <p className="text-text font-semibold whitespace-nowrap">
-                order #{id}
+                order #{order_num}
               </p>
               <div className="text-sub line-clamp-3 max-w-64">{desc}</div>
             </div>
-              <Link href={`/orders/${id}`}>
-            <Button className="!size-12 self-end">
+            <Link href={`/orders/${id}`}>
+              <Button className="!size-10 self-end">
                 <svg
                   width="20"
                   height="14"
@@ -63,8 +72,8 @@ function OrderCard({
                     fill="white"
                   />
                 </svg>
-            </Button>
-              </Link>
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

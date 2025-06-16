@@ -14,7 +14,6 @@ import { CalendarCheck, MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Reservation from "./Reservations";
 import LangSwitcher from "../LangSwitcher";
-
 interface NavItem {
   value: string;
   path: string;
@@ -23,10 +22,10 @@ interface NavItem {
 
 const MobileMenu = ({ items }: { items: NavItem[] }) => {
   const t = useTranslations();
-  const [open, setOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
       <SheetTrigger asChild>
         <MenuIcon
           className="text-primary block size-6 sm:size-8 cursor-pointer xl:hidden"
@@ -37,41 +36,43 @@ const MobileMenu = ({ items }: { items: NavItem[] }) => {
         <SheetHeader>
           <SheetTitle>{t("NAV.Menu")}</SheetTitle>
         </SheetHeader>
-        <nav>
-          <ul className="flex list-none flex-col gap-2 p-4">
-            <li className="text-text hover:text-primary flex items-center gap-2 text-base transition-colors">
-              <span>
-                <CalendarCheck className="h-4 w-4" />
-              </span>
+        <nav className=" overflow-y-auto">
+          <ul className="flex list-none flex-col gap-2 p-2">
+            <li className="nav-item p-2"> 
+              <div className="nav-icon !size-10"> 
+                <CalendarCheck className="size-5" />
+              </div>
               <Reservation />
             </li>
-            {items.map((item) => (
-              <li key={item.path}>
+
+            {items.map((item,i) => (
+              <li key={item.path+i}>
                 <Link
                   href={item.path}
-                  onClick={() => setOpen(false)}
-                  className="text-text hover:text-primary flex items-center gap-2 text-base transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="nav-item p-2"
                 >
                   {item.icon && (
-                    <span className="flex-shrink-0">
+                    <div className="nav-icon !size-10"> 
                       {typeof item.icon === "string" ? (
                         <Image
                           src={item.icon}
                           width={20}
                           height={20}
                           alt={`${item.value} icon`}
-                          className="size-5 object-contain"
+                          className="size-5 object-contain" 
                         />
                       ) : (
                         item.icon
                       )}
-                    </span>
+                    </div>
                   )}
                   {item.value}
                 </Link>
               </li>
             ))}
-            <LangSwitcher className="justify-start text-text hover:text-primary flex items-center gap-2 text-base transition-colors" />
+            
+            <LangSwitcher className='justify-start ps-4' />
           </ul>
         </nav>
       </SheetContent>

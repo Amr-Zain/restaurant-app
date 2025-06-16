@@ -24,6 +24,8 @@ import AddressModal from "../address/AddressModal";
 import { useFormSubmission } from "@/hooks/useFormSubmission";
 import { postOrder } from "@/services/ClientApiHandler";
 import { useBranchStore } from "@/stores/branchs";
+import { CheckoutFromType, checkoutSchema } from "@/helper/schema";
+import { useTranslations } from "next-intl";
 const info = [
   { id: 1, label: "Delivery", value: "delivery", icon: Package },
   {
@@ -44,50 +46,9 @@ const payment = [
   },
 ];
 
-const formSchema = z
-  .object({
-    order_type: z.enum(["delivery", "take_away"], {
-      required_error: "You need to select an order type.",
-    }),
-    is_schedule: z.enum(["1", "0"], {
-      required_error: "You need to select an order schedule option.",
-    }),
-    date: z.string().optional(),
-    order_time: z.string().optional(),
-    pay_type: z.enum(["1", "0"], {
-      required_error: "You need to select a payment method.",
-    }),
-    address_id: z.number().optional(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.is_schedule === "1") {
-      if (!data.date) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Date is required for scheduled orders.",
-          path: ["date"],
-        });
-      }
-      if (!data.order_time) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Time is required for scheduled orders.",
-          path: ["order_time"],
-        });
-      }
-    }
-
-    if (data.order_type === "delivery") {
-      if (!data.address_id) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Shipping address is required for delivery orders.",
-          path: ["address_id"],
-        });
-      }
-    }
-  });
 function CheckOutForm() {
+  const t = useTranslations();
+  const formSchema =checkoutSchema({t})
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -99,19 +60,18 @@ function CheckOutForm() {
       address_id: undefined,
     },
   });
-
   const { fetchAdderss, data } = useAddressStore((state) => state);
   const [address, setAddress] = useState(
     data.find((item) => item.is_default === true) || data[0],
   );
-  const store_id = useBranchStore((state) => state.currentBranch?.id)||1;
+  const store_id = useBranchStore((state) => state.currentBranch?.id ||1);
 
   useEffect(() => {
     form.setValue("address_id", address?.id);
   }, [address, form]);
 
   const [openAddress, setOpenAddress] = useState(false);
-  const onSubmit = async (data) => {
+  const onSubmit = async (data:CheckoutFromType) => {
     if (!store_id) throw "bransh id is required";
     await postOrder({ ...data, address_id: address?.id, store_id,has_wallet:0 });
   };
@@ -144,7 +104,7 @@ function CheckOutForm() {
                       className="grid grid-cols-2 gap-4"
                     >
                       {info.map((item) => (
-                        <FormItem key={item.id} className="checkout-input">
+                        <FormItem key={item?.id} className="checkout-input">
                           <FormControl>
                             <RadioGroupItem
                               value={item.value}
@@ -181,12 +141,12 @@ function CheckOutForm() {
               <FormField
                 control={form.control}
                 name="address_id" 
-                render={({ field }) => (
+                render={() => (
                   <FormItem>
                     <FormControl>
                       <OrderItem
                         className="border-0 bg-white shadow-none"
-                        id={address.id} 
+                        id={address?.id} 
                         image={map}
                         title={address?.title || "Select An Address"}
                         desc={address?.desc as string}
@@ -324,6 +284,7 @@ function CheckOutForm() {
           setAddress(value);
           setOpenAddress(false);
         }}
+        className="mx-[2.5%] sm:mx-[calc((100vw-400px)/2)] !mt-[5vh] w-full h-[90vh] rounded-2xl"
       />
     </>
   );

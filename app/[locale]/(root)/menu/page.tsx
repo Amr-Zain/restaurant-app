@@ -47,12 +47,6 @@ export default async function HomePage({
     getMenuProducts(params),
   ]);
 
- /*  console.log(
-    await getOffers({
-      lat: 31.199999999999999289457264239899814128875732421875,
-      lng: 29.91799999999999926103555480949580669403076171875,
-    }),
-  ); */
   return (
     <div>
       <HeroSection
@@ -72,16 +66,18 @@ export default async function HomePage({
           {!menuList.data.length ? (
             <p className="text-sub mt-8 text-center">no results</p>
           ) : (
+            <>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {menuList?.data.map((product, index) => (
                 <MenuCard key={product.id + `item ${index}`} product={product} />
               ))}
             </div>
-          )}
           {/*  <PaginationControls
               currentPage={Number(params?.page)}
               totalPages={8}
             /> */}
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -180,6 +180,49 @@ export const profileSchema = ({ t }: { t: any }) => z.object({
         .max(100, t("errors.addressTooLong")),
     avatar: z.string().optional()
 });
+export const checkoutSchema = ({ t }: { t: any }) => z
+    .object({
+        order_type: z.enum(["delivery", "take_away"], {
+            required_error: "You need to select an order type.",
+        }),
+        is_schedule: z.enum(["1", "0"], {
+            required_error: "You need to select an order schedule option.",
+        }),
+        date: z.string().optional(),
+        order_time: z.string().optional(),
+        pay_type: z.enum(["1", "0"], {
+            required_error: "You need to select a payment method.",
+        }),
+        address_id: z.number().optional(),
+    })
+    .superRefine((data, ctx) => {
+        if (data.is_schedule === "1") {
+            if (!data.date) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "Date is required for scheduled orders.",
+                    path: ["date"],
+                });
+            }
+            if (!data.order_time) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "Time is required for scheduled orders.",
+                    path: ["order_time"],
+                });
+            }
+        }
+
+        if (data.order_type === "delivery") {
+            if (!data.address_id) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "Shipping address is required for delivery orders.",
+                    path: ["address_id"],
+                });
+            }
+        }
+    });
 export type ContactFormType = z.infer<ReturnType<typeof contactFormSchema>>;
 export type OTPSchemaType = z.infer<ReturnType<typeof OTPSchema>>;
 export type PhoneFormType = z.infer<ReturnType<typeof phoneSchema>>;
@@ -188,4 +231,5 @@ export type ForgatPasswordFormType = z.infer<ReturnType<typeof ForgatPasswordSch
 export type LoginFormType = z.infer<ReturnType<typeof loginSchema>>
 export type ReservationFromType = z.infer<ReturnType<typeof reservationSchema>>
 export type profileFromType = z.infer<ReturnType<typeof profileSchema>>
+export type CheckoutFromType = z.infer<ReturnType<typeof checkoutSchema>>
 

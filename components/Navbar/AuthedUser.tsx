@@ -1,10 +1,21 @@
 "use client";
 import { Link } from "@/i18n/routing";
 import { Button } from "../ui/button";
-import Pofile from "./Profile";
+//import Profile from "./Profile";
 import { useAuthStore } from "@/stores/auth";
 import { useTranslations } from "next-intl";
-import Stores from "./stores";
+//import Stores from "./stores";
+import dynamic from 'next/dynamic'
+ 
+const Stores = dynamic(() => import('./stores'), {
+  loading: () => <p>Loading...</p>,
+  ssr:false
+})
+ 
+const Profile = dynamic(() => import('./Profile'), {
+  loading: () => <p>Loading...</p>,
+  ssr:false
+})
 
 function AuthdUser() {
   const user = useAuthStore((state) => state.user);
@@ -15,7 +26,7 @@ function AuthdUser() {
       {user?.id ? (
         <>
           <div className="nav-icon">
-            <Pofile />
+            <Profile />
           </div>
           <Stores />
         </>

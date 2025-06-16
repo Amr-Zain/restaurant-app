@@ -20,13 +20,14 @@
     "menu": "Menu",
     "orders": "Orders",
     "login": "Log In",
-    "offers":"Offers",
+    "offers": "Offers",
     "privacy": "PRIVACY POLICY",
-    "terms": "TERMS & CINDITIONS"
+    "terms": "TERMS & CINDITIONS",
+    "notification":"Notification"
   },
   "profile": {
     "title": "Profile",
-    "favorite":"MY Favorite",
+    "favorite": "MY Favorite",
     "myAccount": "My Account",
     "myAddress": "My Address",
 
@@ -44,9 +45,14 @@
     "noAccount": "don’t have an account?",
     "haveAccount": "have an account?",
     "signUpNow": " sign up now",
+    "cancelOrder":"Cancel Order",
+    "cancelled":"Cancelled",
+    "cancelOrderDes":"Are You Sure, You want Cancel this Order",
+    "deleteAccount": "Delete Account",
+    "deleteAccountDesc": "Are you sure you want to delete your account?",
     "noBranches": "No branches found.",
-    "noFavorits":"You don’t have Favorite Product",
-    "noAdderss":"No Address Found"
+    "noFavorits": "You don’t have Favorite Product",
+    "noAdderss": "No Address Found"
   },
   "Footer": {
     "sectionsHeading": "Sections",
@@ -116,7 +122,7 @@
     "logout": "Logout",
     "subscribe": "SUBCRIBE",
     "sendMessage": "Send message",
-    "discoverMore":"Discover More"
+    "discoverMore": "Discover More"
   },
   "login": {
     "welcomeBack": "Welcome Back",
@@ -128,6 +134,13 @@
     "editPhoneNumber": "Edit Phone Number",
     "resend": "Resend",
     "login": "Login"
+  },
+  "card": {
+    "cridtCard": "Credit Card",
+    "loyaltyCard": "Loyalty Card",
+    "points": "points",
+    "Transaction History": "Transaction History",
+    "No transactions": "No transactions"
   },
   "verification": {
     "title": "Verify Code",
@@ -157,6 +170,7 @@
     "phoneInvalidLength": "Phone number must be {length} digits long.",
     "messageTypeRequired": "Please select a message type.",
     "messageRequired": "Message content is required.",
+    "logoutFailed": "Failed To logout, Please Try Again",
     "messageTooLong": "Message cannot exceed {max} characters."
   },
   "enter": "Enter",

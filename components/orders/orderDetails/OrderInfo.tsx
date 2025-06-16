@@ -10,9 +10,23 @@ import {
 import { Button } from "@/components/ui/button";
 import OrderItem from "./Item";
 import map from "@/assets/images/map.png";
-import OrderStatus from "./OrderStatus";
+import OrderStatusComponent from "./OrderStatus";
 
-const OrderInfo = () => {
+const OrderInfo = ({
+  callCenter,
+  callCenterMessage,
+  address,
+  orderDate,
+  orderTime,
+  orderStatus
+}: {
+  callCenter: string;
+  orderDate: string;
+  orderTime: string;
+  callCenterMessage: string;
+  address: Address;
+  orderStatus: OrderStatus[]
+}) => {
   const info = [
     { id: 1, label: "Order Type", value: "Delivery", icon: Package },
     {
@@ -21,13 +35,13 @@ const OrderInfo = () => {
       value: "Cash on delivery",
       icon: CreditCard,
     },
-    { id: 3, label: "Date Of Order", value: "24/12/2022", icon: Calendar },
-    { id: 4, label: "Time Of Order", value: "06:30 pm", icon: Clock },
+    { id: 3, label: "Date Of Order", value: orderDate, icon: Calendar },
+    { id: 4, label: "Time Of Order", value: orderTime, icon: Clock },
   ];
   return (
     <div className="mx-auto w-full">
       <div className="p-6">
-        <OrderStatus />
+        <OrderStatusComponent orderStatus={orderStatus}/>
 
         <div className="mb-6">
           <div className="mb-3 flex flex-col gap-2">
@@ -38,10 +52,8 @@ const OrderInfo = () => {
             <OrderItem
               key={`map`}
               id={1}
-              title={"Shipping Address"}
-              desc={
-                "216-D Imam Abu Hanifa Road Dhaka 1216, Bangladesh Gulshan 1210-02"
-              }
+              title={address.title}
+              desc={address.desc}
               image={map}
             />
           </div>
@@ -54,13 +66,10 @@ const OrderInfo = () => {
               <h3 className="text-text mb-1 font-bold">Call Center</h3>
             </div>
             <div className="rounded-xl bg-white p-4">
-              <p className="mb-2 text-sm text-red-500">
-                Your order has shipped. To cancel the order, contact the call
-                center!
-              </p>
-              <p className="text-sm font-medium text-blue-600">
-                +971 - 100684906
-              </p>
+              {callCenterMessage && (
+                <p className="mb-2 text-sm text-red-500">{callCenterMessage}</p>
+              )}
+              <p className="text-sm font-medium text-primary">{callCenter}</p>
             </div>
           </div>
         </div>

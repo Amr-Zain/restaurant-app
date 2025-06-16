@@ -1,8 +1,6 @@
 import NotFound from "@/components/NotFound";
-import Image from "next/image"; // Import the Image component
 import { getCmsPage, getCmsPages } from "@/services/ApiHandler";
 import GeneralSection from "@/components/general/GeneralSection";
-import { Card } from "@/components/ui/card";
 import HeroSection from "@/components/general/HeroSection";
 import { getTranslations } from "next-intl/server";
 
@@ -30,7 +28,7 @@ export default async function CMSPage({
 }) {
   const cms = (await params).slug;
   let pageData = null;
-  const  t = await getTranslations();
+  const t = await getTranslations();
   try {
     const apiResponse = await getCmsPage("cms-pages/" + cms);
     if (apiResponse && apiResponse.data) {
@@ -69,8 +67,21 @@ export default async function CMSPage({
           }}
         />
 
-        {pageData.addition_data && pageData.addition_data.length > 0 && (
-          <div className="mt-10 border-t pt-8">
+        {
+          pageData.addition_data &&
+            pageData.addition_data.map((item, i) => (
+              <GeneralSection
+                key={`${cms} ${item.id}`}
+                className={i % 2 === 0 ? "order-last my-8" : "my-8"}
+                item={{
+                  title: item.heading,
+                  heading: pageData.heading,
+                  image: item.image,
+                  desc: item.desc,
+                }}
+              />
+            ))
+          /*  <div className="mt-10 border-t pt-8">
             <div className="mb-6 flex items-center justify-center gap-2">
               <h3 className="text-text text-center text-2xl font-bold md:text-3xl">
                 More Details
@@ -110,8 +121,8 @@ export default async function CMSPage({
                 </Card>
               ))}
             </div>
-          </div>
-        )}
+          </div> */
+        }
       </div>
     </>
   );

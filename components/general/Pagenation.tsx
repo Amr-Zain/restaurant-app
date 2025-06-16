@@ -42,13 +42,13 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
     }
   `;
   return (
-    <div className="mt-8 flex items-center justify-end space-x-2">
+    <div className="my-8 flex items-center justify-end space-x-2">
       <Pagination>
         <PaginationContent>
            <PaginationItem
             onClick={() => onPageChange(+currentPage - 1)}
             className={
-              getPageButtonClassName(totalPages)+" !py-3 !px-3"
+              getPageButtonClassName(totalPages)+" !py-3 !px-3 !bg-transparent !text-text"
             }
           >
             <ChevronLeftIcon className="w-4 h-4" />
@@ -117,7 +117,7 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
           <PaginationItem
             onClick={() => onPageChange(+currentPage + 1)}
             className={
-              getPageButtonClassName(totalPages)+" !py-3 !px-3"
+              getPageButtonClassName(totalPages)+" !py-3 !px-3 !bg-transparent !text-text"
             }
           >
             <ChevronRightIcon className="w-4 h-4" />

@@ -174,6 +174,14 @@ export const getCartServer = async ():Promise<CartApiResponse> => {
   const { data } = await axiosInstance.get("carts");
   return data;
 };
+export const getOrders= async({status, page}:{status:string, page:number}):Promise<OrdersResponse>=>{
+  const { data } = await axiosInstance.get('orders-and-reservations',{params:{status, page}});
+  return data as OrdersResponse;
+}
+export const getOrder= async(id:string):Promise<{data:Order}>=>{
+  const { data } = await axiosInstance.get('orders/'+id);
+  return data as {data:Order};
+}
 
 // export const getCategoriesData = async () => {
 //   try {

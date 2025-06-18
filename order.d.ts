@@ -88,6 +88,7 @@ interface PaymentMethod {
 
 interface Item {
   id: number;
+  name:string
   product: Product;
   quantity: number;
   total_price: number;

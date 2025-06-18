@@ -8,6 +8,8 @@ import "swiper/css/pagination";
 import { Link } from "@/i18n/routing";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useTranslations } from "next-intl";
+import { ArrowRight } from "../Icons";
 
 function SliderSection({ title, to, items }: { title: string, to: string, items: React.ReactNode[]}) {
   useEffect(() => {
@@ -18,6 +20,7 @@ function SliderSection({ title, to, items }: { title: string, to: string, items:
       offset: 100,
     });
   }, []);
+  const t = useTranslations();
   if(!items.length) return;
   return (
     <div className="p-sec">
@@ -27,7 +30,7 @@ function SliderSection({ title, to, items }: { title: string, to: string, items:
         data-aos-delay="100"
       >
         <h3 
-          className="text-2xl font-bold text-text md:text-4xl md:font-bold lg:text-4xl"
+          className="text-2xl font-bold text-text md:text-4xl md:font-bold"
           data-aos="fade-right"
           data-aos-delay="200"
         >
@@ -35,28 +38,13 @@ function SliderSection({ title, to, items }: { title: string, to: string, items:
         </h3>
         <Link 
           href={to} 
-          className="flex gap-2 items-center text-primary cursor-pointer text-lg font-medium hover:opacity-80 transition-opacity"
+          className="flex gap-2 items-center text-primary cursor-pointer text-sm md:text-lg font-medium hover:opacity-80 transition-opacity"
           data-aos="fade-left"
           data-aos-delay="200"
         >
-          View All{" "}
-          <span>
-            <svg
-              width="20"
-              height="15"
-              viewBox="0 0 20 15"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12.43 1.42969L18.5 7.49969L12.43 13.5697M1.5 7.49969H18.33"
-                stroke="#5A6AE8"
-                strokeWidth="1.5"
-                strokeMiterlimit="10"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+         {t("TEXT.viewAll")+" "}
+          <span className={t('lang') ==="rtl"?"rotate-180":''}>
+            <ArrowRight />
           </span>
         </Link>
       </div>

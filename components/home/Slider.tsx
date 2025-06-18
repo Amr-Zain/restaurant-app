@@ -76,7 +76,7 @@ const HomeSlider = ({
                 dangerouslySetInnerHTML={{
                   __html: slide.title,
                 }}
-                className="font-serif text-3xl font-bold italic md:text-5xl"
+                className="font-Allura  text-4xl md:text-6xl"
                 data-aos="fade-up"
                 data-aos-delay="300"
                 data-aos-duration="1000"
@@ -85,7 +85,7 @@ const HomeSlider = ({
                 dangerouslySetInnerHTML={{
                   __html: slide.desc,
                 }}
-                className="mx-auto max-w-2xl"
+                className="mx-auto max-w-70 md:max-w-sm"
                 data-aos="fade-up"
                 data-aos-delay="500"
                 data-aos-duration="1000"

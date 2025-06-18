@@ -11,6 +11,7 @@ import "animate.css";
 import "aos/dist/aos.css";
 import "../globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import Location from "@/components/Location";
 
 export async function generateMetadata({
   params,
@@ -55,6 +56,7 @@ export default async function RootLayout({
               <div className="flex min-h-screen flex-col" id="app_wrapper">
                 {children}
                 <Toaster position="top-right" />
+                <Location />
               </div>
             </AosWrapper>
             <ScrollBtn />

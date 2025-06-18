@@ -24,21 +24,24 @@ function OrderDetails({
   items,
   orderSummary,
   canCancel,
-  status
+  status,
 }: {
   id: string;
-  status: string;
+  status?: string;
   items: Item[];
   canCancel: boolean;
   orderSummary: OrderSummary;
 }) {
+  console.log(items);
   return (
     <div className="order-1 flex flex-col rounded-3xl bg-white md:order-2">
       <div className="border-primary/20 flex items-center justify-between border-b p-4">
         <h3 className="text-text text-2xl font-semibold">
           {id ? `Order ID - ${id}` : "Items"}
         </h3>
-        <CancelOrder canCancel={canCancel} id={id} status={status}/>
+        {status && (
+          <CancelOrder canCancel={canCancel} id={id} status={status} />
+        )}
       </div>
       <div className="mb-4 flex grow-1 flex-col justify-between gap-2 p-4">
         <div className="max-h-110 overflow-y-auto px-2">

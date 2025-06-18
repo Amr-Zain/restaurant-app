@@ -9,19 +9,21 @@ import { useBranchStore } from "@/stores/branchs";
 import { StoreRadioCard } from "../stores/StoreRadioCard";
 import { StoresRadioSkeleton } from "../stores/StoresRadioSkeleton";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 const Stores = () => {
   const [open, setOpen] = useState(false);
   const t = useTranslations();
   const { branchs, currentBranch, setCurrentBranch, isLoading } =
     useBranchStore((state) => state);
-
+  const router = useRouter()
   const handleBranchChange = (branchId: string) => {
     const selectedBranch = branchs.find(
       (branch) => branch.id.toString() === branchId,
     );
     if (selectedBranch) {
       setCurrentBranch(selectedBranch);
+      router.refresh();
       setOpen(false);
     }
   };

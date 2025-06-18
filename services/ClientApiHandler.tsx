@@ -1,5 +1,6 @@
 "use client";
 import {
+  CheckoutFromType,
   ContactFormType,
   ForgatPasswordFormType,
   LoginFormType,
@@ -125,14 +126,14 @@ export const postReservation = async ({
   });
   return data || [];
 };
-export const postContactForm = async (form: ContactFormType) => {
+export const postContactForm = async (form: ContactFormType):Promise<Branch[]> => {
   const { data } = await axiosInstance.post(`contact_us`, form);
   return data || [];
 };
 export const getBranchs = async () => {
   try {
     const { data } = await axiosInstance.get(`/stores`);
-    return data.data || [];
+    return data.data as Branch[] || [];
   } catch {
     throw "Failed to fetch Sort data";
   }
@@ -219,13 +220,13 @@ export const updateAddress = async (form: AddressFormData, id: number) => {
   return data;
 };
 export const getCart = async (): Promise<CartApiResponse> => {
-  const { data } = await axiosInstance.get("carts");
+  const { data } = await axiosInstance.get("carts",{params:{lat: useAuthStore.getState().location.lat, lng: useAuthStore.getState().location.lng}});
   return data;
 };
 export const addToCart = async (
   item: CartItem & { store_id: number },
 ): Promise<CartApiResponse> => {
-  const { data } = await axiosInstance.post("carts", item);
+  const { data } = await axiosInstance.post("carts", item,{params:{lat: useAuthStore.getState().location.lat, lng: useAuthStore.getState().location.lng}});
   return data;
 };
 export const updateCart = async (body: {
@@ -235,7 +236,7 @@ export const updateCart = async (body: {
   const { data } = await axiosInstance.post("carts/update-count", {
     ...body,
     _method: "put",
-  });
+  },{params:{lat: useAuthStore.getState().location.lat, lng: useAuthStore.getState().location.lng}});
   return data;
 };
 export const clearCart = async () => {
@@ -274,7 +275,7 @@ export const cancelOrder = async (id: string) => {
   });
   return data;
 };
-export const postOrder = async (form) => {
-  const data = axiosInstance.post("orders", form);
+export const postOrder = async (form:any) => {
+  const {data} = axiosInstance.post("orders", form,{headers:{os:''}});
   return data;
 };

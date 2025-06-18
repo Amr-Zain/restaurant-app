@@ -1,11 +1,12 @@
 import Image from "next/image";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Button } from "../ui/button";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import { useCartStore } from "@/stores/cart";
 import { Loader2 } from "lucide-react";
 import { Link, usePathname } from "@/i18n/routing";
 import { useRouter } from "next/navigation";
+import { Trash } from "../Icons";
 
 interface SubModifier {
   item_modifiers: ItemModifier[];
@@ -84,7 +85,7 @@ function CartItem({
               {isLoadingRemove ? (
                 <Loader2 size={18} className="animate-spin" />
               ) : (
-                <Trash2 size={18} />
+                <Trash />
               )}
             </div>
           </div>

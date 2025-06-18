@@ -1,5 +1,6 @@
 import { getBranchs } from "@/services/ClientApiHandler";
 import { create } from "zustand";
+import Cookies from "js-cookie";
 
 interface BranchStore {
     branchs: Branch[];
@@ -18,7 +19,9 @@ const inititals = {
 export const useBranchStore = create<BranchStore>((set) => ({
     ...inititals,
     setBranchs: (branchs) => set(() => ({ branchs })),
-    setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
+    setCurrentBranch: (currentBranch) => {
+        Cookies.set('store',JSON.stringify(currentBranch))
+        set(() => ({ currentBranch }))},
     setLoading: (isLoading) => set(() => ({ isLoading })),
 }));
 
@@ -31,6 +34,7 @@ const getBranchsReq = async () => {
             useBranchStore.getState().setBranchs(fetchedBranches);
             if (!useBranchStore.getState().currentBranch) {
                 useBranchStore.getState().setCurrentBranch(fetchedBranches[0]);
+                Cookies.set('store', JSON.stringify(fetchedBranches[0]));
             }
         }
     } catch (error) {

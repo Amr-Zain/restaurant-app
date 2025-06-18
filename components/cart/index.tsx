@@ -1,39 +1,50 @@
+"use client";
 import { useCartStore } from "@/stores/cart";
 import CartItem from "./CartItem";
 import OrderSummary from "../orders/orderDetails/OrderSummary";
 import { Link } from "@/i18n/routing";
 import { Button } from "../ui/button";
+import { useTranslations } from "next-intl";
 
 function Cart() {
-  const { items, price, currency } = useCartStore((state) => state);
+  const { items, price, currency, totalItems } = useCartStore((state) => state);
+  const t = useTranslations();
 
   const orderSummary = {
-    title: "Order Summary",
+    title: t("orderSummary.title"),
     currency: currency,
     items: [
-      { label: "Subtotal", value: price?.sun_total || 0 },
       {
-        label: `Shipping ${price?.delivery_price === 0 ? "Fee" : ""}`,
+        label: (
+          <>
+            {t("orderSummary.subtotal")}
+            <span className="text-sub ms-2 font-normal text-sm">
+              ({t("cart.items", { count: totalItems })})
+            </span>
+          </>
+        ),
+        value: price?.sun_total || 0,
+      },
+      {
+        label: `${t("orderSummary.shipping")} ${price?.delivery_price === 0 ? t("orderSummary.fee") : ""}`,
         value: price?.delivery_price || 0,
       },
-      { label: "Surcharge", value: price?.surcharge || 0 },
-      { label: "Tax", value: price?.tax_rate_value || 0 },
-      /* { label: "Discount", value: price?.delivery_price || 0 }, */
+      { label: t("orderSummary.surcharge"), value: price?.surcharge || 0 },
+      { label: t("orderSummary.tax"), value: price?.tax_rate_value || 0 },
     ],
-    totalAmount: { label: "Total", value: price?.total || 0 },
+    totalAmount: { label: t("orderSummary.total"), value: price?.total || 0 },
   };
+
   return (
-    <div className="mb-4 flex flex-col justify-between overflow-y-auto px-4">
+    <div className="mb-4 flex flex-col justify-between px-4">
       {!items.length ? (
         <div className="flex h-full flex-col items-center justify-center">
-          <h3 className="text-text font-medium">No products</h3>
-          <p className="text-sub">
-            {"You don't have any products yet in your cart"}
-          </p>
+          <h3 className="text-text font-medium">{t("cart.noproducts")}</h3>
+          <p className="text-sub">{t("cart.desc")}</p>
         </div>
       ) : (
         <>
-          <div className="px-2">
+          <div className="max-h-[30vh] overflow-y-auto px-2">
             {items.map((item, i) => (
               <CartItem
                 id={item.product.id}
@@ -51,7 +62,7 @@ function Cart() {
           <OrderSummary {...orderSummary} />
           <Link href={"/checkout"}>
             <Button variant={"default"} className="my-2 !h-12 !w-full">
-              Checkout
+              {t("cart.checkoutButton")}
             </Button>
           </Link>
         </>

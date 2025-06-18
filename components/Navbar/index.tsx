@@ -16,17 +16,17 @@ async function NavBar() {
   const cmsPages = await getCmsPages();
 
   const navItems = [
-    {
+   /*  {
       value: t("about"),
       path: "/about-us",
       icon: <Info className="h-4 w-4" />,
-    },
+    } */,
      { value: t("Menu"), path: "/menu", icon: <Book className="h-4 w-4" /> },
-    {
+    /* {
       value: t("contact"),
       path: "/contact-us",
       icon: <Mail className="h-4 w-4" />,
-    },
+    }, */
     ...cmsPages.map((item) => ({
       value: item.title,
       path: `/${item.slug}`,

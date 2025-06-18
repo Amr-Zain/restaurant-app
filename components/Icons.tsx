@@ -79,6 +79,25 @@ export const Bell = ({ className = "" }: { className?: string }) => (
     />
   </svg>
 );
+export const ArrowRight = ({ className = "" }: { className?: string }) => (
+  <svg
+    className={className}
+    width="20"
+    height="15"
+    viewBox="0 0 20 15"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M12.43 1.42969L18.5 7.49969L12.43 13.5697M1.5 7.49969H18.33"
+      stroke="#5A6AE8"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 export const Loyalty = ({ className = "" }: { className?: string }) => (
   <svg
     className={className}
@@ -624,30 +643,6 @@ export const Logo = ({
   </svg>
 );
 
-export const ArrowRight = () => (
-  <svg
-    width="24"
-    height="25"
-    viewBox="0 0 24 25"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M5 12.9648H19"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M12 5.96484L19 12.9648L12 19.9648"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
 export const ArrowDown = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

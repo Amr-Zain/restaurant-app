@@ -10,10 +10,12 @@ import {
 } from "@/components/ui/sheet";
 import Cart from "../cart";
 import { useCartStore } from "@/stores/cart";
+import { useTranslations } from "next-intl";
 
 const CartModal = () => {
   const [open, setOpen] = useState(false);
   const cartItemsLen = useCartStore((state) => state.totalItems);
+  const t = useTranslations();
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -54,10 +56,9 @@ const CartModal = () => {
       >
         <SheetHeader>
           <SheetTitle className="flex gap-2 text-lg">
-            My Cart{" "}
+            {t('cart.title')}{" "}
             <span className="text-sub text-sm self-end ">
-              {"(" + cartItemsLen}
-              {cartItemsLen === 1 ? " Item" : " Items"}{") "}
+              ({t('cart.items',{count:cartItemsLen})})
             </span>
           </SheetTitle>
         </SheetHeader>

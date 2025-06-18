@@ -52,7 +52,7 @@ function CancelOrder({
  /*  useEffect(() => {
     const intervalId = setInterval(() => {
       router.refresh();
-    }, 5000); 
+    }, 10000); 
     return () => clearInterval(intervalId);
   }, [router]); */
 

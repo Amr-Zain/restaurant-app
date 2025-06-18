@@ -188,7 +188,7 @@ export const checkoutSchema = ({ t }: { t: any }) => z
         is_schedule: z.enum(["1", "0"], {
             required_error: "You need to select an order schedule option.",
         }),
-        date: z.string().optional(),
+        order_date: z.date().optional(),
         order_time: z.string().optional(),
         pay_type: z.enum(["1", "0"], {
             required_error: "You need to select a payment method.",
@@ -197,11 +197,11 @@ export const checkoutSchema = ({ t }: { t: any }) => z
     })
     .superRefine((data, ctx) => {
         if (data.is_schedule === "1") {
-            if (!data.date) {
+            if (!data.order_date) {
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
                     message: "Date is required for scheduled orders.",
-                    path: ["date"],
+                    path: ["order_date"],
                 });
             }
             if (!data.order_time) {

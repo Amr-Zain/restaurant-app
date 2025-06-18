@@ -105,8 +105,8 @@ const Profile = () => {
               </div>
               {t("profile.favorite")}
             </div>
-            <CardModal type="cridtCard" balance={100} currency="EGP" />
-            <CardModal type="loyaltyCard" balance={100} currency="EGP" />
+            <CardModal type="cridtCard" />
+            <CardModal type="loyaltyCard"  />
             <Notifiable />
             <DeleteAccount />
             <div

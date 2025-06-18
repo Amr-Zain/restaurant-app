@@ -25,6 +25,7 @@
   --font-IBM: "IBM Plex Sans", sans-serif;
   --font-switzer: "Switzer", sans-serif;
   --font-din: "Din", sans-serif;
+  --font-Allura: "Allura", sans-serif;
 
   --min-height-3-4: 75%;
 
@@ -216,7 +217,7 @@
     font-family: "Din";
     font-weight: 700;
     src: url("../public/assets/fonts/din/ArbFONTS-DINNextLTArabic-Bold.ttf");
-    font-display: swap;
+    font-display: swap;  
   }
 
   @font-face {
@@ -252,6 +253,11 @@
     font-weight: 700;
     src: url("../public/assets/fonts/ibm/IBMPlexSans-Bold.ttf");
     font-display: swap;
+  }
+  @font-face {
+    font-family:'Allura' ;
+    font-weight: 400;
+    src: url('../public/assets/fonts/Allura-Regular.ttf');
   }
 }
 

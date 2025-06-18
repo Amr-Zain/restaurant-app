@@ -5,7 +5,6 @@ import DateFields from "../util/formFields/DateField";
 import { TimePickerField } from "../reservation/TimePickr";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 
 import {
   Form,
@@ -26,6 +25,8 @@ import { postOrder } from "@/services/ClientApiHandler";
 import { useBranchStore } from "@/stores/branchs";
 import { CheckoutFromType, checkoutSchema } from "@/helper/schema";
 import { useTranslations } from "next-intl";
+import { useCartStore } from "@/stores/cart";
+import { format } from "date-fns";
 const info = [
   { id: 1, label: "Delivery", value: "delivery", icon: Package },
   {
@@ -48,14 +49,14 @@ const payment = [
 
 function CheckOutForm() {
   const t = useTranslations();
-  const formSchema =checkoutSchema({t})
+  const formSchema = checkoutSchema({ t });
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       order_type: "delivery",
       is_schedule: "0",
-      date: "",
-      order_time: "",
+/*       date: "",
+ */      order_time: "",
       pay_type: "0",
       address_id: undefined,
     },
@@ -64,21 +65,27 @@ function CheckOutForm() {
   const [address, setAddress] = useState(
     data.find((item) => item.is_default === true) || data[0],
   );
-  const store_id = useBranchStore((state) => state.currentBranch?.id ||1);
+  const store_id = useBranchStore((state) => state.currentBranch?.id || 1);
 
   useEffect(() => {
     form.setValue("address_id", address?.id);
   }, [address, form]);
+  const total_price = useCartStore(state=>state.price?.total)
 
   const [openAddress, setOpenAddress] = useState(false);
-  const onSubmit = async (data:CheckoutFromType) => {
+  const onSubmit = async (data: CheckoutFromType) => {
     if (!store_id) throw "bransh id is required";
-    await postOrder({ ...data, address_id: address?.id, store_id,has_wallet:0 });
+    return await postOrder({
+      ...data,
+      address_id: address?.id,
+      pay_type:JSON.stringify(data.pay_type ==="1"?[{wallet:total_price}]:[{cash:total_price}]),
+      order_date: data?.order_date?format(data.order_date, "yyyy-MM-dd"):"",
+      store_id,
+    });
   };
   const { handleSubmit } = useFormSubmission(form, {
     submitFunction: onSubmit,
   });
-  console.log(form.formState.errors);
 
   const scheduleOption = form.watch("is_schedule");
   const orderType = form.watch("order_type");
@@ -140,20 +147,20 @@ function CheckOutForm() {
               </h4>
               <FormField
                 control={form.control}
-                name="address_id" 
+                name="address_id"
                 render={() => (
                   <FormItem>
                     <FormControl>
                       <OrderItem
                         className="border-0 bg-white shadow-none"
-                        id={address?.id} 
+                        id={address?.id}
                         image={map}
                         title={address?.title || "Select An Address"}
                         desc={address?.desc as string}
                         onUpdate={() => setOpenAddress(true)}
                       />
                     </FormControl>
-                    <FormMessage /> {/* Display validation error */}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -206,7 +213,7 @@ function CheckOutForm() {
                 <DateFields
                   control={form.control}
                   label=""
-                  name="date"
+                  name="order_date"
                   placeholder="Select date"
                   className="checkout-input border-0 shadow-none"
                   disabled={isLoading}
@@ -284,10 +291,11 @@ function CheckOutForm() {
           setAddress(value);
           setOpenAddress(false);
         }}
-        className="mx-[2.5%] sm:mx-[calc((100vw-400px)/2)] !mt-[5vh] w-full h-[90vh] rounded-2xl"
+        className="mx-[2.5%] !mt-[5vh] h-[90vh] w-full rounded-2xl sm:mx-[calc((100vw-400px)/2)]"
       />
     </>
   );
 }
 
 export default CheckOutForm;
+

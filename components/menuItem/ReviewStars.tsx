@@ -1,12 +1,14 @@
 import { Star } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
-function ReviewStars({
+async function ReviewStars({
   productRating,
   productTotalReviews,
 }: {
   productRating: number;
   productTotalReviews?: number;
 }) {
+    const t = await getTranslations();
   return (
     <div className="mb-4 flex items-center text-yellow-500">
       {[...Array(5)].map((_, i) => {
@@ -14,15 +16,13 @@ function ReviewStars({
         
         return (
           <div key={i} className="relative h-5 w-5">
-            {/* Empty star background */}
             <Star
               size={20}
-              className="absolute text-gray-300"
+              className="absolute text-review"
               fill="none"
               stroke="currentColor"
             />
             
-            {/* Filled portion - clipped to exact percentage */}
             <div 
               className="absolute top-0 h-full overflow-hidden"
               style={{ width: `${fillPercentage}%` }}
@@ -38,7 +38,7 @@ function ReviewStars({
         );
       })}
       <span className="ml-2 font-semibold text-text">{productRating}</span>
-      {productTotalReviews&&<span className="ml-1 text-text">({productTotalReviews} reviews)</span>}
+      {productTotalReviews&&<span className="ml-1 text-text"> ({t('TEXT.reviews', { count: productTotalReviews })})</span>}
     </div>
   );
 }

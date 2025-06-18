@@ -11,26 +11,59 @@ const axiosInstance = axios.create({
     },
   },
 });
-
 axiosInstance.interceptors.request.use(
   async (config) => {
     try {
       const serverCookies = await cookies();
+
       const token = serverCookies.get('token')?.value;
       const locale = serverCookies.get("NEXT_LOCALE")?.value || "en";
+      const storeCookie = serverCookies.get("store")?.value;
+      const userCookie = serverCookies.get('user')?.value;
+      //const locationCookie = serverCookies.get('location')?.value;
+
+      config.params = config.params || {};
+
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
+      } else {
+        const guestToken = serverCookies.get('guest_token')?.value;
+        if (guestToken) {
+          config.params.guest_token = guestToken;
+        }
+       /*  if(locationCookie){
+          const locaiton = JSON.parse(locationCookie);
+          config.params.lat = locaiton.lat;
+          config.params.lng = locaiton.lng;
+        } */
       }
-      else {
-        config.params = { ...config.params, guest_token: serverCookies.get('guest_token')?.value }
+
+      if (storeCookie) {
+        try {
+          const store = JSON.parse(storeCookie);
+          if (store && store.id) {
+            config.params.store_id = store.id;
+          }
+        } catch (parseError) {
+          console.warn("Failed to parse 'store' cookie:", parseError);
+        }
       }
-      if (!config.params) {
-        config.params = {};
+
+      if (userCookie) {
+        try {
+          const user = JSON.parse(userCookie) as User;
+          if (user && user.default_address && user.default_address.id) {
+            config.params.address_id = user.default_address.id;
+          }
+        } catch (parseError) {
+          console.warn("Failed to parse 'user' cookie:", parseError);
+        }
       }
 
       config.headers["Accept-Language"] = locale;
+
     } catch (error) {
-      console.error("Error setting Axios request headers: ", error);
+      console.error("Error in Axios request interceptor:", error);
     }
 
     return config;
@@ -40,6 +73,7 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+
 // Response interceptor to handle 401 errors
 
 axiosInstance.interceptors.response.use(
@@ -47,8 +81,9 @@ axiosInstance.interceptors.response.use(
   async (error: AxiosError) => {
     if (error.response?.status === 401) {
 
-      (await cookies()).delete('token')
-      //logout();
+      (await cookies()).delete('token');
+      (await cookies()).delete('user');
+      (await cookies()).delete('guest_token');
     }
     return Promise.reject(error);
   }

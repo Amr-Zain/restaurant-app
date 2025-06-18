@@ -1,4 +1,3 @@
-'use client'
 import { Link } from "@/i18n/routing";
 import Reservation from "./Reservations";
 
@@ -17,7 +16,7 @@ const DesktopNavigation = ({ items }: { items: NavItem[] }) => (
         <li key={item.path + i}>
           <Link
             href={item.path}
-            className="nav-item"
+            className="nav-item whitespace-nowrap"
           >
             {item.value}
           </Link>

@@ -18,14 +18,18 @@ export default function ItemDetails({
         id={productData.id}
         imageUrl={productData.image}
         description={productData.desc}
+        icon={productData.food_icon[0]}
       />
 
-      {productData?.sub_modifiers.map((subModifier) => (
-        <SubModifierComponent
-          key={` submidifier ${subModifier.id}`}
-          subModifier={subModifier}
-        />
-      ))}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-10">
+        {productData?.sub_modifiers
+          .map((subModifier) => (
+            <SubModifierComponent
+              key={` submidifier ${subModifier.id}`}
+              subModifier={subModifier}
+            />
+          ))}
+      </div>
       <ItemCardButtons
         currency={productData.price.currency}
         id={productData.id}

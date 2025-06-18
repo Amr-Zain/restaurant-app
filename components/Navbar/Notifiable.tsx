@@ -42,11 +42,11 @@ function Notifiable() {
       <DialogContent className="bg-backgroud max-w-[95%] rounded-2xl border-0 px-4 shadow-xl">
         <DialogHeader className="pb-4">
           <DialogTitle className="text-text text-center text-xl font-semibold">
-            {t("TEXT.deleteAccount")}
+            {t("TEXT.changeNotifications")}
           </DialogTitle>
         </DialogHeader>
         <DialogDescription className="text-sub">
-          {t("TEXT.deleteAccountDesc")}
+          {t("TEXT.changeNotificationsDesc")}
         </DialogDescription>
         <div className="flex w-full justify-end gap-4 px-4">
           <Button

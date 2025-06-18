@@ -21,7 +21,7 @@ export default async function HomePage() {
       <HomeSlider slides={homeData?.sliders} />
       {homeData?.products && (
         <SliderSection
-          title={"View Our Menus"}
+          title={t('TEXT.viewMenu')}
           to="/menu"
           items={homeData.products.map((product, index) => (
             <MenuCard key={product.id + ` ${index}`} product={product} />
@@ -34,7 +34,7 @@ export default async function HomePage() {
       )}
       {homeData?.popular_products && (
         <SliderSection
-          title="Popular Items"
+          title={t('TEXT.popularItems')}
           to="/menu"
           items={homeData.popular_products.map((product, index) => (
             <MenuCard key={product.id + ` ${index}`} product={product} />
@@ -68,7 +68,7 @@ export default async function HomePage() {
       )}
       <ImagesSection />
       {homeData?.offers&&<SliderSection
-        title="Offers"
+         title={t('TEXT.offers')}
         to="/offers"
         items={homeData.offers.map((product, index) => (
           <MenuCard isOffer key={product.id + ` ${index}`} product={product} />

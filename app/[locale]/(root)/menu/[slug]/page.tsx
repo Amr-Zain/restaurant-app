@@ -2,45 +2,76 @@ import ItemDetails from "@/components/menuItem";
 import MenuCard from "@/components/menu/menuCard";
 import SliderSection from "@/components/menu/MenuSliderSection";
 import ItemReviews from "@/components/menuItem/Reviews";
-import { getProfuctDeiltals } from "@/services/ApiHandler";
-const product: Product = {
-  id: 29,
-  name: "AAA",
-  slug: "aaaaaab",
-  desc: "This is a description for the AAA product. It's a sample item to demonstrate how the data is passed to the MenuCard component.",
-  type: "regular",
-  image:
-    "https://saas.khlod.aait-d.com/storage/tenants/front_brand/images/products/2rv7dLbrAi9A5FmFMrG5SZxviCmmlFtgBQOTEDZc.jpg",
-  rating: 4.5,
-  review_count: 120,
-  rate: 0,
-  favourite_id:11,
-  is_favourite: true,
-  price: {
-    price: 10,
-    currency: "جنيه مصري",
-    percentage: 20,
-    discount_value: 2,
-    price_after: 8,
-  },
-};
-export default async function ItemDetailsPage({
+import { getMenuProducts, getProfuctDeiltals } from "@/services/ApiHandler";
+
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}) {
+}): Promise<Metadata> {
   const { slug } = await params;
-  console.log(slug);
-  const item = (await getProfuctDeiltals(slug)) as ProductData;
+  let product = null;
+  try {
+    product = (await getProfuctDeiltals(slug)) as ProductData;
+  } catch {
+    return {};
+  }
+  return {
+    title: product.name,
+    description: product.seo.description,
+    keywords: product.seo.keywords,
+    openGraph: {
+      images: product.images.map((item) => item.image),
+    },
+  };
+}
+
+export default async function ItemDetailsPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const { slug } = params;
+  console.log("Fetching details for slug:", slug);
+  const t = await getTranslations();
+  let item: ProductData | null = null;
+  try {
+    item = (await getProfuctDeiltals(slug)) as ProductData;
+  } catch (error: unknown) {
+    console.error("Error fetching product details:", error);
+
+    if (
+      error &&
+      typeof error === "object" &&
+      "status" in error &&
+      error.status === 404
+    ) {
+      return notFound();
+    }
+
+    console.error("An unexpected error occurred:", error);
+  }
+
+  if (!item?.id) {
+    return notFound();
+  }
+  const { data: PopularProducts } = await getMenuProducts({
+    search_by: "popular",
+    item_id: item.id,
+  });
+
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
       <ItemDetails productData={item} />
       <ItemReviews itemId={item.id} />
 
       <SliderSection
-        title="Popular Items"
+        title={t("TEXT.popularItems")}
         to="/menu"
-        items={[...Array(9)].map((_, index) => (
+        items={PopularProducts.map((product, index) => (
           <MenuCard key={product.id + ` ${index}`} product={product} />
         ))}
       />

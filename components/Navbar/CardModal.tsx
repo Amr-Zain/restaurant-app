@@ -6,19 +6,13 @@ import { Loyalty, Wallet } from "../Icons";
 import { useAuthStore } from "@/stores/auth";
 import Image from "next/image";
 import logo from "@/assets/images/logo.png";
+import { useCartStore } from "@/stores/cart";
 
-function CardModal({
-  type,
-  balance,
-  currency,
-}: {
-  type: "cridtCard" | "loyaltyCard";
-  balance: number;
-  currency?: string;
-}) {
+function CardModal({ type }: { type: "cridtCard" | "loyaltyCard" }) {
   const [open, setOpen] = useState(false);
   const t = useTranslations("card");
-  const full_name = useAuthStore((state) => state.user?.full_name);
+  const { full_name, points, wallet } = useAuthStore((state) => state.user!);
+  const currency = useCartStore((state) => state.currency);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild className="cursor-pointer">
@@ -53,7 +47,9 @@ function CardModal({
                 {type === "cridtCard" ? t("cridtCard") : t("loyaltyCard")}
               </div>
               <div className="flex h-7 gap-1 text-sm md:text-lg">
-                <div className="font-semibold">{balance || 0}</div>
+                <div className="font-semibold">
+                  {type === "cridtCard" ? wallet : points}
+                </div>
                 <div className="self-end text-sm">
                   {type === "cridtCard" ? currency : t("points")}
                 </div>

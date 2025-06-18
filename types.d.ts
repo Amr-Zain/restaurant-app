@@ -120,16 +120,22 @@ interface Address {
   };
 
 interface User {
-    id: number;
-    full_name: string;
-    avatar: string;
-    email: string;
-    phone_code: string;
-    phone: string;
-    user_type: string; //"customer"
-    notifiable: boolean;
-    token: string;
+  avatar: string;
+  country: Country;
+  default_address: Address;
+  email: string;
+  full_name: string;
+  id: number;
+  notifiable: boolean;
+  phone: string;
+  phone_code: string;
+  points: number;
+  tenant: string;
+  token: string;
+  user_type: string;
+  wallet: number;
 }
+
 interface Branch  {
   id: number;
   image: string;
@@ -202,10 +208,12 @@ interface HomePageData {
     image: string; // Assuming there's an image property based on common patterns, though not explicitly in your sample
   };
 }
-interface User {
+interface Country {
   id: number;
-  full_name: string;
-  avatar: string;
+  name: string;
+  phone_code: string;
+  phone_limit: number;
+  flag: string;
 }
 
 interface Review {

@@ -3,7 +3,7 @@ import OrderDetails from "@/components/orders/orderDetails";
 import { getCartServer } from "@/services/ApiHandler";
 async function CheckOut() {
   const cart = await getCartServer();
-  
+
   const orderSummary = {
     title: "Order Summary",
     currency: cart?.currency || "",
@@ -19,19 +19,26 @@ async function CheckOut() {
     ],
     totalAmount: { label: "Total", value: cart?.price?.total || 0 },
   };
+  console.log(cart)
   return (
     <div>
-      <div className="container my-10 grid grid-cols-1 gap-6 md:grid-cols-[1fr_360px]">
-        <CheckOutForm />
+      {cart?.data?.products ? (
+        <div className="container my-10 grid grid-cols-1 gap-6 md:grid-cols-[1fr_360px]">
+          <CheckOutForm />
 
-        <OrderDetails
-          items={cart?.data.products?.map((item) => ({
-            ...item.product,
-            price: { price: item.total_price, currency: cart.currency },
-          }))}
-          orderSummary={orderSummary}
-        />
-      </div>
+          <OrderDetails
+            items={cart?.data.products?.map((item) => ({
+              ...item.product,
+              product:item.product,
+              price: { price: item.total_price, currency: cart.currency },
+            }))}
+            orderSummary={orderSummary}
+            canCancel
+          />
+        </div>
+      ) : (
+        <div className="text-sub my-20 text-center">your cart is emptiy</div>
+      )}
     </div>
   );
 }

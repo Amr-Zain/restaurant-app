@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { useItemDetailsStore } from "@/stores/itemDitails";
 import { useCartStore } from "@/stores/cart";
 import { CartIcon } from "../Icons";
+import { useTranslations } from "next-intl";
 
 function ItemCardButtons({
   id,
@@ -18,12 +19,8 @@ function ItemCardButtons({
     useItemDetailsStore((state) => state);
   const isLoading = useCartStore((state) => state.isLoading.addItem);
   const addToCart = useCartStore((state) => state.addItem);
-
- /*  useEffect(() => {
-     resetItemDetails();
-     
-  }, [id, resetItemDetails]);
- */
+  const t = useTranslations()
+ 
   const calculateCurrentPrice = () => {
     let currentPrice = price;
     currentPrice += selectedModifiers.reduce(
@@ -40,43 +37,42 @@ function ItemCardButtons({
       quantity,
       sub_modifiers: selectedModifiers,
     });
-    //resetItemDetails();
   };
   return (
     <div className="mb-4 flex flex-col items-center justify-end gap-4 sm:flex-row">
-      <div className="border-primary/20 flex items-center space-x-1 rounded-lg border p-2">
+      <div className="border-primary/20 h-12 flex items-center space-x-1 rounded-lg border p-2">
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           disabled={quantity === 1}
           onClick={() => setQuantity(Math.max(1, quantity - 1))}
-          className="size-8 cursor-pointer border-0 bg-backgroud"
+          className="size-10 cursor-pointer text-primary"
         >
-          <Minus size={20} />
+          <Minus size={25} />
         </Button>
-        <span className="text-text w-8 cursor-pointer text-center text-sm font-bold">
+        <span className="text-text w-8 cursor-pointer text-center text-lg font-bold">
           {quantity}
         </span>
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           onClick={() => setQuantity(quantity + 1)}
-          className="size-8 cursor-pointer border-0 bg-backgroud"
+          className="size-10 cursor-pointer text-primary"
         >
-          <Plus size={20} />
+          <Plus size={25} />
         </Button>
       </div>
       <Button
         onClick={addToCartHandler}
         disabled={isLoading}
-        className="!h-12 cursor-pointer rounded-lg px-8 py-3 text-sm font-semibold text-white sm:w-auto"
+        className="!h-12 !min-w-40 cursor-pointer rounded-lg px-8 py-3 text-sm font-semibold text-white sm:w-auto"
       >
         {isLoading ? (
           <Loader2 className="animate-spin" />
         ) : (
           <>
             <CartIcon />
-            Add to Cart {calculateCurrentPrice().toFixed(2)}{" "}
+             {t('buttons.addToCart') +" "+calculateCurrentPrice().toFixed(2)}{" "}
             <span className="self-end text-[.6rem]">{currency}</span>
           </>
         )}

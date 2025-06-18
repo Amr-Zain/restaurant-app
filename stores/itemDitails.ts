@@ -52,23 +52,6 @@ export const useItemDetailsStore = create<ItemDetailsState>((set, get) => ({
                 }
             } else {
                 if (action === "add") {
-                    const currentSelectionsCount = prev.reduce((count, sm) => {
-                        if (sm.sub_modifier_id === subModifier.id) {
-                            return count + sm.quantity;
-                        }
-                        return count;
-                    }, 0);
-
-                    if (
-                        subModifier.max_num_of_selection &&
-                        currentSelectionsCount >= subModifier.max_num_of_selection
-                    ) {
-                        toast.error(
-                            `You can select a maximum of ${subModifier.max_num_of_selection} for ${subModifier.name}.`,
-                        );
-                        return { selectedModifiers: prev };
-                    }
-
                     if (existingIndex > -1) {
                         const newSelected = [...prev];
                         newSelected[existingIndex].quantity += 1;

@@ -115,9 +115,7 @@ export const getMenuFilter = async (): Promise<{
   }
 };
 export const getMenuProducts = async (params: {
-  category?: string;
-  sub_category?: string;
-  keyword?: string;
+[key: string]: string|number;
 }): Promise<{ data: Product[]; meta: unknown }> => {
   try {
     const { data } = await axiosInstance.get("product", { params });
@@ -155,18 +153,18 @@ export const getProfuctDeiltals = async(slug:string)=>{
     return data.data as ProductData || {}
 
   } catch (error) {
-    console.log(error);
-    return "error loading data";
+    console.error(error);
+    throw error
   }
 }
-export const getProductReviews = async (id:number):Promise<ProductReviewsResponse>=>{
+export const getProductReviews = async (id:number)=>{
   try {
     const { data } = await axiosInstance.get(`products/${id}/reviews`)
     return data as ProductReviewsResponse
   
   } catch (error) {
     console.log(error);
-    return "error loading data";
+    throw error 
   }
 
 }
@@ -182,7 +180,6 @@ export const getOrder= async(id:string):Promise<{data:Order}>=>{
   const { data } = await axiosInstance.get('orders/'+id);
   return data as {data:Order};
 }
-
 // export const getCategoriesData = async () => {
 //   try {
 //     const { data } = await axiosInstance.get("/categories");

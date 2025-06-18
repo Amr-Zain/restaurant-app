@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { Minus, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
@@ -6,11 +6,13 @@ import { Label } from "../ui/label";
 import { useItemDetailsStore } from "@/stores/itemDitails";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 function SubModifierComponent({ subModifier }: { subModifier: SubModifier }) {
   const handleModifierChange = useItemDetailsStore(
     (state) => state.handleModifierChange,
   );
+  const t = useTranslations();
   const getModifierQuantity = useItemDetailsStore(
     (state) => state.getModifierQuantity,
   );
@@ -21,23 +23,28 @@ function SubModifierComponent({ subModifier }: { subModifier: SubModifier }) {
     (state) => state.initializeModifiers,
   );
   useEffect(() => {
-    initializeModifiers([subModifier]); 
-  }, [subModifier, initializeModifiers]); 
-   
+    initializeModifiers([subModifier]);
+  }, [subModifier, initializeModifiers]);
+
   return (
-    <div key={subModifier.id} className="mb-6">
-      <h3 className="text-text mb-3 text-xl font-semibold">
+    <div
+      key={subModifier.id}
+      className={`${subModifier.selections_type === "exact" ? "lg:col-span-2" : ""}`}
+    >
+      <h3 className="text-text mb-3 text-lg font-semibold">
         {subModifier.name}
         {
-          <span className="text-sub ml-2 text-sm">
-            (Required: {subModifier.min_num_of_selection || "0"}
-            {subModifier.max_num_of_selection &&
-              ` - ${subModifier.max_num_of_selection}`}
-            )
+          <span className="text-review ml-2 text-sm">
+            {t("labels.selectTopping", {
+              type: t(`labels.${subModifier.selections_type}`),
+              value:
+                subModifier.selections_type === "exact"
+                  ? `${subModifier.max_num_of_selection} ${subModifier.name}`
+                  : `${subModifier.min_num_of_selection || 0}~${subModifier.max_num_of_selection} ${subModifier.name}`,
+            })}
           </span>
         }
       </h3>
-
       {subModifier.selections_type === "exact" ? (
         <RadioGroup
           value={
@@ -68,16 +75,18 @@ function SubModifierComponent({ subModifier }: { subModifier: SubModifier }) {
                 key={modifier.id}
                 className={cn(
                   "checkout-input",
+                  
                   isSelected ? "border-primary border" : "",
                 )}
               >
                 <RadioGroupItem
                   value={modifier.id.toString()}
                   id={modifier.id.toString()}
+                  className="hidden"
                 />
                 <Label
                   htmlFor={modifier.id.toString()}
-                  className="text-text cursor-pointer"
+                  className="text-text cursor-pointer text-sm font-semibold"
                 >
                   {modifier.name}
                   {modifier.price &&
@@ -88,25 +97,38 @@ function SubModifierComponent({ subModifier }: { subModifier: SubModifier }) {
           })}
         </RadioGroup>
       ) : (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="max-h-[210px] space-y-2 overflow-y-auto">
           {subModifier.item_modifiers.map((modifier) => {
             const modifierQuantity = getModifierQuantity(
               subModifier.id,
               modifier.id,
             );
             const isSelected = modifierQuantity > 0;
-
+            const currentSelectionsCount = selectedModifiers.reduce(
+              (count, sm) => {
+                if (sm.sub_modifier_id === subModifier.id) {
+                  return count + sm.quantity;
+                }
+                return count;
+              },
+              0,
+            );
+            const isMax = !!(
+              subModifier.max_num_of_selection &&
+              currentSelectionsCount >= subModifier.max_num_of_selection
+            );
             return (
               <div
                 key={modifier.id}
                 className={cn(
-                  "checkout-input",
+                  "checkout-input me-2",
+                  'p-2 sm:p-4',
                   isSelected ? "border-primary border" : "",
                 )}
               >
                 <div className="text-text flex flex-col font-medium">
                   <div>
-                    <span className="font-medium">{modifier.name}</span>
+                    <span className="font-semibold text-sm">{modifier.name}</span>
                     <span className="text-sm font-medium">
                       {modifier.price
                         ? ` (+${modifier.price.price} ${modifier.price.currency})`
@@ -114,7 +136,7 @@ function SubModifierComponent({ subModifier }: { subModifier: SubModifier }) {
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex flex-col sm:flex-row items-center sm:space-x-2">
                   <Button
                     variant="outline"
                     size="icon"
@@ -126,12 +148,13 @@ function SubModifierComponent({ subModifier }: { subModifier: SubModifier }) {
                   >
                     <Minus size={16} />
                   </Button>
-                  <span className="w-6 text-center font-semibold text-gray-800">
+                  <span className="w-6 text-center p-2 font-semibold text-gray-800">
                     {modifierQuantity}
                   </span>
                   <Button
                     variant="default"
                     size="icon"
+                    disabled={isMax}
                     onClick={() =>
                       handleModifierChange(subModifier, modifier, "add")
                     }

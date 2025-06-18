@@ -157,7 +157,7 @@ export const useCartStore = create<CartState>((set, get) => ({
     set((state) => ({ isLoading: { ...state.isLoading, clearCart: true }, error: null }));
     try {
       const data = await clearCart(); const cart = {
-        items: [], totalItems: 0, price: null, currency: ''
+        items: [], totalItems: 0, price: null,
       }
       Cookies.set('cart', JSON.stringify(cart), { expires: 30 })
       set(cart);

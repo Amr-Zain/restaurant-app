@@ -82,7 +82,7 @@ function OrderItem({
                 <path
                   d="M13.9102 3.15039C14.2417 4.32786 14.8701 5.40046 15.7351 6.26544C16.6001 7.13042 17.6727 7.7588 18.8502 8.09039"
                   stroke="#BDC1DF"
-                  stroke-miterlimit="10"
+                  strokeMiterlimit="10"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />

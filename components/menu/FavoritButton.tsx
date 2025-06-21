@@ -1,22 +1,36 @@
 "use client";
-import { useState } from "react";
+import { useEffect } from "react";
 import { Button } from "../ui/button";
-import { taggleFavorit } from "@/services/ClientApiHandler";
+import { useFavoritesStore } from "@/stores/favorites";
 
 function FavoritButton({
   isFavorit,
   favId,
   id,
 }: {
-  isFavorit: boolean |null;
+  isFavorit: boolean | null;
   favId: number;
   id: number;
 }) {
-  const [favorit, setFavorat] = useState(isFavorit);
+  const addToFavorites = useFavoritesStore((state) => state.addToFavorites);
+  const fetchFavorites = useFavoritesStore((state) => state.fetchFavorites);
+  const favorit = useFavoritesStore((state) => (state.data.some(item=>(item.id === id))));
+  const deleteFromFavorites = useFavoritesStore(
+    (state) => state.deleteFromFavorites,
+  );
   const onClick = async () => {
-    await taggleFavorit({ favorit: !favorit, id: favorit ? favId : id });
-    setFavorat(!favorit);
+    if (favorit) {
+      await deleteFromFavorites(favId);
+    } else {
+      await addToFavorites(id);
+    }
+  
   };
+  useEffect(()=>{
+    if(!favorit&& isFavorit){
+      fetchFavorites()
+    }
+  },[])
   return (
     <Button
       variant="ghost"

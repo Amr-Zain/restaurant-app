@@ -1,6 +1,7 @@
 import Image, { StaticImageData } from "next/image";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Trash } from "@/components/Icons";
+import { Link } from "@/i18n/routing";
 
 function OrderItem({
   title,
@@ -11,16 +12,22 @@ function OrderItem({
   onDelete,
   onUpdate,
   className,
+  url,
 }: {
   id: number;
   title: string;
+  url?: string;
   desc: string;
   className?: string;
   image: string | StaticImageData;
   price?: number;
   currency?: string;
-  onDelete?: (event: React.MouseEvent<HTMLButtonElement>) => Promise<void> | void;
-  onUpdate?: (event: React.MouseEvent<HTMLButtonElement>) => Promise<void> | void;
+  onDelete?: (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => Promise<void> | void;
+  onUpdate?: (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => Promise<void> | void;
 }) {
   return (
     <Card
@@ -41,8 +48,10 @@ function OrderItem({
           </div>
           <div>
             <div>
-              <CardTitle className="text-lg font-normal">{title}</CardTitle>
-              <CardDescription className="text-sub line-clamp-2 text-sm">
+              <CardTitle className="text-lg line-clamp-2">
+                {url ? <Link href={url}>{title}</Link> :  title }
+              </CardTitle>
+              <CardDescription className="text-sub line-clamp-5 text-sm">
                 {desc}
               </CardDescription>
               <div className="text-text font-semibold">

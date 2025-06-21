@@ -27,40 +27,45 @@ import { CheckoutFromType, checkoutSchema } from "@/helper/schema";
 import { useTranslations } from "next-intl";
 import { useCartStore } from "@/stores/cart";
 import { format } from "date-fns";
-const info = [
-  { id: 1, label: "Delivery", value: "delivery", icon: Package },
-  {
-    id: 2,
-    label: "Takeaway",
-    value: "take_away",
-    icon: CreditCard,
-  },
-];
+import { useRouter } from "@/i18n/routing";
 
-const payment = [
-  { id: 1, label: "Card", value: "1", icon: CreditCard },
-  {
-    id: 2,
-    label: "Cash",
-    value: "0",
-    icon: Package,
-  },
-];
+
 
 function CheckOutForm() {
   const t = useTranslations();
+
+  const info = [
+    { id: 1, label: t("checkout.delivery"), value: "delivery", icon: Package },
+    {
+      id: 2,
+      label: t("checkout.takeaway"),
+      value: "take_away",
+      icon: CreditCard,
+    },
+  ];
+
+  const payment = [
+    { id: 1, label: t("checkout.card"), value: "1", icon: CreditCard },
+    {
+      id: 2,
+      label: t("checkout.cash"),
+      value: "0",
+      icon: Package,
+    },
+  ];
+
   const formSchema = checkoutSchema({ t });
-  const form = useForm({
+  const form = useForm<CheckoutFromType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       order_type: "delivery",
       is_schedule: "0",
-/*       date: "",
- */      order_time: "",
+      order_time: "",
       pay_type: "0",
       address_id: undefined,
     },
   });
+
   const { fetchAdderss, data } = useAddressStore((state) => state);
   const [address, setAddress] = useState(
     data.find((item) => item.is_default === true) || data[0],
@@ -70,35 +75,43 @@ function CheckOutForm() {
   useEffect(() => {
     form.setValue("address_id", address?.id);
   }, [address, form]);
-  const total_price = useCartStore(state=>state.price?.total)
+
+  const total_price = useCartStore(state => state.price?.total);
 
   const [openAddress, setOpenAddress] = useState(false);
+  const router = useRouter()
   const onSubmit = async (data: CheckoutFromType) => {
-    if (!store_id) throw "bransh id is required";
+    if (!store_id) throw new Error("Branch ID is required");
     return await postOrder({
       ...data,
       address_id: address?.id,
-      pay_type:JSON.stringify(data.pay_type ==="1"?[{wallet:total_price}]:[{cash:total_price}]),
-      order_date: data?.order_date?format(data.order_date, "yyyy-MM-dd"):"",
+      pay_type: JSON.stringify(data.pay_type === "1" ? [{ wallet: total_price }] : [{ cash: total_price }]),
+      order_date: data?.order_date ? format(data.order_date, "yyyy-MM-dd") : "",
       store_id,
     });
   };
+
   const { handleSubmit } = useFormSubmission(form, {
     submitFunction: onSubmit,
+    onSuccess:(data:{data:Order})=>{
+      router.push(`orders/${data.data.id}`)
+    }
   });
 
   const scheduleOption = form.watch("is_schedule");
   const orderType = form.watch("order_type");
   const isLoading = form.formState.isSubmitting;
+
   useEffect(() => {
     fetchAdderss();
   }, [fetchAdderss]);
+
   return (
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
           <div>
-            <h4 className="text-text mb-3 text-sm font-bold">Order Type</h4>
+            <h4 className="text-text mb-3 text-sm font-bold">{t("checkout.orderType")}</h4>
             <FormField
               control={form.control}
               name="order_type"
@@ -112,24 +125,21 @@ function CheckOutForm() {
                     >
                       {info.map((item) => (
                         <FormItem key={item?.id} className="checkout-input">
+                          <FormLabel
+                            htmlFor={item.value}
+                            className="flex h-full w-full cursor-pointer items-center gap-2"
+                          >
+                            <item.icon className="text-sub size-5" />
+                            <span className="text-text font-bold text-sm">
+                              {item.label}
+                            </span>
+                          </FormLabel>
                           <FormControl>
                             <RadioGroupItem
                               value={item.value}
                               id={item.value}
                             />
                           </FormControl>
-                          <FormLabel
-                            htmlFor={item.value}
-                            className="flex h-full w-full cursor-pointer items-center gap-2"
-                          >
-                            <item.icon className="text-sub size-5" />
-                            <span className="text-text text-sm">
-                              {item.label}
-                            </span>
-                            {field.value === item.value && (
-                              <span className="text-primary ml-auto">✓</span>
-                            )}
-                          </FormLabel>
                         </FormItem>
                       ))}
                     </RadioGroup>
@@ -143,19 +153,19 @@ function CheckOutForm() {
           {orderType === "delivery" && (
             <div>
               <h4 className="text-text mb-3 text-sm font-bold">
-                Your Shipping Address
+                {t("checkout.yourShippingAddress")}
               </h4>
               <FormField
                 control={form.control}
                 name="address_id"
-                render={() => (
+                render={() => ( // Removed field destructuring as it's not directly used here
                   <FormItem>
                     <FormControl>
                       <OrderItem
                         className="border-0 bg-white shadow-none"
                         id={address?.id}
                         image={map}
-                        title={address?.title || "Select An Address"}
+                        title={address?.title || t("checkout.selectAnAddress")}
                         desc={address?.desc as string}
                         onUpdate={() => setOpenAddress(true)}
                       />
@@ -185,9 +195,9 @@ function CheckOutForm() {
                         </FormControl>
                         <FormLabel
                           htmlFor={"schedule-order"}
-                          className="text-text cursor-pointer"
+                          className="text-text font-bold cursor-pointer"
                         >
-                          Schedule Order
+                          {t("checkout.scheduleOrder")}
                         </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-2">
@@ -196,9 +206,9 @@ function CheckOutForm() {
                         </FormControl>
                         <FormLabel
                           htmlFor={"order-now"}
-                          className="text-text cursor-pointer"
+                          className="text-text font-bold cursor-pointer"
                         >
-                          Order Now
+                          {t("checkout.orderNow")}
                         </FormLabel>
                       </FormItem>
                     </RadioGroup>
@@ -214,7 +224,7 @@ function CheckOutForm() {
                   control={form.control}
                   label=""
                   name="order_date"
-                  placeholder="Select date"
+                  placeholder={t("checkout.selectDate")}
                   className="checkout-input border-0 shadow-none"
                   disabled={isLoading}
                 />
@@ -222,7 +232,7 @@ function CheckOutForm() {
                 <TimePickerField
                   name="order_time"
                   control={form.control}
-                  placeholder="Select time"
+                  placeholder={t("checkout.selectTime")}
                   className="checkout-input !px-4 !py-4"
                   disabled={isLoading}
                 />
@@ -232,7 +242,7 @@ function CheckOutForm() {
 
           <div>
             <h4 className="text-text mb-3 text-sm font-bold">
-              Payment Methods
+              {t("checkout.paymentMethods")}
             </h4>
             <FormField
               control={form.control}
@@ -246,25 +256,22 @@ function CheckOutForm() {
                       className="grid grid-cols-2 gap-4"
                     >
                       {payment.map((item) => (
-                        <FormItem key={item.id} className="checkout-input">
+                        <FormItem key={item.id} className="checkout-input justify-between">
+                          <FormLabel
+                            htmlFor={`payment-${item.value}`}
+                            className="flex h-full w-full cursor-pointer items-center gap-2"
+                          >
+                            <item.icon className="text-sub size-5" />
+                            <span className="text-text font-bold text-sm">
+                              {item.label}
+                            </span>
+                          </FormLabel>
                           <FormControl>
                             <RadioGroupItem
                               value={item.value}
                               id={`payment-${item.value}`}
                             />
                           </FormControl>
-                          <FormLabel
-                            htmlFor={`payment-${item.value}`}
-                            className="flex h-full w-full cursor-pointer items-center gap-2"
-                          >
-                            <item.icon className="text-sub size-5" />
-                            <span className="text-text text-sm">
-                              {item.label}
-                            </span>
-                            {field.value === item.value && (
-                              <span className="text-primary ml-auto">✓</span>
-                            )}
-                          </FormLabel>
                         </FormItem>
                       ))}
                     </RadioGroup>
@@ -278,9 +285,9 @@ function CheckOutForm() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-30 font-semibold"
+            className="min-w-45 !h-11 font-semibold"
           >
-            {isLoading ? "Submitting..." : "Submit"}
+            {isLoading ? t("buttons.loading") : t("buttons.submit")}
           </Button>
         </form>
       </Form>
@@ -298,4 +305,3 @@ function CheckOutForm() {
 }
 
 export default CheckOutForm;
-

@@ -2,14 +2,15 @@ import Image from "next/image";
 import { Card, CardDescription, CardTitle } from "../ui/card";
 import FavoritButton from "./FavoritButton";
 import { Link } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
 
-interface MenuCardProps {
+interface ProductCardProps {
   product: Product;
   isOffer?: boolean;
   index?: number;
 }
 
-function MenuCard({ product, isOffer = false, index = 0 }: MenuCardProps) {
+async function ProductCard({ product, isOffer = false, index = 0 }: ProductCardProps) {
   const {
     id,
     favourite_id,
@@ -30,10 +31,10 @@ function MenuCard({ product, isOffer = false, index = 0 }: MenuCardProps) {
     : undefined;
 
   const baseDelay = index * 100;
-
+  const t = await getTranslations();
   return (
     <Card
-      className="mx-auto max-w-[380px] gap-2 overflow-hidden p-2"
+      className="mx-auto gap-2 overflow-hidden p-2 w-full"
       data-aos="fade-up"
       data-aos-delay={baseDelay}
       data-aos-duration="800"
@@ -53,7 +54,7 @@ function MenuCard({ product, isOffer = false, index = 0 }: MenuCardProps) {
           className="h-full object-cover transition-transform duration-500 hover:scale-110"
         />
         <div
-          className="absolute top-2 left-2 flex items-center justify-center gap-2 rounded-full bg-white/70 px-4 py-[2px] backdrop-blur-md"
+          className="absolute top-2 left-2 flex items-center justify-center gap-1 rounded-full bg-white/70 px-3 py-[2px] backdrop-blur-md"
           data-aos="fade-down"
           data-aos-delay={baseDelay + 400}
           data-aos-duration="500"
@@ -71,7 +72,7 @@ function MenuCard({ product, isOffer = false, index = 0 }: MenuCardProps) {
               fill="#F6C100"
             />
           </svg>
-          <span className="font-bold">{rating}</span>
+          <span className="font-bold">{rating.toFixed(1)}</span>
         </div>
       </div>
 
@@ -100,7 +101,7 @@ function MenuCard({ product, isOffer = false, index = 0 }: MenuCardProps) {
       </CardTitle>
 
       <CardDescription
-        className="line-clamp-2 text-sm"
+        className="line-clamp-2 text-sm text-sub h-10"
         data-aos="fade-right"
         data-aos-delay={baseDelay + 350}
         data-aos-duration="600"
@@ -117,7 +118,7 @@ function MenuCard({ product, isOffer = false, index = 0 }: MenuCardProps) {
         {isOffer ? (
           <>
             <div
-              className="flex flex-col gap-1"
+              className="flex flex-col"
               data-aos="slide-right"
               data-aos-delay={baseDelay + 450}
             >
@@ -137,7 +138,7 @@ function MenuCard({ product, isOffer = false, index = 0 }: MenuCardProps) {
                 data-aos-delay={baseDelay + 500}
                 data-aos-duration="800"
               >
-                <span>off</span>
+                <span>{t('TEXT.off')}</span>
                 <span>{offPercentage}</span>
               </div>
             )}
@@ -170,4 +171,4 @@ function MenuCard({ product, isOffer = false, index = 0 }: MenuCardProps) {
   );
 }
 
-export default MenuCard;
+export default ProductCard;

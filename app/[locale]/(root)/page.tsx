@@ -2,7 +2,7 @@ import GeneralSection from "@/components/general/GeneralSection";
 import appStore from "@/assets/images/appStore.png";
 import googlePlay from "@/assets/images/googlePlay.png";
 import SliderSection from "@/components/menu/MenuSliderSection";
-import MenuCard from "@/components/menu/menuCard";
+import MenuCard from "@/components/menu/ProductCard";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import ImagesSection from "@/components/home/ImagesSections";
@@ -14,14 +14,14 @@ import { getHomeData } from "@/services/ApiHandler";
 import { getTranslations } from "next-intl/server";
 
 export default async function HomePage() {
-  const homeData = await getHomeData() ;
+  const homeData = await getHomeData();
   const t = await getTranslations();
   return (
     <div className="space-y-12">
       <HomeSlider slides={homeData?.sliders} />
       {homeData?.products && (
         <SliderSection
-          title={t('TEXT.viewMenu')}
+          title={t("TEXT.viewMenu")}
           to="/menu"
           items={homeData.products.map((product, index) => (
             <MenuCard key={product.id + ` ${index}`} product={product} />
@@ -34,7 +34,7 @@ export default async function HomePage() {
       )}
       {homeData?.popular_products && (
         <SliderSection
-          title={t('TEXT.popularItems')}
+          title={t("TEXT.popularItems")}
           to="/menu"
           items={homeData.popular_products.map((product, index) => (
             <MenuCard key={product.id + ` ${index}`} product={product} />
@@ -67,13 +67,19 @@ export default async function HomePage() {
         </GeneralSection>
       )}
       <ImagesSection />
-      {homeData?.offers&&<SliderSection
-         title={t('TEXT.offers')}
-        to="/offers"
-        items={homeData.offers.map((product, index) => (
-          <MenuCard isOffer key={product.id + ` ${index}`} product={product} />
-        ))}
-      />}
+      {homeData?.offers && (
+        <SliderSection
+          title={t("TEXT.offers")}
+          to="/offers"
+          items={homeData.offers.map((product, index) => (
+            <MenuCard
+              isOffer
+              key={product.id + ` ${index}`}
+              product={product}
+            />
+          ))}
+        />
+      )}
       {homeData?.subscription_content && (
         <GeneralSection item={homeData.subscription_content}>
           <div className="relative">

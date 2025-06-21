@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+'use client';
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,7 +12,7 @@ import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
 import { cancelOrder } from "@/services/ClientApiHandler";
 import { toast } from "sonner";
-import { useRouter } from "@/i18n/routing";
+//import { useRouter } from "@/i18n/routing";
 
 function CancelOrder({
   canCancel,
@@ -27,7 +28,7 @@ function CancelOrder({
   const t = useTranslations();
   const [canCancelState, setCanCancel] = useState(canCancel);
   const [statusState, setStatus] = useState(status);
-  const router = useRouter();
+  //const router = useRouter();
   const cancelOrderHandler = async () => {
     try {
         setLoading(true)
@@ -62,7 +63,7 @@ function CancelOrder({
         <Button
           variant={"ghost"}
           disabled={!canCancelState}
-          className={`cursor-pointer text-red-600`}
+          className={`cursor-pointer text-red-600 font-bold hover:bg-transparent px-0`}
         >
           {statusState === "customer_cancel"
             ? t("TEXT.cancelled")

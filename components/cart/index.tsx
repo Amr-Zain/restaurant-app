@@ -18,7 +18,7 @@ function Cart() {
         label: (
           <>
             {t("orderSummary.subtotal")}
-            <span className="text-sub ms-2 font-normal text-sm">
+            <span className="text-sub ms-2 text-sm font-semibold">
               ({t("cart.items", { count: totalItems })})
             </span>
           </>
@@ -36,7 +36,7 @@ function Cart() {
   };
 
   return (
-    <div className="mb-4 flex flex-col justify-between px-4">
+    <div className="mb-4 flex h-[90vh] flex-col justify-between px-4">
       {!items.length ? (
         <div className="flex h-full flex-col items-center justify-center">
           <h3 className="text-text font-medium">{t("cart.noproducts")}</h3>
@@ -44,7 +44,7 @@ function Cart() {
         </div>
       ) : (
         <>
-          <div className="max-h-[30vh] overflow-y-auto px-2">
+          <div className="max-h-[50vh] overflow-y-auto px-2">
             {items.map((item, i) => (
               <CartItem
                 id={item.product.id}
@@ -59,12 +59,14 @@ function Cart() {
               />
             ))}
           </div>
-          <OrderSummary {...orderSummary} />
-          <Link href={"/checkout"}>
-            <Button variant={"default"} className="my-2 !h-12 !w-full">
-              {t("cart.checkoutButton")}
-            </Button>
-          </Link>
+          <div>
+            <OrderSummary {...orderSummary} />
+            <Link href={"/checkout"}>
+              <Button variant={"default"} className="my-2 !h-12 !w-full">
+                {t("cart.checkoutButton")}
+              </Button>
+            </Link>
+          </div>
         </>
       )}
     </div>

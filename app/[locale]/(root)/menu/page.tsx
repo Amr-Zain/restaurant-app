@@ -1,12 +1,9 @@
 import HeroSection from "@/components/general/HeroSection";
 //import CategoryTabs from "@/components/menu/CategoryTabs";
-import MenuCard from "@/components/menu/menuCard";
+import MenuCard from "@/components/menu/ProductCard";
 import { getTranslations } from "next-intl/server";
 //import PaginationControls from "@/components/general/Pagenation";
-import {
-  getMenuFilter,
-  getMenuProducts,
-} from "@/services/ApiHandler";
+import { getMenuFilter, getMenuProducts } from "@/services/ApiHandler";
 import FiltersLayout from "@/components/menu/FiltersLayout";
 /* const product: Product = {
   id: 29,
@@ -67,12 +64,15 @@ export default async function HomePage({
             <p className="text-sub mt-8 text-center">no results</p>
           ) : (
             <>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {menuList?.data.map((product, index) => (
-                <MenuCard key={product.id + `item ${index}`} product={product} />
-              ))}
-            </div>
-          {/*  <PaginationControls
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {menuList?.data.map((product, index) => (
+                  <MenuCard
+                    key={product.id + `item ${index}`}
+                    product={product}
+                  />
+                ))}
+              </div>
+              {/*  <PaginationControls
               currentPage={Number(params?.page)}
               totalPages={8}
             /> */}

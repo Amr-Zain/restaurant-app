@@ -1,6 +1,7 @@
 "use server";
 import axiosInstance from "./instance";
 import AppError from "../utils/appError";
+import { transformData } from "@/helper/functions";
 
 export const getServiceBySlug = async (slug: string) => {
   try {
@@ -43,9 +44,8 @@ export const getAboutData = async () => {
 };
 export const getSettingsData = async () => {
   try {
-    const { data } = await axiosInstance.get("/settings");
-
-    return data.data;
+    const { data } = await axiosInstance.get("/web_settings");
+    return transformData(data.data);
   } catch (error) {
     if (error instanceof Error) {
       throw new AppError(error.message, 500);
@@ -149,7 +149,6 @@ export const getOffers = async (params?: { lat: number; lng: number }) => {
 export const getProfuctDeiltals = async(slug:string)=>{
   try {
     const { data } = await axiosInstance.get(`product/${slug}`)
-    console.log(data.data);
     return data.data as ProductData || {}
 
   } catch (error) {
@@ -180,6 +179,23 @@ export const getOrder= async(id:string):Promise<{data:Order}>=>{
   const { data } = await axiosInstance.get('orders/'+id);
   return data as {data:Order};
 }
+export const getReservations= async(id:string)=>{
+  const { data } = await axiosInstance.get('reservations/'+id);
+  return data.data as Reservation;
+}
+export const getNotifications = async() => {
+  try{
+    const { data } = await axiosInstance.get("notifications");
+    return data.data as Notification[] ||[]  
+
+  }catch(err){
+    console.log(err)
+  }
+  return []
+};
+/* export const getSettingsData = async () => {
+  return await axiosInstance.get("web_settings");
+}; */
 // export const getCategoriesData = async () => {
 //   try {
 //     const { data } = await axiosInstance.get("/categories");
@@ -194,9 +210,7 @@ export const getOrder= async(id:string):Promise<{data:Order}>=>{
 //   return await axiosInstance.get("/relations");
 // };
 
-// export const getSettingsData = async () => {
-//   return await axiosInstance.get("/settings");
-// };
+// 
 
 // export const getTermsData = async () => {
 //   return await axiosInstance.get(`/term`);

@@ -12,7 +12,7 @@ export default function Reservation() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <div>{t("Reservation")}</div>
+        <div className="cursor-pointer">{t("Reservation")}</div>
       </DialogTrigger>
 
       <DialogContent className="h-[90vh] max-h-[90vh] w-[700px] max-w-full overflow-hidden rounded-3xl p-0">

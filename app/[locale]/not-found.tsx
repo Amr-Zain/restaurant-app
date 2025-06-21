@@ -1,14 +1,14 @@
-import React from "react";
 import LocalePath from "@/components/LocalePath";
-import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Cute from "@/assets/images/notFound.png";
-import { Button } from "@/components/ui/button";
 
-export default function NotFound() {
-  const t = useTranslations("NotFoundPage");
+export default async function NotFound() {
+  const t = await getTranslations('NotFoundPage'); 
+
   return (
-   <div className="containerr grid h-screen items-center">
+    <div className="containerr grid h-screen items-center">
       <div className="flex flex-col items-center justify-start">
         <Image
           width="500"

@@ -1,5 +1,5 @@
 import ItemDetails from "@/components/menuItem";
-import MenuCard from "@/components/menu/menuCard";
+import ProductCard from "@/components/menu/ProductCard";
 import SliderSection from "@/components/menu/MenuSliderSection";
 import ItemReviews from "@/components/menuItem/Reviews";
 import { getMenuProducts, getProfuctDeiltals } from "@/services/ApiHandler";
@@ -67,12 +67,11 @@ export default async function ItemDetailsPage({
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
       <ItemDetails productData={item} />
       <ItemReviews itemId={item.id} />
-
       <SliderSection
         title={t("TEXT.popularItems")}
         to="/menu"
         items={PopularProducts.map((product, index) => (
-          <MenuCard key={product.id + ` ${index}`} product={product} />
+          <ProductCard key={product.id + ` ${index}`} product={product} />
         ))}
       />
     </div>

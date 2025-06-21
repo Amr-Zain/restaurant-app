@@ -5,7 +5,7 @@
     "en": "عربي"
   },
   "NAV": {
-    "lang": "ع",
+    "lang": "ltr",
 
     "home": "Home",
     "about": "About us",
@@ -52,6 +52,7 @@
     "productDetails": "{name} Details",
     "viewMenu": "View Our Menus",
     "offers": "Offers",
+    "off": "Off",
     "popularItems": "Popular Items",
     "cancelOrderDes": "Are You Sure, You want Cancel this Order",
     "deleteAccount": "Delete Account",
@@ -80,6 +81,37 @@
     "companyName": "Your Company Name",
     "rightsReserved": "All rights reserved"
   },
+  "NotFoundPage": {
+    "title": "Not Found",
+    "description": "Could not find requested resource",
+    "returnHome": "Return Home"
+  },
+  "reservations": {
+    "shippingAddress": "Shipping Address",
+    "callCenter": "Call Center",
+    "paymentType": "Payment Type",
+    "cash": "Cash",
+    "numberOfPersons": "Number of Persons",
+    "dateOfOrder": "Date Of Order",
+    "fromTime": "From Time",
+    "toTime": "To Time",
+    "reservationId": "Reservation ID",
+    "bookingSummary": "booking summary",
+    "confirmationAmount": "Confirmation Amount",
+    "orderType": "Order Type",
+    "delivery": "Delivery",
+    "cashOnDelivery": "Cash on delivery",
+    "timeOfOrder": "Time Of Order",
+    "orderId": "Order ID",
+    "items": "Items"
+  },
+  "categories": {
+    "all": "All",
+    "pending": "Pending",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+  "noOrdersFound": "No Orders Found",
   "cart": {
     "title": " My Cart",
     "items": "{count, plural, =0 {no Items} one {# Item} other {# Items}}",
@@ -140,8 +172,23 @@
     "ok": "OK",
     "reservations": "reservations"
   },
+  "checkout": {
+    "orderType": "Order Type",
+    "delivery": "Delivery",
+    "takeaway": "Takeaway",
+    "yourShippingAddress": "Your Shipping Address",
+    "selectAnAddress": "Select An Address",
+    "scheduleOrder": "Schedule Order",
+    "orderNow": "Order Now",
+    "selectDate": "Select date",
+    "selectTime": "Select time",
+    "paymentMethods": "Payment Methods",
+    "card": "Card",
+    "cash": "Cash"
+  },
   "buttons": {
     "login": "Log In",
+    "reorder": "Reorder",
     "loading": "Loading...",
     "register": "Register",
     "confirm": "Confirm",

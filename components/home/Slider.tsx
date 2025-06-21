@@ -147,14 +147,14 @@ const HomeSlider = ({
         >
           <button
             onClick={() => swiperRef.current?.slidePrev()}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white transition-colors hover:bg-white/30"
+            className={`flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white transition-colors hover:bg-white/30 cursor-pointer ${t('lang')==='rtl'?' rotate-180':''}`}
             aria-label="Previous slide"
-          >
+            >
             <ChevronLeft className="h-6 w-6" />
           </button>
           <button
             onClick={() => swiperRef.current?.slideNext()}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white transition-colors hover:bg-white/30"
+            className={`flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white transition-colors hover:bg-white/30 cursor-pointer ${t('lang')==='rtl'?' rotate-180':''}`}
           >
             <ChevronRight className="h-6 w-6" />
           </button>

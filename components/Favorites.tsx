@@ -53,7 +53,7 @@ const Favorites = ({
                   image={item.image}
                   price={item.price.price}
                   currency={item.price.currency}
-                  onDelete={() => deleteFromFavorites(item.id)}//there is favourite_id in the item 
+                  onDelete={() => deleteFromFavorites(item.favourite_id)}
                 />
               ))}
             </div>

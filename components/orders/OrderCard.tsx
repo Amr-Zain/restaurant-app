@@ -2,8 +2,9 @@ import OverlappingImages from "../general/OverlappedImages";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { Link } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
 
-function OrderCard({
+async function OrderCard({
   id,
   types,
   images,
@@ -18,8 +19,10 @@ function OrderCard({
   desc: string;
   images: string[];
 }) {
+    const t = await getTranslations();
+
   return (
-    <Card className="mx-auto w-full max-w-[95%] gap-2 border-0 p-4 shadow-none transition-shadow hover:shadow-sm sm:w-136">
+    <Card className="order-card">
       <div className="flex justify-between">
         <p className="text-sub flex gap-1 whitespace-nowrap">
           <span className="hidden sm:block">order</span> #{order_num}
@@ -28,7 +31,7 @@ function OrderCard({
           {types.map((type, index) => (
             <div
               key={index}
-              className="text-primary bg-primary/10 flex h-9 items-center gap-1 rounded-full px-3 py-2 text-xs  font-medium capitalize"
+              className="order-status"
             >
               {type}
             </div>
@@ -47,15 +50,15 @@ function OrderCard({
               {item_count} {item_count === 1 ? "item" : "items"}
             </div>
           </div>
-          <div className="flex w-full grow-1 justify-between">
+          <div className="flex w-full grow-1 justify-between gap-2">
             <div>
               <p className="text-text font-semibold whitespace-nowrap">
                 order #{order_num}
               </p>
-              <div className="text-sub line-clamp-3 max-w-64">{desc}</div>
+              <div className="text-sub line-clamp-3">{desc}</div>
             </div>
             <Link href={`/orders/${id}`}>
-              <Button className="!size-10 self-end">
+              <Button className={`!size-10 self-end ${t('lang') ==='rtl'?'rotate-180':""}`}>
                 <svg
                   width="20"
                   height="14"

@@ -57,7 +57,7 @@ function CartItem({
           <div className="flex justify-between gap-4">
             <div>
               <Link href={`/menu/${slug}`}>
-                <CardTitle className="text-md cursor-pointer">
+                <CardTitle className="text-md line-clamp-1 cursor-pointer">
                   {title}
                 </CardTitle>
               </Link>
@@ -71,23 +71,22 @@ function CartItem({
                   .join(", ")}
               </CardDescription>
             </div>
-            <div
+            <Button
+              variant={"ghost"}
+              disabled={isLoadingRemove || isLoadingUpdate}
               onClick={() => {
-                if (!isLoadingRemove || !isLoadingUpdate) {
-                  deleteItem(cart_product_id);
-                  console.log(pathname.split("/").at(-1));
-                  if (pathname.split("/").at(-1) === "checkout")
-                    router.refresh();
-                }
+                deleteItem(cart_product_id);
+                console.log(pathname.split("/").at(-1));
+                if (pathname.split("/").at(-1) === "checkout") router.refresh();
               }}
-              className={`cursor-pointer text-red-500 ${isLoadingRemove ? "cursor-not-allowed opacity-50" : ""}`}
+              className={`cursor-pointer text-red-500 hover:bg-transparent ${isLoadingRemove ? "cursor-not-allowed opacity-50" : ""}`}
             >
               {isLoadingRemove ? (
                 <Loader2 size={18} className="animate-spin" />
               ) : (
-                <Trash />
+                <Trash className="size-5" />
               )}
-            </div>
+            </Button>
           </div>
           <div className="flex justify-between gap-6">
             <div className="text-text text-sm font-semibold">

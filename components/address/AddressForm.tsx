@@ -51,13 +51,13 @@ export default function AddAddressForm({
   const form = useForm<AddressFormData>({
     resolver: zodResolver(addressSchema),
     defaultValues: {
-      apartment: defaultValues?.apartment.toString(),
-      building: defaultValues?.building.toString(),
-      desc: defaultValues?.desc.toString(),
-      floor: defaultValues?.floor.toString(),
+      apartment: defaultValues?.apartment,
+      building: defaultValues?.building,
+      desc: defaultValues?.desc,
+      floor: defaultValues?.floor,
       is_default: defaultValues?.is_default,
-      lat: defaultValues?.lat.toString(),
-      lng: defaultValues?.lng.toString(),
+      lat: defaultValues?.lat,
+      lng: defaultValues?.lng,
     },
   });
   const isSubmitting = form.formState.isLoading;
@@ -81,7 +81,7 @@ export default function AddAddressForm({
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="mx-auto max-h-[90vh] max-w-md overflow-y-auto">
-        <DialogHeader className="">
+        <DialogHeader>
           <DialogTitle className="text-lg font-semibold">
             {isUpdate ? "Update Address" : "Add new address"}
           </DialogTitle>

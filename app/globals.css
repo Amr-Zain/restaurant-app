@@ -406,8 +406,7 @@ input[type="number"] {
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-/* ---break---
- */
+
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -449,18 +448,26 @@ input[type="number"] {
 .p-sec {
   @apply px-2 sm:px-6 lg:px-8 py-4 md:py-8;
 }
-
+.order-card {
+  @apply mx-auto w-full max-w-[95%] lg:w-full gap-2 border-0 p-4 shadow-none transition-shadow hover:shadow-sm sm:w-136;
+}
 .reserv-input {
   @apply text-text focus:ring-0 !placeholder-text border-0 !border-b-[1.5px] ps-0 !border-input-primary rounded-none shadow-none h-10;
 }
 .nav-icon {
   @apply flex size-10 items-center justify-center rounded-full bg-[#F6F6FD] sm:size-12 cursor-pointer
 }
+.order-status {
+  @apply text-primary bg-primary/10 flex h-9 items-center gap-1 rounded-full px-3 py-2 text-xs font-medium capitalize
+}
 .checkout-input {
   @apply flex justify-between gap-2 items-center hover:bg-backgroud hover:text-primary cursor-pointer rounded-2xl bg-white !px-4 py-4 transition-colors;
 }
 .nav-item {
   @apply text-text hover:text-primary flex cursor-pointer items-center gap-2 text-base transition-colors 
+}
+[data-slot="dialog-close"]{
+  inset-inline-end: 1rem !important;
 }
 @layer base {
   * {

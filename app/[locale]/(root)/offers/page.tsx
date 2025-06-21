@@ -1,5 +1,5 @@
 import HeroSection from "@/components/general/HeroSection";
-import MenuCard from "@/components/menu/menuCard";
+import ProductCard from "@/components/menu/ProductCard";
 import { getTranslations } from "next-intl/server";
 import { getOffers } from "@/services/ApiHandler";
 import PaginationControls from "@/components/general/Pagenation";
@@ -29,7 +29,7 @@ export default async function HomePage({
         <>
           <div className="container my-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {offers?.data.map((product, index) => (
-              <MenuCard
+              <ProductCard
                 isOffer
                 key={product.id + `item ${index}`}
                 product={product}

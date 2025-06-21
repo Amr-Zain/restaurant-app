@@ -1,6 +1,12 @@
 "use client";
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import Image from "next/image";
 import profile from "@/assets/images/profile.png";
@@ -10,16 +16,33 @@ import { StoreRadioCard } from "../stores/StoreRadioCard";
 import { StoresRadioSkeleton } from "../stores/StoresRadioSkeleton";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
+import { X } from "lucide-react";
 
 const Stores = () => {
   const [open, setOpen] = useState(false);
   const t = useTranslations();
   const { branchs, currentBranch, setCurrentBranch, isLoading } =
     useBranchStore((state) => state);
-  const router = useRouter()
+  const router = useRouter();
+
+  const [tempSelectedBranchId, setTempSelectedBranchId] = useState<
+    number | undefined
+  >(currentBranch?.id);
+
+  useEffect(() => {
+    if (open) {
+      setTempSelectedBranchId(currentBranch?.id);
+    }
+  }, [open, currentBranch]);
+
   const handleBranchChange = (branchId: string) => {
+    setTempSelectedBranchId(+branchId);
+  };
+
+  const handleConfirm = () => {
     const selectedBranch = branchs.find(
-      (branch) => branch.id.toString() === branchId,
+      (branch) => branch.id === tempSelectedBranchId,
     );
     if (selectedBranch) {
       setCurrentBranch(selectedBranch);
@@ -37,10 +60,10 @@ const Stores = () => {
             height={55}
             src={currentBranch?.image || profile}
             alt="Branch image"
-            className="size-10 rounded-full object-cover shrink-0"
+            className="size-10 shrink-0 rounded-full object-cover"
           />
           <div className="text-sub hidden w-24 items-center gap-1 sm:flex">
-            <div className=" text-sm text-ellipsis">
+            <div className="text-sm text-ellipsis">
               <h3 className="line-clamp-1">
                 {currentBranch?.name ||
                   (isLoading ? "Loading..." : "No branch")}
@@ -68,17 +91,21 @@ const Stores = () => {
         </div>
       </DialogTrigger>
 
-      <DialogContent className="bg-backgroud rounded-2xl w-128 max-w-[90%] border-0 px-4 shadow-xl">
+      <DialogContent className="bg-backgroud w-128 max-w-[90%] rounded-2xl border-0 px-4 shadow-xl [&>button:last-child]:hidden">
+        <DialogClose className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute end-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:pointer-events-none">
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </DialogClose>
         <DialogHeader className="pb-4">
-          <DialogTitle className="text-center  text-xl font-semibold text-text">
+          <DialogTitle className="text-xl text-text text-center font-semibold">
             {t("labels.selectStore")}
           </DialogTitle>
         </DialogHeader>
         <div>
           <RadioGroup
-            value={currentBranch?.id?.toString() || ""}
+            value={tempSelectedBranchId?.toString()}
             onValueChange={handleBranchChange}
-            className="flex flex-col gap-4 w-full"
+            className="flex w-full flex-col gap-4"
           >
             {isLoading ? (
               <StoresRadioSkeleton length={3} />
@@ -87,15 +114,22 @@ const Stores = () => {
                 <StoreRadioCard
                   key={"branch " + branch.id}
                   branch={branch}
-                  currentBranchId={currentBranch?.id}
+                  currentBranchId={tempSelectedBranchId}
                 />
               ))
             ) : (
-              <p className="text-center text-sub">
-                {t("TEXT.noBranches")}
-              </p>
+              <p className="text-sub text-center">{t("TEXT.noBranches")}</p>
             )}
           </RadioGroup>
+          {branchs.length > 0 && (
+            <Button
+              className="mt-6 flex !h-10 !w-full justify-center"
+              onClick={handleConfirm}
+              disabled={!tempSelectedBranchId || isLoading}
+            >
+              {t("labels.confirm")}
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>

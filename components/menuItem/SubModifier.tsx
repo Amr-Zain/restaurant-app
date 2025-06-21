@@ -25,7 +25,7 @@ function SubModifierComponent({ subModifier }: { subModifier: SubModifier }) {
   useEffect(() => {
     initializeModifiers([subModifier]);
   }, [subModifier, initializeModifiers]);
-
+  const dir = t('lang')
   return (
     <div
       key={subModifier.id}
@@ -34,7 +34,7 @@ function SubModifierComponent({ subModifier }: { subModifier: SubModifier }) {
       <h3 className="text-text mb-3 text-lg font-semibold">
         {subModifier.name}
         {
-          <span className="text-review ml-2 text-sm">
+          <span className="text-review ms-2 text-sm">
             {t("labels.selectTopping", {
               type: t(`labels.${subModifier.selections_type}`),
               value:
@@ -60,6 +60,8 @@ function SubModifierComponent({ subModifier }: { subModifier: SubModifier }) {
               handleModifierChange(subModifier, modifier, "select");
             }
           }}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          dir={dir as any }
           className="flex flex-col gap-4 sm:flex-row"
         >
           {subModifier.item_modifiers.map((modifier) => {

@@ -21,7 +21,7 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
 }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { replace } = useRouter();
+  const { push } = useRouter();
 
   const onPageChange = (page: number) => {
     const params = new URLSearchParams(searchParams);
@@ -30,28 +30,26 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
     } else {
       params.delete("page");
     }
-    replace(`${pathname}?${params.toString()}`);
+    push(`${pathname}?${params.toString()}`);
   };
 
   const getPageButtonClassName = (page: number) => `
-    rounded-full px-4 py-2 text-sm font-medium border
+    rounded-full  text-sm font-medium border cursor-pointer size-10 flex justify-center items-center
     ${
       currentPage == page
         ? "bg-primary text-white hover:bg-primary/30"
-        : "border-gray-300 text-gray-700 hover:bg-gray-100"
+        : "hover:bg-primary/10 border-primary text-primary"
     }
   `;
   return (
     <div className="my-8 flex items-center justify-end space-x-2">
       <Pagination>
         <PaginationContent>
-           <PaginationItem
+          <PaginationItem
             onClick={() => onPageChange(+currentPage - 1)}
-            className={
-              getPageButtonClassName(totalPages)+" !py-3 !px-3 !bg-transparent !text-text"
-            }
+            className={getPageButtonClassName(totalPages)}
           >
-            <ChevronLeftIcon className="w-4 h-4" />
+            <ChevronLeftIcon className="size-4" />
           </PaginationItem>
 
           <PaginationItem
@@ -71,7 +69,7 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
           )}
 
           {totalPages > 2 && currentPage < totalPages && currentPage > 2 && (
-            <PaginationItem>
+            <PaginationItem className={getPageButtonClassName(totalPages)}>
               <PaginationEllipsis />
             </PaginationItem>
           )}
@@ -86,7 +84,7 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
           )}
 
           {totalPages > 2 && currentPage < totalPages - 1 && (
-            <PaginationItem>
+            <PaginationItem className={getPageButtonClassName(totalPages)}>
               <PaginationEllipsis />
             </PaginationItem>
           )}
@@ -100,27 +98,11 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
             </PaginationItem>
           )}
 
-          {/* Next Button */}
-          {/* <PaginationItem>
-            <PaginationNext
-              onClick={() => onPageChange(+currentPage + 1)}
-              className={
-                "rounded-full border border-gray-300 px-3 py-1 text-sm text-gray-700 hover:bg-gray-100"
-              }
-              href={
-                currentPage === totalPages
-                  ? "#"
-                  : `${pathname}?${new URLSearchParams(searchParams).set("page", (currentPage + 1).toString().toString())}`
-              }
-            />
-          </PaginationItem> */}
           <PaginationItem
             onClick={() => onPageChange(+currentPage + 1)}
-            className={
-              getPageButtonClassName(totalPages)+" !py-3 !px-3 !bg-transparent !text-text"
-            }
+            className={getPageButtonClassName(totalPages)}
           >
-            <ChevronRightIcon className="w-4 h-4" />
+            <ChevronRightIcon className="size-4" />
           </PaginationItem>
         </PaginationContent>
       </Pagination>

@@ -44,7 +44,7 @@ const CartModal = () => {
             />
           </svg>
           {!!cartItemsLen && (
-            <span className="border-backgroud bg-primary absolute end-2 top-2 size-4 rounded-full border-2 text-center text-[8px] font-semibold text-white">
+            <span className="border-backgroud bg-primary absolute end-2 top-2 size-4 rounded-full border-2 flex justify-center items-center text-[8px] font-semibold text-white">
               {cartItemsLen}
             </span>
           )}

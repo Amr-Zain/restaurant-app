@@ -2,8 +2,9 @@ import { Link } from "@/i18n/routing";
 import OverlappingImages from "../general/OverlappedImages";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
+import { getTranslations } from "next-intl/server";
 
-export default function ReservationCard({
+export default async function ReservationCard({
   reservation,
 }: {
   reservation: Reservation;
@@ -21,18 +22,18 @@ export default function ReservationCard({
   } = reservation;
 
   const displayDescription = `${store?.name || "Unknown Store"} on ${date} from ${from_time} to ${to_time}`;
-
+  const t = await getTranslations();
   return (
-    <Card className="mx-auto w-full max-w-[95%] gap-2 rounded-lg border-0 p-4 shadow-md transition-shadow hover:shadow-lg sm:w-136">
+    <Card className="order-card">
       <div className="mb-3 flex items-center justify-between">
         <p className="flex gap-1 text-sm whitespace-nowrap text-gray-600">
           <span className="hidden sm:block">Reservation</span> #{id}
         </p>
         <div className="flex gap-1">
-          <div className="text-primary bg-primary/10 flex h-9 items-center gap-1 rounded-full px-3 py-2 text-xs font-medium capitalize">
+          <div className="order-status">
             {type}
           </div>
-          <div className="text-primary bg-primary/10 flex h-9 items-center gap-1 rounded-full px-3 py-2 text-xs font-medium capitalize">
+          <div className="order-status">
             {status}
           </div>
         </div>
@@ -49,15 +50,15 @@ export default function ReservationCard({
 
           <div className="flex w-full grow items-center justify-between">
             <div className="min-w-0 flex-1">
-              <p className="mb-1 overflow-hidden text-lg font-semibold text-ellipsis whitespace-nowrap text-gray-900">
+              <p className="text-text font-semibold whitespace-nowrap">
                 {name}
               </p>
-              <div className="text-text line-clamp-2 max-w-full text-sm sm:max-w-64">
+              <div className="text-sub line-clamp-3">
                 {displayDescription}
               </div>
             </div>
             <Link href={`/reservations/${id}`}>
-              <Button className="!size-10 self-end">
+              <Button className={`!size-10 self-end ${t('lang') ==='rtl'?'rotate-180':""}`}>
                 <svg
                   width="20"
                   height="14"

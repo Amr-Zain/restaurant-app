@@ -2,7 +2,52 @@ interface ProductImage {
   id: number;
   image: string;
 }
+interface Notification {
+  body: string;
+  id: number;
+  image: string | null; 
+  notify_id: number;
+  notify_type: "order"| 'reservation'; 
+  read_at: string;
+  time_ago: string;
+  title: string;
+}
+interface KeyValueItem<T = unknown> {
+  key: string;
+  value: T;
+}
 
+interface WebsiteData {
+  website_colors: KeyValueItem<string>[];
+  website_customization: KeyValueItem<boolean | string>[];
+  website_setting: KeyValueItem<string>[];
+  contact_us: KeyValueItem<unknown>[];
+  payment_methods: KeyValueItem<boolean>[];
+}
+
+interface TransformedWebsiteData {
+  website_colors: Record<string, string>;
+  website_customization: Record<string, boolean | string>;
+  website_setting: Record<string, string>;
+  contact_us: Record<string, any>;
+  payment_methods: Record<string, boolean>;
+}
+interface Reservation {
+  id: number;
+  name: string;
+  phone_code: string;
+  phone: string;
+  store: Branch;
+  guests_number: number;
+  date: string;
+  from_time: string;
+  to_time: string;
+  status: string;
+  value_per_person: string;
+  total_amount: string;
+  is_paid: boolean;
+  currency: string;
+}
 interface FoodIcon {
   id: number;
   name: string;

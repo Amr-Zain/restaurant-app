@@ -171,7 +171,7 @@ export const getCartServer = async ():Promise<CartApiResponse> => {
   const { data } = await axiosInstance.get("carts");
   return data;
 };
-export const getOrders= async({status, page}:{status:string, page:number}):Promise<OrdersResponse>=>{
+export const getOrdersReservations= async({status, page}:{status:string, page:number}):Promise<OrdersResponse>=>{
   const { data } = await axiosInstance.get('orders-and-reservations',{params:{status, page}});
   return data as OrdersResponse;
 }

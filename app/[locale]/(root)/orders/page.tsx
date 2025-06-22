@@ -1,10 +1,9 @@
 import HeroSection from "@/components/general/HeroSection";
-import StatusTabs from "@/components/orders/StatusTabs";
-import OrderCard from "@/components/orders/OrderCard";
+import StatusTabs from "@/components/menu/StatusTabs";
+import OrderReservationCard from "@/components/orders/OrderCard";
 import { getTranslations } from "next-intl/server";
 import PaginationControls from "@/components/general/Pagenation";
-import { getOrders } from "@/services/ApiHandler";
-import ReservationCard from "@/components/reservation/ReservationCard";
+import { getOrdersReservations } from "@/services/ApiHandler";
 
 export default async function OrdersPage({
   searchParams,
@@ -13,7 +12,10 @@ export default async function OrdersPage({
 }) {
   const t = await getTranslations();
   const { page = 1, status = "all" } = await searchParams;
-  const res = await getOrders({ status: status === "all" ? "" : status, page });
+  const res = await getOrdersReservations({
+    status: status === "all" ? "" : status,
+    page,
+  });
   console.log(res);
 
   const categories = [
@@ -30,6 +32,7 @@ export default async function OrdersPage({
         home={t("NAV.home")}
         section={t("NAV.orders")}
         href="/orders"
+        dir={t('lang')}
       />
       <div className="p-sec mx-auto w-full">
         <StatusTabs
@@ -43,14 +46,24 @@ export default async function OrdersPage({
             <div className="grid grid-cols-1 gap-4 gap-x-0 lg:grid-cols-2">
               {res.data.map((order, i) =>
                 order?.type === "reservation" ? (
-                  <ReservationCard
-                    key={`reservation ${i}`}
-                    reservation={order as unknown as Reservation}
+                  <OrderReservationCard
+                    key={i}
+                    images={[order.store?.image]}
+                    type={order.type}
+                    item_count={order.guests_number}
+                    id={order.id}
+                    desc={`${order.name || "Unknown Store"} on ${order.date} from ${order.from_time} to ${order.to_time}`}
+                    types={[
+                      t(`TEXT.${order.type}`),
+                      t(`categories.${order.status}`),
+                    ]}
+                    name={order.store.name}
                   />
                 ) : (
-                  <OrderCard
+                  <OrderReservationCard
                     key={i}
                     images={order.item.map((item) => item.product.image)}
+                    type={order.type}
                     item_count={order.item_count}
                     id={order.id}
                     order_num={order.order_num}
@@ -60,15 +73,15 @@ export default async function OrdersPage({
                           sub.item_modifiers
                             .map(
                               (modifiers) =>
-                                `${modifiers.quantity} X ${modifiers.name} ${modifiers.price ? `(${modifiers.price?.price} ${modifiers.price?.currency})` : ""}\n `
+                                `${modifiers.quantity} X ${modifiers.name} ${modifiers.price ? `(${modifiers.price?.price} ${modifiers.price?.currency})` : ""}\n `,
                             )
-                            .join("")
-                        )
+                            .join(""),
+                        ),
                       )
                       .join(", ")}
-                    types={[order.status_trans /* , order.order_type */]}
+                    types={[t(`TEXT.${order.type}`), order.status_trans]}
                   />
-                )
+                ),
               )}
             </div>
             <PaginationControls

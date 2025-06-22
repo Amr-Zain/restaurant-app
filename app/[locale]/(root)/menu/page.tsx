@@ -5,45 +5,25 @@ import { getTranslations } from "next-intl/server";
 //import PaginationControls from "@/components/general/Pagenation";
 import { getMenuFilter, getMenuProducts } from "@/services/ApiHandler";
 import FiltersLayout from "@/components/menu/FiltersLayout";
-/* const product: Product = {
-  id: 29,
-  name: "AAA",
-  slug: "aaaaaab",
-  desc: "This is a description for the AAA product. It's a sample item to demonstrate how the data is passed to the MenuCard component.",
-  type: "regular",
-  image:
-    "https://saas.khlod.aait-d.com/storage/tenants/front_brand/images/products/2rv7dLbrAi9A5FmFMrG5SZxviCmmlFtgBQOTEDZc.jpg",
-  rating: 4.5, 
-  review_count: 120,
-  rate: 0, 
-  is_favourite: true,
-  price: {
-    price: 10, 
-    currency: "جنيه مصري",
-    percentage: 20,
-    discount_value: 2,
-    price_after: 8, 
-    offer: null,
-  },
-}; */
+
 export default async function HomePage({
   searchParams,
 }: {
   searchParams: Promise<{
     page?: number;
-    category?: string;
-    subCategory?: string;
+    categories?: string;
+    sub_categories?: string;
     keyword?: string;
   }>;
 }) {
   const t = await getTranslations();
   const params = await searchParams;
-
+  console.log(params)
   const [filters, menuList] = await Promise.all([
     getMenuFilter(),
     getMenuProducts(params),
   ]);
-
+  console.log(menuList)
   return (
     <div>
       <HeroSection
@@ -51,17 +31,19 @@ export default async function HomePage({
         home={t("NAV.home")}
         section={t("NAV.menu")}
         href="/menu"
+        dir={t('lang')}
       />
       <div className="p-sec mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-[250px_1fr]">
         <FiltersLayout
           filters={filters?.content}
-          category={params?.category}
-          subCategory={params?.subCategory}
+          initialCategoryIds={params?.categories?.split(',')}
+          initialSubCategoryIds={params?.sub_categories?.split(',')}
           keyword={params?.keyword}
         />
         <div className="flex min-h-[70vh] flex-col items-center justify-between">
           {!menuList.data.length ? (
-            <p className="text-sub mt-8 text-center">no results</p>
+            <p className="text-sub mt-8 text-center">{t("TEXT.noResults")}</p>
+
           ) : (
             <>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

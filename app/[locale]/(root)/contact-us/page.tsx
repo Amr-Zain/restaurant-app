@@ -20,6 +20,7 @@ export default async function AboutPage() {
         home={t("NAV.home")}
         section={t("NAV.contact")}
         href="/about"
+        dir={t('lang')}
       />
       <div className="p-sec mx-auto space-y-12">
         <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">

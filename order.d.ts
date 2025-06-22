@@ -1,5 +1,5 @@
 interface OrdersResponse {
-  data: Order[];
+  data: (Order|Reservation)[];
   links: Links;
   meta: Meta;
   status: string;
@@ -8,7 +8,7 @@ interface OrdersResponse {
 
 interface Order {
   id: number;
-  type:'order'| 'reservation';
+  type:'order';
   order_num: string;
   status: string;
   status_trans: string;
@@ -195,6 +195,7 @@ interface MetaLink {
 }
 
 interface Reservation {
+  type: "reservation";
   id: number;
   call_center: string;
   created_at: string;

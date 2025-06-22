@@ -8,13 +8,13 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
 const FiltersLayout = ({
-  category,
-  subCategory,
+  initialCategoryIds,
+  initialSubCategoryIds,
   filters,
   keyword = "",
 }: {
-  category?: string;
-  subCategory?: string;
+  initialCategoryIds?: string[];
+  initialSubCategoryIds?: string[];
   keyword?: string;
   filters: MenuCategory[];
 }) => {
@@ -26,8 +26,8 @@ const FiltersLayout = ({
       <div className="hidden md:block">
         <FilterSidebar
           filters={filters}
-          categoryName={category}
-          subCategoryName={subCategory}
+          initialCategoryIds={initialCategoryIds}
+          initialSubCategoryIds={initialSubCategoryIds}
           setSearchQuery={setSearchQuery}
           searchQuery={searchQuery}
         />
@@ -53,8 +53,8 @@ const FiltersLayout = ({
             <FilterSidebar
               onFilter={() => setOpen(false)}
               filters={filters}
-              categoryName={category}
-              subCategoryName={subCategory}
+              initialCategoryIds={initialCategoryIds}
+              initialSubCategoryIds={initialSubCategoryIds}
               setSearchQuery={setSearchQuery}
               searchQuery={searchQuery}
             />

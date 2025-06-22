@@ -49,14 +49,14 @@ export default async function ItemDetailsPage({
       "status" in error &&
       error.status === 404
     ) {
-      return notFound();
+      notFound();
     }
 
     console.error("An unexpected error occurred:", error);
   }
 
   if (!item?.id) {
-    return notFound();
+    notFound();
   }
   const { data: PopularProducts } = await getMenuProducts({
     search_by: "popular",

@@ -33,7 +33,7 @@ async function OrderDetails({
   canCancel?: boolean;
   orderSummary: OrderSummary;
 }) {
-  const t =await getTranslations('reservations'); 
+  const t = await getTranslations('reservations'); 
 
   return (
     <div className="hidden rounded-3xl bg-white md:block">

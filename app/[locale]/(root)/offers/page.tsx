@@ -22,9 +22,10 @@ export default async function HomePage({
         home={t("NAV.home")}
         section={t("NAV.offers")}
         href="/offers"
+        dir={t('lang')}
       />
       {!offers.data.length ? (
-        <p className="text-sub mt-8 text-center">no results</p>
+        <p className="text-sub mt-8 text-center">{t("TEXT.noResults")}</p>
       ) : (
         <>
           <div className="container my-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -38,7 +39,7 @@ export default async function HomePage({
           </div>
           <PaginationControls
             currentPage={Number(params?.page) || offers.meta.current_page}
-            totalPages={offers.meta.total}
+            totalPages={offers.meta.last_page}
           />
         </>
       )}

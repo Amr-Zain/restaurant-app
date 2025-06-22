@@ -9,6 +9,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Item from "../orders/orderDetails/Item";
+import { useTranslations } from "next-intl";
 
 const Notifications = ({
   notifications,
@@ -16,6 +17,7 @@ const Notifications = ({
   notifications: Notification[];
 }) => {
   const [open, setOpen] = useState(false);
+  const t = useTranslations()
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -44,9 +46,9 @@ const Notifications = ({
       <SheetContent side="left" className="rounded-r-2xl border-r-1 min-w-82">
         {" "}
         <SheetHeader>
-          <SheetTitle>Notifications</SheetTitle>
+          <SheetTitle>{t('TEXT.notifications')}</SheetTitle>
         </SheetHeader>
-        <div className="space-y-2 px-4">
+        <div className="space-y-2 px-4 overflow-y-auto">
           {notifications?.map((notification) => (
             <Item
               url={`/${notification.notify_type}s/${notification.notify_id}`}

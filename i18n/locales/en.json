@@ -42,7 +42,12 @@
     "toTimeRequired": "Please select end time."
   },
   "TEXT": {
+    "order":"Order",
+    "reservation":"Reservation",
+    "notifications":"Notifications",
     "reviews": "{count, plural, =0 {no reviews} one {# review} other {# reviews}}",
+    "items": "{count, plural, =0 {no Items} one {# Item} other {# Items}}",
+    "guests": "{count, plural, =0 {no Guests} one {# Guest} other {# Guests}}",
     "noAccount": "don’t have an account?",
     "haveAccount": "have an account?",
     "signUpNow": " sign up now",
@@ -53,6 +58,7 @@
     "viewMenu": "View Our Menus",
     "offers": "Offers",
     "off": "Off",
+    "noResults":"No Results",
     "popularItems": "Popular Items",
     "cancelOrderDes": "Are You Sure, You want Cancel this Order",
     "deleteAccount": "Delete Account",
@@ -64,6 +70,16 @@
     "viewAll": " View All",
     "changeNotificationsDesc": "Are you sure you want to change the Notification State"
   },
+  "searchFilters":{
+  "selectedFilters": "Selected filters",
+  "clearAll": "Clear all",
+  "search": "Search",
+  "searchPlaceholder": "Search...",
+  "noFiltersSelected": "No filters selected.",
+  "selectMainCategories": "Select Main Categories",
+  "selectSubcategories": "Select Subcategories",
+  "applyFilter": "Apply Filter"
+},
   "Footer": {
     "sectionsHeading": "Sections",
     "linksHeading": "Links",

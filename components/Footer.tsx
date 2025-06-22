@@ -4,6 +4,7 @@ import Reservation from "./Navbar/Reservations";
 import { getCmsPages } from "@/services/ApiHandler";
 import { getTranslations } from "next-intl/server";
 import { Separator } from "./ui/separator";
+import React from "react";
 
 async function Footer({
   desc,
@@ -107,8 +108,8 @@ async function Footer({
               </h3>
               <ul className="space-y-3">
                 {contact.map((item, i) => (
-                  <>
-                    <li key={`contact ${i}`}>
+                  <React.Fragment key={`contact ${i}`}>
+                    <li >
                       <span className="block text-xs font-bold text-white uppercase">
                         {item.title}
                       </span>
@@ -119,7 +120,7 @@ async function Footer({
                     {i < contact.length - 1 && (
                       <Separator className="text-gray-500 max-w-25" />
                     )}
-                  </>
+                  </React.Fragment>
                 ))}
               </ul>
             </div>

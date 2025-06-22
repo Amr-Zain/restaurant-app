@@ -4,59 +4,54 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface FilterSidebarProps {
   filters: MenuCategory[];
-  categoryName?: string;
-  subCategoryName?: string;
+  initialCategoryIds?: string[];
+  initialSubCategoryIds?: string[];
   searchQuery: string;
-  setSearchQuery: (value:string) => void;
+  setSearchQuery: (value: string) => void;
   onFilter?: () => void;
 }
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({
   filters,
-  categoryName='',
-  subCategoryName='',
+  initialCategoryIds = [],
+  initialSubCategoryIds = [],
   searchQuery,
   setSearchQuery,
   onFilter,
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations('searchFilters'); 
 
-  const [selectedMainCategoryName, setSelectedMainCategoryName] = React.useState<
-    string 
-  >(categoryName);
-  const [selectedSubCategoryName, setSelectedSubCategoryName] = React.useState<
-    string 
-  >(subCategoryName);
+  const [selectedCategoryIds, setSelectedCategoryIds] = React.useState<string[]>(initialCategoryIds);
+  const [selectedSubCategoryIds, setSelectedSubCategoryIds] = React.useState<string[]>(initialSubCategoryIds);
 
-  const currentSelectedMainCategory = React.useMemo(() => {
-    return filters.find(
-      (cat) => cat.name === selectedMainCategoryName,
-    );
-  }, [filters, selectedMainCategoryName]);
-
-  const currentSubCategories = React.useMemo(() => {
-    return currentSelectedMainCategory?.subcategories || [];
-  }, [currentSelectedMainCategory]);
+  const availableSubcategories = React.useMemo(() => {
+    const subs: MenuSubcategory[] = [];
+    filters.forEach(cat => {
+      if (selectedCategoryIds.includes(cat.id.toString())) {
+        subs.push(...cat.subcategories);
+      }
+    });
+    return subs;
+  }, [filters, selectedCategoryIds]);
 
   const applyFilter = () => {
     const params = new URLSearchParams(searchParams);
-
-    if (selectedMainCategoryName) {
-      params.set("category", selectedMainCategoryName);
+    if (selectedCategoryIds.length > 0) {
+      params.set("categories", selectedCategoryIds.join(","));
     } else {
-      params.delete("category");
+      params.delete("categories");
     }
-
-    if (selectedSubCategoryName) {
-      params.set("subCategory", selectedSubCategoryName);
+    if (selectedSubCategoryIds.length > 0) {
+      params.set("sub_categories", selectedSubCategoryIds.join(","));
     } else {
-      params.delete("subCategory");
+      params.delete("sub_categories");
     }
-
     if (searchQuery.trim()) {
       params.set("keyword", searchQuery.trim());
     } else {
@@ -68,43 +63,61 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
     if (onFilter) onFilter();
   };
 
-  const toggleButton = (
-    type: "mainCategory" | "subCategory",
-    valueName: string, 
-  ) => {
-    if (type === "mainCategory") {
-      if (selectedMainCategoryName === valueName) {
-        setSelectedMainCategoryName('');
-        setSelectedSubCategoryName(''); 
+  const toggleCategory = (categoryId: number) => {
+    setSelectedCategoryIds((prev) => {
+      if (prev.includes(categoryId.toString())) { // Convert to string for consistency
+        // If deselected, also deselect all its subcategories to maintain consistency
+        const category = filters.find(cat => cat.id === categoryId);
+        if (category) {
+          const subCategoryIdsToRemove = category.subcategories.map(sub => sub.id.toString()); // Convert to string
+          setSelectedSubCategoryIds(currentSubIds =>
+            currentSubIds.filter(id => !subCategoryIdsToRemove.includes(id))
+          );
+        }
+        return prev.filter((id) => id !== categoryId.toString()); // Convert to string
       } else {
-        setSelectedMainCategoryName(valueName);
-        setSelectedSubCategoryName('');
+        return [...prev, categoryId.toString()]; // Convert to string
       }
-    } else if (type === "subCategory") {
-      if (selectedMainCategoryName) {
-        setSelectedSubCategoryName(
-          selectedSubCategoryName === valueName ? '' : valueName,
-        );
+    });
+  };
+
+  // Function to toggle selection of a subcategory
+  const toggleSubCategory = (subCategoryId: number) => {
+    setSelectedSubCategoryIds((prev) => {
+      if (prev.includes(subCategoryId.toString())) {
+        return prev.filter((id) => id !== subCategoryId.toString());
+      } else {
+        return [...prev, subCategoryId.toString()];
       }
+    });
+  };
+
+  const removeSelectedFilter = (type: "category" | "subCategory", idToRemove?: number) => {
+    if (type === "subCategory" && idToRemove !== undefined) {
+      setSelectedSubCategoryIds((prev) => prev.filter((id) => id !== idToRemove.toString()));
+    } else if (type === "category" && idToRemove !== undefined) {
+      setSelectedCategoryIds((prev) => {
+        // When a main category is removed, also remove its associated subcategories
+        const category = filters.find(cat => cat.id === idToRemove);
+        if (category) {
+          const subCategoryIdsToRemove = category.subcategories.map(sub => sub.id.toString());
+          setSelectedSubCategoryIds(currentSubIds =>
+            currentSubIds.filter(id => !subCategoryIdsToRemove.includes(id))
+          );
+        }
+        return prev.filter((id) => id !== idToRemove.toString());
+      });
     }
   };
 
-  const removeSelectedFilter = (type: "mainCategory" | "subCategory") => {
-    if (type === "subCategory") {
-      setSelectedSubCategoryName('');
-    } else if (type === "mainCategory") {
-      setSelectedMainCategoryName('');
-      setSelectedSubCategoryName(''); 
-    }
-  };
 
   const clearAllFilters = () => {
-    setSelectedMainCategoryName('');
-    setSelectedSubCategoryName('');
+    setSelectedCategoryIds([]);
+    setSelectedSubCategoryIds([]);
     setSearchQuery("");
     const params = new URLSearchParams(searchParams);
-    params.delete("category");
-    params.delete("subCategory");
+    params.delete("categories");
+    params.delete("sub_categories");
     params.delete("keyword");
     params.set("page", "1");
     router.push(`?${params.toString()}`);
@@ -112,24 +125,24 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   };
 
   const hasSelectedFilters =
-    selectedMainCategoryName !== '' ||
-    selectedSubCategoryName !== '' ||
+    selectedCategoryIds.length > 0 ||
+    selectedSubCategoryIds.length > 0 ||
     searchQuery.trim() !== "";
 
   return (
     <div className="w-full flex-shrink-0 self-start rounded-2xl bg-white p-4 md:w-58">
       <div className="mb-4 flex items-center justify-between mt-4">
         <h2 className="text-lg font-semibold text-gray-800 ">
-          Selected filters
+          {t("selectedFilters")}
         </h2>
         {hasSelectedFilters && (
           <Button
             variant="ghost"
             size="sm"
-            className="h-auto p-0 text-sm font-medium text-red-600"
+            className="h-auto p-0 text-sm font-medium text-red-600 cursor-pointer hover:text-red-800 hover:bg-transparent"
             onClick={clearAllFilters}
           >
-            Clear all
+            {t("clearAll")}
           </Button>
         )}
       </div>
@@ -140,70 +153,81 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
             htmlFor="search-filter"
             className="text-text-primary/40 mb-2 block text-sm font-medium"
           >
-            Search
+            {t("search")}
           </label>
           <Input
             id="search-filter"
-            placeholder="Search..."
+            placeholder={t("searchPlaceholder")}
             className="rounded-xl"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-
         <div className="mb-6 flex flex-wrap gap-2">
-          {selectedMainCategoryName && (
-            <span
-              key={`main-${selectedMainCategoryName}`}
-              className="text-primary bg-primary/10 flex items-center gap-1 rounded-sm px-3 py-2 text-xs"
-            >
-              {selectedMainCategoryName}
-              <button
-                onClick={() => {
-                  removeSelectedFilter("mainCategory");
-                  applyFilter(); // Apply filter immediately
-                }}
-              >
-                <X size={12} strokeWidth={2.5} />
-              </button>
-            </span>
-          )}
-          {selectedSubCategoryName && (
-            <span
-              key={`sub-${selectedSubCategoryName}`}
-              className="text-primary bg-primary/10 flex items-center gap-1 rounded-sm px-3 py-2 text-xs"
-            >
-              {selectedSubCategoryName}
-              <button
-                onClick={() => {
-                  removeSelectedFilter("subCategory");
-                  applyFilter();
-                }}
-              >
-                <X size={12} strokeWidth={2.5} />
-              </button>
-            </span>
-          )}
+          {selectedCategoryIds.map((categoryId) => {
+            const category = filters.find((cat) => cat.id.toString() === categoryId);
+            return (
+              category && (
+                <span
+                  key={`main-${category.id}`}
+                  className="text-primary bg-primary/10 flex items-center gap-1 rounded-sm px-3 py-2 text-xs"
+                >
+                  {category.name}
+                  <button
+                    onClick={() => {
+                      removeSelectedFilter("category", category.id);
+                    }}
+                  >
+                    <X size={12} strokeWidth={2.5} />
+                  </button>
+                </span>
+              )
+            );
+          })}
+          {selectedSubCategoryIds.map((subCategoryId) => {
+            let subCategoryName = '';
+            for (const cat of filters) {
+              const sub = cat.subcategories.find(s => s.id.toString() === subCategoryId);
+              if (sub) {
+                subCategoryName = sub.name;
+                break;
+              }
+            }
+            return (
+              subCategoryName && (
+                <span
+                  key={`sub-${subCategoryId}`}
+                  className="text-primary bg-primary/10 flex items-center gap-1 rounded-sm px-3 py-2 text-xs"
+                >
+                  {subCategoryName}
+                  <button
+                    onClick={() => {
+                      removeSelectedFilter("subCategory", +subCategoryId);
+                    }}
+                    className="cursor-pointer" 
+                  >
+                    <X size={12} strokeWidth={2.5} />
+                  </button>
+                </span>
+              )
+            );
+          })}
           {!hasSelectedFilters && (
-            <p className="text-text text-sm">No filters selected.</p>
+            <p className="text-text text-sm">{t("noFiltersSelected")}</p>
           )}
         </div>
 
         <div>
           <h3 className="text-primary/40 mb-2 text-sm font-medium">
-            Select main Categories
+            {t("selectMainCategories")}
           </h3>
           <div className="grid grid-cols-2 gap-2">
             {filters.map((categoryItem) => (
               <Button
                 key={categoryItem.id}
-                variant={
-                  selectedMainCategoryName === categoryItem.name
-                    ? "default"
-                    : "outline"
-                }
-                className={`!h-10 rounded-xl ${selectedMainCategoryName === categoryItem.name ? "bg-primary text-white" : "text-primary/40 border-gray-300 hover:bg-gray-200"}`}
-                onClick={() => toggleButton("mainCategory", categoryItem.name)}
+                variant={selectedCategoryIds.includes(categoryItem.id.toString()) ? "default" : "outline"}
+                className={`!h-10 rounded-xl cursor-pointer ${selectedCategoryIds.includes(categoryItem.id.toString()) ? "bg-primary text-white" : "text-primary/40 border-gray-300 hover:bg-gray-200"}`}
+                onClick={() => toggleCategory(categoryItem.id)}
               >
                 {categoryItem.name}
               </Button>
@@ -211,22 +235,18 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           </div>
         </div>
 
-        {selectedMainCategoryName && currentSubCategories.length > 0 && (
+        {selectedCategoryIds.length > 0 && availableSubcategories.length > 0 && (
           <div>
             <h3 className="text-primary/40 bg-text-primary/10 mb-2 text-sm font-medium">
-              {selectedMainCategoryName} Select sub category{" "}
+              {t("selectSubcategories")}
             </h3>
             <div className="flex flex-wrap gap-2">
-              {currentSubCategories.map((subCatItem) => (
+              {availableSubcategories.map((subCatItem) => (
                 <Button
-                  key={subCatItem.id} 
-                  variant={
-                    selectedSubCategoryName === subCatItem.name
-                      ? "default"
-                      : "outline"
-                  }
-                  className={`!h-10 rounded-xl ${selectedSubCategoryName === subCatItem.name ? "bg-primary text-white" : "text-primary/40 border-gray-300 hover:bg-gray-200"}`}
-                  onClick={() => toggleButton("subCategory", subCatItem.name)}
+                  key={subCatItem.id}
+                  variant={selectedSubCategoryIds.includes(subCatItem.id.toString()) ? "default" : "outline"}
+                  className={`!h-10 rounded-xl cursor-pointer ${selectedSubCategoryIds.includes(subCatItem.id.toString()) ? "bg-primary text-white" : "text-primary/40 border-gray-300 hover:bg-gray-200"}`}
+                  onClick={() => toggleSubCategory(subCatItem.id)}
                 >
                   {subCatItem.name}
                 </Button>
@@ -234,8 +254,8 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
             </div>
           </div>
         )}
-        <Button className="!h-12 w-full font-semibold" onClick={applyFilter}>
-          Apply Filter
+        <Button className="!h-12 w-full font-semibold cursor-pointer" onClick={applyFilter}>
+          {t("applyFilter")}
         </Button>
       </div>
     </div>

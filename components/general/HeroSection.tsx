@@ -5,15 +5,18 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 function HeroSection({
   title,
   home,
   section,
   href,
+  dir,
 }: {
   title: string;
   home: string;
+  dir: string;
   section: string;
   href: string;
 }) {
@@ -24,14 +27,16 @@ function HeroSection({
         <h3 className="font-Allura mb-4 text-center text-4xl text-white md:text-5xl">
           {title}
         </h3>
-        <Breadcrumb>
+        <Breadcrumb dir={dir}>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink className="hover:text-sub text-white" href="/">
                 {home}
               </BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
+            <BreadcrumbSeparator>
+              {dir === "ltr" ? <ChevronRight /> : <ChevronLeft />}
+            </BreadcrumbSeparator>
             <BreadcrumbItem>
               <BreadcrumbLink className="hover:text-sub text-white" href={href}>
                 {section}

@@ -10,6 +10,7 @@ export async function middleware(request: NextRequest) {
     const response = NextResponse.next();
     const isArabicLocale = request.nextUrl.pathname.startsWith("/ar");
 
+
     if (request.nextUrl.pathname.startsWith("/en")) {
         const newPathname = request.nextUrl.pathname.replace("/en", "");
         const url = new URL(request.nextUrl.origin + newPathname);
@@ -17,11 +18,13 @@ export async function middleware(request: NextRequest) {
     }
 
     response.cookies.set("NEXT_LOCALE", isArabicLocale ? "ar" : "en");
+    const ar = request.nextUrl.pathname.startsWith("/ar")
 
     // Handle guest token
     const serverCookies = await cookies();
     let guest_token = serverCookies.get('guest_token')?.value;
-    if (!guest_token) {
+    const token = serverCookies.get('token')?.value;
+    if (!guest_token && !token) {
         guest_token = v4();
         serverCookies.set('guest_token', guest_token);
     }
@@ -41,6 +44,12 @@ export async function middleware(request: NextRequest) {
             response.headers.append("set-cookie", cookie);
         });
     }
+    if (['profile', 'checkout', 'order', 'reservation'].some(item => request.nextUrl.pathname.includes(item)) && !token) {
+        return NextResponse.redirect(new URL(`${ar ? '/ar' : ""}/auth/login`, request.url));
+    } else if (request.nextUrl.pathname.includes("auth") && token) {
+        return NextResponse.redirect(new URL(`${ar ? '/ar' : ""}/`, request.url));
+    }
+
 
     return response;
 }

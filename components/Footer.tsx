@@ -41,7 +41,7 @@ async function Footer({
   return (
     <footer className="text-sub mt-auto bg-black py-12">
       <div className="container mx-auto px-4">
-        <div className="mb-8 grid grid-cols-1 gap-8 sm:grid-cols-2">
+        <div className="mb-8 grid grid-cols-1 gap-8 sm:grid-cols-[1fr_1.5fr]">
           {mainPartAvailability && (
             <div
               className="space-y-4"

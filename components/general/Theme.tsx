@@ -5,31 +5,11 @@ function Theme({ colors }: { colors: Record<string, string> }) {
   useEffect(() => {
 
     for (const key in colors) {
+      console.log(key)
       if (Object.hasOwnProperty.call(colors, key)) {
         const value = colors[key];
-        let cssVarName: string;
-        switch (key) {
-          case "website_primary_color":
-            cssVarName = "--color-primary";
-            break;
-          case "website_font_color":
-            cssVarName = "--color-text";
-            break;
-          case "website_tertiary_color":
-            cssVarName = "--sub";
-            break;
-          case "website_footer_color":
-            cssVarName = "--footer";
-            break;
-          default:
-            cssVarName = key
-              .replace(/^website_/, "")
-              .replace(/_color$/, "")
-              .replace(/_/g, "-");
-            cssVarName = `--${cssVarName}`;
-            break;
-        }
-        document.body.style.setProperty(cssVarName, value);
+        document.documentElement.style.setProperty(`--${key}`, value);
+        console.log(key,document.documentElement.style.getPropertyValue(`--${key}`));
       }
     }
   }, [colors]);

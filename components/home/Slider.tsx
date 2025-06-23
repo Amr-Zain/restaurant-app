@@ -39,8 +39,6 @@ const HomeSlider = ({
           <SwiperSlide key={`slider ${slide.id}`}>
             <div className={`relative h-full w-full`}>
               <div
-                data-aos="zoom-in"
-                data-aos-duration="1500"
                 className="h-full w-full"
               >
                 <Image
@@ -59,9 +57,6 @@ const HomeSlider = ({
                   __html: slide.title,
                 }}
                 className="font-Allura  text-4xl md:text-6xl"
-                data-aos="fade-up"
-                data-aos-delay="300"
-                data-aos-duration="1000"
               />
               <p
                 dangerouslySetInnerHTML={{
@@ -105,8 +100,6 @@ const HomeSlider = ({
             
             <div 
               className="absolute inset-0 z-10 bg-black/60"
-              data-aos="fade-in"
-              data-aos-duration="800"
             ></div>
           </SwiperSlide>
         ))}

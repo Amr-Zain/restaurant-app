@@ -18,7 +18,7 @@ function CardModal({ type, data }: CardModalProps) {
   const full_name = useAuthStore((state) => state.user!.full_name);
 
   const promisedData = use(data);
-  console.log(promisedData);
+  if (!data) return;
   const isCreditCard = type === "cridtCard";
   const cardTitle = isCreditCard ? t("cridtCard") : t("loyaltyCard");
   const cardIcon = isCreditCard ? (
@@ -73,7 +73,7 @@ function CardModal({ type, data }: CardModalProps) {
             {t("Transaction History")}
           </h3>
           <div className="h-50 overflow-y-auto p-4">
-            {promisedData.transactions.length ? (
+            {promisedData?.transactions.length ? (
               <>
                 {promisedData.transactions.map((trans) => (
                   <Item

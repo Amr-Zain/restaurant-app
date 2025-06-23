@@ -1,9 +1,14 @@
 import ProfileForm from "@/components/profile/ProfileForm";
 import { getProfile } from "@/services/ApiHandler";
+import Head from "next/head";
 
 async function Profile() {
   const profileData = await getProfile();
   return (
+    <>
+    <Head>
+      <title>hjhjhjh</title>
+    </Head>
     <div className="container">
       <ProfileForm
         defaultValues={{
@@ -14,8 +19,9 @@ async function Profile() {
           address: profileData.default_address?.title,
           avatar: profileData.avatar,
         }}
-      />
+        />
     </div>
+      </>
   );
 }
 

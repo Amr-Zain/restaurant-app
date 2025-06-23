@@ -3,15 +3,33 @@
 
 @custom-variant dark (&:is(.dark *));
 
+:root {
+  --website_dark_border_color: "#797979";
+  --website_font_color: "#171717";
+  --website_footer_color: "#121212";
+  --website_light_border_color: "#EFF0F1";
+  --website_light_font_color: "#828ABA";
+  --website_primary_color: "#5A6AE8";
+  --website_secondary_color: "#F6F6FD";
+  --website_success_color: "#06D6A0";
+  --website_tertiary_color: "#6262f4";
+  --website_warning_color: "#FF445B";
+  --website_white_color: "#F6F6F6";
+}
+
 @theme inline {
-  --color-primary: #5A6AE8;
-  --color-secondary: #edd70c;
+  --color-primary: var(--website_primary_color);
+  --color-secondary: var(--website_secondary_color);
   --color-secondary-dark: #ecb737;
-  --color-third: #f2f4fb;
-  --color-text: #171717;
-  --color-sub: #979EC5;
-  --color-success: #06D6A0;
-  --color-backgroud: #fbfafc;
+  --color-third: var(--website_tertiary_color);
+  --color-text: var(--website_font_color);
+  --color-border: var(--website_light_border_color);
+  --color-border-dark: var(--website_dark_border_color);
+  --color-sub: var(--website_light_font_color);
+  --color-success: var(--website_success_color);
+  --color-backgroud: var(--website_white_color);
+  --color-warning: var(--website_warning_color);
+  --color-footer: var(--website_footer_color);
   --color-description: #697e95;
   --color-input-primary: #BDC1DF;
   --color-current: currentColor;
@@ -218,7 +236,7 @@
     font-family: "Din";
     font-weight: 700;
     src: url("../public/assets/fonts/din/ArbFONTS-DINNextLTArabic-Bold.ttf");
-    font-display: swap;  
+    font-display: swap;
   }
 
   @font-face {
@@ -255,8 +273,9 @@
     src: url("../public/assets/fonts/ibm/IBMPlexSans-Bold.ttf");
     font-display: swap;
   }
+
   @font-face {
-    font-family:'Allura' ;
+    font-family: 'Allura';
     font-weight: 400;
     src: url('../public/assets/fonts/Allura-Regular.ttf');
   }
@@ -380,18 +399,23 @@ input[type="number"] {
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(55.9% 0.16 276.7); /* Updated to match --color-primary */
-  --primary-foreground: oklch(0.985 0 0); /* White/light text for primary */
+  --primary: var(--color-primary);
+  /* Updated to match --color-primary */
+  --primary-foreground: oklch(0.985 0 0);
+  /* White/light text for primary */
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(55.9% 0.16 276.7 / 0.1); /* Light transparent primary for accent */
-  --accent-foreground: oklch(55.9% 0.16 276.7); /* Primary color for accent foreground */
+  --accent: oklch(55.9% 0.16 276.7 / 0.1);
+  /* Light transparent primary for accent */
+  --accent-foreground: var(--color-primary);
+  /* Primary color for accent foreground */
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: oklch(55.9% 0.16 276.7); /* Primary color for focus rings */
+  --ring: var(--color-primary);
+  /* Primary color for focus rings */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -410,32 +434,37 @@ input[type="number"] {
 
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: var(--website_light_font_color);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(55.9% 0.16 276.7); /* Updated to match --color-primary */
-  --primary-foreground: oklch(0.205 0 0); /* Dark text for primary in dark mode */
+  --primary: var(--website_primary_color);
+  /* Updated to match --color-primary */
+  --primary-foreground: oklch(0.205 0 0);
+  /* Dark text for primary in dark mode */
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(55.9% 0.16 276.7 / 0.2); /* Slightly darker transparent primary for accent */
-  --accent-foreground: oklch(0.985 0 0); /* White/light text for accent foreground */
+  --accent: oklch(55.9% 0.16 276.7 / 0.2);
+  /* Slightly darker transparent primary for accent */
+  --accent-foreground: oklch(0.985 0 0);
+  /* White/light text for accent foreground */
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(55.9% 0.16 276.7); /* Primary color for focus rings */
-  --chart-1: oklch(0.488 0.243 264.376);
+  --ring: var(--website_primary_color);
+  /* Primary color for focus rings */
+  --chart-1: var(--website_primary_color);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary: var(--website_primary_color);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
@@ -449,27 +478,35 @@ input[type="number"] {
 .p-sec {
   @apply px-2 sm:px-6 lg:px-8 py-4 md:py-8;
 }
+
 .order-card {
   @apply mx-auto w-full max-w-[95%] lg:w-full gap-2 border-0 p-4 shadow-none transition-shadow hover:shadow-sm sm:w-136;
 }
+
 .reserv-input {
   @apply text-text focus:ring-0 !placeholder-text border-0 !border-b-[1.5px] ps-0 !border-input-primary rounded-none shadow-none h-10;
 }
+
 .nav-icon {
   @apply flex size-10 items-center justify-center rounded-full bg-[#F6F6FD] sm:size-12 cursor-pointer
 }
+
 .order-status {
   @apply text-primary bg-primary/10 flex h-9 items-center gap-1 rounded-full px-3 py-2 text-xs font-medium capitalize
 }
+
 .checkout-input {
   @apply flex justify-between gap-2 items-center hover:bg-backgroud hover:text-primary cursor-pointer rounded-2xl bg-white !px-4 py-4 transition-colors;
 }
+
 .nav-item {
-  @apply text-text hover:text-primary flex cursor-pointer items-center gap-2 text-base transition-colors 
+  @apply text-text hover:text-primary flex cursor-pointer items-center gap-2 text-base transition-colors
 }
-[data-slot="dialog-close"]{
+
+[data-slot="dialog-close"] {
   inset-inline-end: 1rem !important;
 }
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

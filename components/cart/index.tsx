@@ -34,7 +34,7 @@ function Cart() {
   };
 
   return (
-    <div className="mb-4 flex h-[88vh] flex-col justify-between px-4">
+    <div className="mb-4 flex h-[85vh] flex-col justify-between px-4">
       {!items.length ? (
         <div className="flex h-full flex-col items-center justify-center">
           <h3 className="text-text font-medium">{t("cart.noproducts")}</h3>

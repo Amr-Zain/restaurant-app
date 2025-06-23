@@ -1,55 +1,23 @@
-import createMiddleware from "next-intl/middleware";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-
-import { routing } from "./i18n/routing";
-import { cookies } from "next/headers";
-import { v4 } from 'uuid';
+import { localeMiddleware } from "./middleware/locale";
+import { authMiddleware } from "./middleware/auth";
+import { guestTokenMiddleware } from "./middleware/guest-token";
+import { redirectMiddleware } from "./middleware/redirect";
 
 export async function middleware(request: NextRequest) {
-    const response = NextResponse.next();
-    const isArabicLocale = request.nextUrl.pathname.startsWith("/ar");
+    let response = NextResponse.next();
 
+    response = await redirectMiddleware(request, response);
+    if (response.status !== 200) return response;
 
-    if (request.nextUrl.pathname.startsWith("/en")) {
-        const newPathname = request.nextUrl.pathname.replace("/en", "");
-        const url = new URL(request.nextUrl.origin + newPathname);
-        return NextResponse.redirect(url);
-    }
+    response = await localeMiddleware(request, response);
+    if (response.status !== 200) return response;
 
-    response.cookies.set("NEXT_LOCALE", isArabicLocale ? "ar" : "en");
-    const ar = request.nextUrl.pathname.startsWith("/ar")
-
-    // Handle guest token
-    const serverCookies = await cookies();
-    let guest_token = serverCookies.get('guest_token')?.value;
-    const token = serverCookies.get('token')?.value;
-    if (!guest_token && !token) {
-        guest_token = v4();
-        serverCookies.set('guest_token', guest_token);
-    }
-
-    // Handle internationalization routing
-    const handleI18nRouting = createMiddleware(routing);
-    const i18nResponse = handleI18nRouting(request);
-
-    // Merge headers and cookies from i18nResponse to response
-    i18nResponse.headers.forEach((value, key) => {
-        response.headers.set(key, value);
-    });
-
-    const setCookieHeaders = i18nResponse.headers.get("set-cookie");
-    if (setCookieHeaders) {
-        setCookieHeaders.split(",").forEach((cookie) => {
-            response.headers.append("set-cookie", cookie);
-        });
-    }
-    if (['profile', 'checkout', 'order', 'reservation'].some(item => request.nextUrl.pathname.includes(item)) && !token) {
-        return NextResponse.redirect(new URL(`${ar ? '/ar' : ""}/auth/login`, request.url));
-    } else if (request.nextUrl.pathname.includes("auth") && token) {
-        return NextResponse.redirect(new URL(`${ar ? '/ar' : ""}/`, request.url));
-    }
-
+    response = await guestTokenMiddleware(request, response);
+    
+    response = await authMiddleware(request, response);
+    if (response.status !== 200) return response;
 
     return response;
 }
@@ -58,5 +26,4 @@ export const config = {
     matcher: [
         "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|public/|assets/images|logo.png|logo.webp|favicon.webp|header.gif|footer_logo.png).*)",
     ],
-
 };

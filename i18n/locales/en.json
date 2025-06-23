@@ -73,6 +73,15 @@
     "viewAll": " View All",
     "changeNotificationsDesc": "Are you sure you want to change the Notification State"
   },
+  "share":{
+  "shareThisItem": "Share This Item",
+  "copyLink": "Copy Link",
+  "whatsApp": "WhatsApp",
+  "facebook": "Facebook",
+  "twitter": "Twitter",
+  "email": "Email",
+  "checkThisOut": "Check this out!"
+},
   "searchFilters":{
   "selectedFilters": "Selected filters",
   "clearAll": "Clear all",

@@ -54,7 +54,7 @@ function CheckOutForm() {
     },
   ];
 
-  const formSchema = checkoutSchema({ t });
+  const formSchema = checkoutSchema();
   const form = useForm<CheckoutFromType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -93,6 +93,8 @@ function CheckOutForm() {
 
   const { handleSubmit } = useFormSubmission(form, {
     submitFunction: onSubmit,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
     onSuccess:(data:{data:Order})=>{
       router.push(`orders/${data.data.id}`)
     }
@@ -298,7 +300,7 @@ function CheckOutForm() {
           setAddress(value);
           setOpenAddress(false);
         }}
-        className="mx-[2.5%] !mt-[5vh] h-[90vh] w-full rounded-2xl sm:mx-[calc((100vw-400px)/2)]"
+        /* className="mx-[2.5%] !mt-[5vh] h-[90vh] w-full rounded-2xl sm:mx-[calc((100vw-400px)/2)]" */
       />
     </>
   );

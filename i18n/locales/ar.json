@@ -71,6 +71,15 @@
     "viewAll": " عرض الكل",
     "changeNotificationsDesc": "هل أنت متأكد من أنك تريد تغيير حالة الإشعارات؟"
   },
+  "share": {
+    "shareThisItem": "مشاركة هذا العنصر",
+    "copyLink": "نسخ الرابط",
+    "whatsApp": "واتساب",
+    "facebook": "فيسبوك",
+    "twitter": "تويتر",
+    "email": "بريد إلكتروني",
+    "checkThisOut": "تحقق من هذا!"
+  },
   "searchFilters": {
     "selectedFilters": "الفلاتر المحددة",
     "clearAll": "مسح الكل",

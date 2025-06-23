@@ -1,11 +1,10 @@
-import { Share2 } from "lucide-react";
 import Image from "next/image";
 import { Separator } from "../ui/separator";
-import { Button } from "../ui/button";
 import ReviewStars from "./ReviewStars";
 import FavoritButton from "../menu/FavoritButton";
 import { Textarea } from "@/components/ui/textarea";
 import { getTranslations } from "next-intl/server";
+import { ShareDrawer } from "./ShareDrawer";
 
 async function Item({
   review_count,
@@ -71,15 +70,7 @@ async function Item({
               favId={favourite_id!}
               id={id}
             />
-            <Button
-              variant="ghost"
-              className="bg-primary/5 size-8 cursor-pointer rounded-full"
-            >
-              <Share2
-                className="text-primary hover:text-primary/50 cursor-pointer"
-                size={24}
-              />
-            </Button>
+           <ShareDrawer />
           </div>
         </div>
 

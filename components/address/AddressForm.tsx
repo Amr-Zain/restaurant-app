@@ -36,7 +36,8 @@ export default function AddAddressForm({
     data,
     updateAddress: setUpdated,
   } = useAddressStore((state) => state);
-  const defaultValues = data.find((item) => item.id === updateId);
+  const defaultValues = data.find((item) => item.id == updateId);
+  console.log(defaultValues)
   const t = useTranslations();
   const form = useForm<AddressSchemaType>({
     resolver: zodResolver(addressSchema({t})),

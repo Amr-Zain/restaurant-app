@@ -1,10 +1,10 @@
 import NotFound from "@/components/NotFound";
-import { getCmsPage, getCmsPages } from "@/services/ApiHandler";
+import { getCmsPage } from "@/services/ApiHandler";
 import GeneralSection from "@/components/general/GeneralSection";
 import HeroSection from "@/components/general/HeroSection";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-
+/* 
 interface CmsPageForPaths {
   slug: string;
 }
@@ -21,7 +21,7 @@ export async function generateStaticParams(): Promise<CmsPageForPaths[]> {
     return [];
   }
 }
-
+ */
 export default async function CMSPage({
   params,
 }: {

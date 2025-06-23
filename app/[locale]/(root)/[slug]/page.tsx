@@ -58,6 +58,7 @@ export default async function CMSPage({
         home={t("NAV.home")}
         section={pageData.title}
         href={pageData.slug}
+        dir={t('lang')}
       />
       <div className="container mx-auto p-4 sm:p-6 lg:p-8">
         <GeneralSection

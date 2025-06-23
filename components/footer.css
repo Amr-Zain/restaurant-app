@@ -1,0 +1,44 @@
+@reference '../app/globals.css';
+
+.footer_section {
+  @apply container py-16 lg:py-14;
+}
+.footer_section .about_section {
+  @apply col-span-3 xl:col-span-1;
+}
+.footer_section .social {
+  @apply flex flex-wrap items-center gap-2;
+}
+.footer_section .social a {
+  @apply inline-flex h-9 w-9 items-center justify-center rounded-full border border-primary text-primary transition-all duration-300 ease-in-out;
+}
+.footer_section .social a:hover {
+  @apply bg-primary text-white;
+}
+.footer_section .access_links ul li {
+  @apply mb-1 last:mb-0;
+}
+.footer_section .access_links ul li a {
+  @apply transition ease-in-out hover:text-primary;
+}
+.footer_section .access_links ul li a.router-link-active.router-link-exact-active {
+  @apply text-primary;
+}
+.footer_section .top_title {
+  @apply mb-2 text-lg font-bold text-black;
+}
+.footer_section .subscribe_form {
+  @apply rounded-full bg-white;
+}
+.footer_section .subscribe_form .input_wrapper_home {
+  @apply mb-0;
+}
+.footer_section .subscribe_form .input_wrapper_home input {
+  @apply rounded-full border-none py-2;
+}
+.footer_section .subscribe_form .input_wrapper_home input:-internal-autofill-selected {
+  background-color: #fff !important;
+}
+.footer_section .subscribe_form button {
+  @apply bg-primary p-4;
+}

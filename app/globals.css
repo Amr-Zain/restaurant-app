@@ -148,14 +148,6 @@
     border-color: var(--color-gray-200, currentcolor);
   }
 }
-
-/* @layer utilities {
-  :root {
-    --background: #ffffff;
-    --foreground: #171717;
-  }
-}
- */
 @layer base {
   @font-face {
     font-display: swap;
@@ -387,9 +379,6 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
-
-/* ---break---
- */
 
 :root {
   --radius: 0.625rem;

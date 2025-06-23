@@ -48,7 +48,6 @@ export default async function RootLayout({
 }) {
   const setting = await getSettingsData();
   const defaultLanguage = setting.website_setting .website_default_language
-  console.log("🚀 ~ setting:", setting)
   const { locale } = await params;
   
   const messages = await getMessages({ locale: locale||defaultLanguage });

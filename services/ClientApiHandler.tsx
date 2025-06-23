@@ -1,5 +1,6 @@
 "use client";
 import {
+  AddressSchemaType,
   ContactFormType,
   ForgatPasswordFormType,
   LoginFormType,
@@ -11,7 +12,6 @@ import {
 } from "@/helper/schema";
 import axiosInstance from "./axiosClient";
 import { format } from "date-fns";
-import { AddressFormData } from "@/components/address/AddressForm";
 import { CartItem } from "@/stores/cart";
 import { useAuthStore } from "@/stores/auth";
 
@@ -209,14 +209,13 @@ export const updateUserProfile = async (form: profileFromType) => {
     throw error instanceof Error ? error.message : "unexpected error";
   }
 };
-export const postAddress = async (form: AddressFormData) => {
+export const postAddress = async (form: AddressSchemaType) => {
   if (!form.is_default) delete form.is_default;
   const { data } = await axiosInstance.post(`address`, form);
   return data;
 };
-export const updateAddress = async (form: AddressFormData, id: number) => {
+export const updateAddress = async (form: AddressSchemaType, id: number) => {
   if (!form.is_default) delete form.is_default;
-
   const { data } = await axiosInstance.patch(`address/${id}`, form);
   return data;
 };

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import "@/styles/social.scss";
+import "@/styles/social.css";
 import { appStore, SocialKey } from "@/stores/app";
 
 import {

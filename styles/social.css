@@ -1,0 +1,10 @@
+@reference '../app/globals.css';
+ul.social {
+  @apply flex items-center gap-4;
+}
+ul.social li a {
+  @apply flex size-9 items-center justify-center rounded-full border border-primary transition duration-300 ease-in-out;
+}
+ul.social li a:hover {
+  @apply scale-105 bg-primary text-white;
+}

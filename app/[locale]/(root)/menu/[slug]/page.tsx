@@ -35,7 +35,6 @@ export default async function ItemDetailsPage({
   params: { slug: string };
 }) {
   const { slug } = params;
-  console.log("Fetching details for slug:", slug);
   const t = await getTranslations();
   let item: ProductData | null = null;
   try {

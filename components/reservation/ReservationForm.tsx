@@ -15,6 +15,7 @@ import PhoneNumber from "../util/formFields/PhoneInput";
 import usePhoneCode from "@/hooks/usePhoneCode";
 import { ReservationFromType, reservationSchema } from "@/helper/schema";
 import { useBranchStore } from "@/stores/branchs";
+import img from '@/assets/images/table.png'
 
 export default function ReservationForm({
   className,
@@ -67,7 +68,8 @@ export default function ReservationForm({
 
   return (
     <div
-      className={`h-full w-full rounded-3xl bg-[url('@/assets/images/table.png')] p-4 md:p-8 ${className}`}
+      className={`h-full w-full rounded-3xl p-4 md:p-8 ${className}`}
+      style={{backgroundImage:`url(${img.src})`}}
     >
       <div className="mx-auto max-w-full">
         <Form {...form}>

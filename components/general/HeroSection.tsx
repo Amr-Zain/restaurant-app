@@ -6,7 +6,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
+import img from '@/assets/images/hero.jpg';
 function HeroSection({
   title,
   home,
@@ -21,7 +21,7 @@ function HeroSection({
   href: string;
 }) {
   return (
-    <section className="relative flex h-52 w-[100hw] flex-col items-center justify-center bg-[url('@/assets/images/hero.jpg')] bg-cover">
+    <section className="relative flex h-52 w-[100hw] flex-col items-center justify-center bg-cover" style={{backgroundImage:`url(${img.src})`}}>
       <div className="absolute inset-0 bg-black/40" />
       <div className="z-10 mb-4">
         <h3 

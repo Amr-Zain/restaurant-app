@@ -11,7 +11,7 @@ async function Profile() {
           phone_code: profileData.country.phone_code,
           phone: profileData.phone,
           email: profileData.email,
-          address: profileData.default_address.title,
+          address: profileData.default_address?.title,
           avatar: profileData.avatar,
         }}
       />

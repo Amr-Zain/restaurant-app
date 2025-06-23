@@ -92,7 +92,7 @@ const Stores = () => {
       </DialogTrigger>
 
       <DialogContent className="bg-backgroud w-128 max-w-[90%] rounded-2xl border-0 px-4 shadow-xl [&>button:last-child]:hidden">
-        <DialogClose className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute end-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:pointer-events-none">
+        <DialogClose className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute end-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:pointer-events-none cursor-pointer">
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
         </DialogClose>

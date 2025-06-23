@@ -43,7 +43,11 @@ async function Footer({
       <div className="container mx-auto px-4">
         <div className="mb-8 grid grid-cols-1 gap-8 sm:grid-cols-2">
           {mainPartAvailability && (
-            <div className="space-y-4">
+            <div
+              className="space-y-4"
+              data-aos="fade-right"
+              data-aos-delay="100"
+            >
               <Image
                 src={logo}
                 width={80}
@@ -54,8 +58,8 @@ async function Footer({
               <p className={`text-sub text-sm leading-relaxed`}>{desc}</p>
             </div>
           )}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-            <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
+            <div className="space-y-4" data-aos="fade-up" data-aos-delay="200">
               <h3 className="mb-4 text-sm font-semibold text-white uppercase">
                 {t("sectionsHeading")}
               </h3>
@@ -84,7 +88,7 @@ async function Footer({
               </ul>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-4" data-aos="fade-up" data-aos-delay="300">
               <h3 className="mb-4 text-sm font-bold text-white uppercase">
                 {t("linksHeading")}
               </h3>
@@ -102,14 +106,14 @@ async function Footer({
               </ul>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-4" data-aos="fade-up" data-aos-delay="400">
               <h3 className="mb-4 text-sm font-bold text-white uppercase">
                 {t("contactHeading")}
               </h3>
               <ul className="space-y-3">
                 {contact.map((item, i) => (
                   <React.Fragment key={`contact ${i}`}>
-                    <li >
+                    <li>
                       <span className="block text-xs font-bold text-white uppercase">
                         {item.title}
                       </span>
@@ -118,7 +122,7 @@ async function Footer({
                       </span>
                     </li>
                     {i < contact.length - 1 && (
-                      <Separator className="text-gray-500 max-w-25" />
+                      <Separator className="max-w-25 text-gray-500" />
                     )}
                   </React.Fragment>
                 ))}
@@ -127,13 +131,17 @@ async function Footer({
           </div>
         </div>
 
-        <div className="flex justify-between border-t border-white pt-4">
+        <div
+          className="flex justify-between border-t border-white pt-4"
+          data-aos="fade-up"
+          data-aos-delay="500"
+        >
           <p className="text-sm text-gray-500">
             © {new Date().getFullYear()} {t("rightsReserved")}
           </p>
           {/* <div className="flex">
-            <SocialLinks className="flex gap-2" />
-          </div> */}
+              <SocialLinks className="flex gap-2" />
+            </div> */}
         </div>
       </div>
     </footer>

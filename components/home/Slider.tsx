@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -10,8 +10,6 @@ import { Link } from "@/i18n/routing";
 import SocialLinks from "../general/SocialLinks";
 import type { Swiper as SwiperType } from "swiper/types";
 import { useTranslations } from "next-intl";
-import AOS from "aos";
-import "aos/dist/aos.css";
 
 const HomeSlider = ({
   slides,
@@ -20,21 +18,6 @@ const HomeSlider = ({
 }) => {
   const swiperRef = React.useRef<SwiperType | null>(null);
   const t = useTranslations();
-
-  useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      easing: 'ease-in-out',
-      once: false,
-      offset: 50,
-    });
-  }, []);
-
-  const handleSlideChange = () => {
-    setTimeout(() => {
-      AOS.refresh();
-    }, 100);
-  };
 
   return (
     <div className="relative mx-auto h-[90vh] w-full">
@@ -50,7 +33,6 @@ const HomeSlider = ({
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
         }}
-        onSlideChange={handleSlideChange}
         className="h-full"
       >
         {slides.map((slide, index) => (
@@ -106,6 +88,7 @@ const HomeSlider = ({
                     viewBox="0 0 16 15"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    className={t('lang')==='rtl'?"-rotate-90":''}
                   >
                     <path
                       d="M5.86574 1.6942L14.4173 2.44237L13.6692 10.994M1.39459 13.3698L14.2871 2.55164"

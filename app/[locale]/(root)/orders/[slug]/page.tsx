@@ -18,7 +18,7 @@ export default async function OrdersPage({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     if (error.status === 404) return notFound();
-    throw error instanceof Error ?error.message: 'error loaidng the data'
+    throw error instanceof Error ? error.message : 'error loading the data'
   }
   const t = await getTranslations();
   const orderSummary = {
@@ -59,25 +59,41 @@ export default async function OrdersPage({
   };
 
   return (
-    <div className="container my-10 grid grid-cols-1 gap-6 md:grid-cols-[1fr_360px]">
-      <OrderInfo
-        id={res.data.id}
-        callCenter={res.data.call_center}
-        callCenterMessage={res.data.call_center_message}
-        orderDate={res.data.order_date}
-        orderTime={res.data.order_time}
-        address={res.data.address}
-        orderStatus={res.data.order_status!}
-      />
-      <OrderDetails
-        canCancel={res.data.can_cancel}
-        orderNumber={res.data.order_num}
-        id={slug}
-        statusTrans={res.data.status_trans}
-        status={res.data.status}
-        items={res.data.item}
-        orderSummary={orderSummary}
-      />
+    <div 
+      className="container my-10 grid grid-cols-1 gap-6 md:grid-cols-[1fr_360px]"
+      data-aos="fade-up"
+      data-aos-duration="800"
+    >
+      <div
+        data-aos="fade-right"
+        data-aos-duration="700"
+        data-aos-delay="200"
+      >
+        <OrderInfo
+          id={res.data.id}
+          callCenter={res.data.call_center}
+          callCenterMessage={res.data.call_center_message}
+          orderDate={res.data.order_date}
+          orderTime={res.data.order_time}
+          address={res.data.address}
+          orderStatus={res.data.order_status!}
+        />
+      </div>
+      <div
+        data-aos="fade-left"
+        data-aos-duration="700"
+        data-aos-delay="400"
+      >
+        <OrderDetails
+          canCancel={res.data.can_cancel}
+          orderNumber={res.data.order_num}
+          id={slug}
+          statusTrans={res.data.status_trans}
+          status={res.data.status}
+          items={res.data.item}
+          orderSummary={orderSummary}
+        />
+      </div>
     </div>
   );
 }

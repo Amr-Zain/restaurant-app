@@ -43,6 +43,9 @@
     "order": "طلب",
     "reservation": "حجز",
     "notifications": "الإشعارات",
+    "changePhone": "تغيير الرقم",
+    "changePhoneDesc": "الرجاء إدخال رقم هاتفك حتى نتمكن من التحقق منه.",
+    "followInstgram": "تابعنا على انستغرام",
     "reviews": "{count, plural, =0 {لا توجد مراجعات} one {مراجعة واحدة} other {# مراجعات}}",
     "items": "{count, plural, =0 {لا توجد عناصر} one {عنصر واحد} other {# عناصر}}",
     "guests": "{count, plural, =0 {لا ضيوف} one {ضيف واحد} other {# ضيوف}}",
@@ -147,6 +150,8 @@
     "selectTopping": "{type} {value} الإضافات",
     "min_max": "حدد",
     "exact": "وجبة",
+    "latitude": "خط العرض",
+    "longitude": "خط الطول",
     "email": "البريد الإلكتروني",
     "phone": "الهاتف",
     "phoneNumber": "الهاتف",
@@ -184,7 +189,9 @@
     "bookTable": "احجز طاولة",
     "cancel": "إلغاء",
     "ok": "موافق",
-    "reservations": "الحجوزات"
+    "reservations": "الحجوزات",
+    "title": "العنوان",
+    "description": "الوصف"
   },
   "checkout": {
     "orderType": "نوع الطلب",
@@ -229,7 +236,7 @@
   "card": {
     "cridtCard": "بطاقة ائتمان",
     "loyaltyCard": "بطاقة الولاء",
-    "points": "نقاط",
+    "points": "{count, plural, =0 {لا توجد نقاط} one {نقطه واحدة} other {# نقاط}}",
     "Transaction History": "سجل المعاملات",
     "No transactions": "لا توجد معاملات"
   },
@@ -262,7 +269,15 @@
     "messageTypeRequired": "يرجى اختيار نوع الرسالة.",
     "messageRequired": "محتوى الرسالة مطلوب.",
     "logoutFailed": "فشل تسجيل الخروج، يرجى المحاولة مرة أخرى",
-    "messageTooLong": "لا يمكن أن تتجاوز الرسالة {max} حرفًا."
+    "messageTooLong": "لا يمكن أن تتجاوز الرسالة {max} حرفًا.",
+    "latitudeRange": "خط العرض يجب أن يكون بين -90 و 90",
+    "longitudeRange": "خط الطول يجب أن يكون بين -180 و 180",
+    "buildingNumberRequiredPositive": "رقم المبنى مطلوب ويجب أن يكون رقماً موجباً",
+    "buildingNumberInteger": "رقم المبنى يجب أن يكون عدداً صحيحاً",
+    "floorNumberNonNegative": "رقم الطابق لا يمكن أن يكون سالباً",
+    "floorNumberInteger": "رقم الطابق يجب أن يكون عدداً صحيحاً",
+    "apartmentNumberRequiredPositive": "رقم الشقة مطلوب ويجب أن يكون رقماً موجباً",
+    "apartmentNumberInteger": "رقم الشقة يجب أن يكون عدداً صحيحاً"
   },
   "enter": "إدخال",
   "requiredField": "{field} مطلوب",

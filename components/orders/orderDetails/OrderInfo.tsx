@@ -92,7 +92,7 @@ const OrderInfo = async ({
 
         {orderStatus.find(
           (status) => status?.key === "finished" || status?.key === "delivered"
-        )?.status !== "done" && <ReorderButton id={id} />}
+        )?.status === "done" && <ReorderButton id={id} />}
       </div>
     </div>
   );

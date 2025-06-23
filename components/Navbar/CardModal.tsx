@@ -1,36 +1,48 @@
 "use client";
-import { useState } from "react";
+import { use, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { useTranslations } from "next-intl";
 import { Loyalty, Wallet } from "../Icons";
 import { useAuthStore } from "@/stores/auth";
 import Image from "next/image";
 import logo from "@/assets/images/logo.png";
-import { useCartStore } from "@/stores/cart";
+import Item from "../orders/orderDetails/Item";
+interface CardModalProps {
+  type: "cridtCard" | "loyaltyCard";
+  data: Promise<Wallet>;
+}
 
-function CardModal({ type }: { type: "cridtCard" | "loyaltyCard" }) {
+function CardModal({ type, data }: CardModalProps) {
   const [open, setOpen] = useState(false);
   const t = useTranslations("card");
-  const { full_name, points, wallet } = useAuthStore((state) => state.user!);
-  const currency = useCartStore((state) => state.currency);
+  const full_name = useAuthStore((state) => state.user!.full_name);
+
+  const promisedData = use(data);
+  console.log(promisedData);
+  const isCreditCard = type === "cridtCard";
+  const cardTitle = isCreditCard ? t("cridtCard") : t("loyaltyCard");
+  const cardIcon = isCreditCard ? (
+    <Wallet className="hover:!bg-primary size-5" />
+  ) : (
+    <Loyalty className="hover:!bg-primary size-5" />
+  );
+
+  const cardValue = isCreditCard
+    ? `${promisedData?.bending_balance} ${promisedData?.currency}`
+    : t("points", { count: promisedData.points || 0 });
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild className="cursor-pointer">
-        {type === "cridtCard" ? (
+        <div className="flex items-center justify-between">
           <div className={"nav-item p-3"}>
-            <div className="nav-icon">
-              <Wallet className="hover:!bg-primary size-5" />
-            </div>
-            {t("cridtCard")}
+            <div className="nav-icon">{cardIcon}</div>
+            {cardTitle}
           </div>
-        ) : (
-          <div className={"nav-item p-3"}>
-            <div className="nav-icon">
-              <Loyalty className="hover:!bg-primary size-5" />
-            </div>
-            {t("loyaltyCard")}
+          <div className="text-success rounded-full bg-[#e9f4ec] px-4 py-2 text-sm font-semibold">
+            {cardValue}
           </div>
-        )}
+        </div>
       </DialogTrigger>
 
       <DialogContent className="bg-backgroud w-170 max-w-[95%] rounded-2xl border-0 px-2 shadow-xl md:px-4 [&>button:last-child]:hidden">
@@ -44,15 +56,10 @@ function CardModal({ type }: { type: "cridtCard" | "loyaltyCard" }) {
             </div>
             <div className="flex flex-col text-white sm:gap-2 md:gap-4">
               <div className="text-ms font-semibold md:text-lg">
-                {type === "cridtCard" ? t("cridtCard") : t("loyaltyCard")}
+                {cardTitle}
               </div>
               <div className="flex h-7 gap-1 text-sm md:text-lg">
-                <div className="font-semibold">
-                  {type === "cridtCard" ? wallet : points}
-                </div>
-                <div className="self-end text-sm">
-                  {type === "cridtCard" ? currency : t("points")}
-                </div>
+                <div className="font-semibold">{cardValue}</div>
               </div>
             </div>
           </div>
@@ -62,12 +69,31 @@ function CardModal({ type }: { type: "cridtCard" | "loyaltyCard" }) {
           </div>
         </div>
         <div>
-          <h3 className="text-text text-xl font-bold">
+          <h3 className="text-text mb-2 text-xl font-bold">
             {t("Transaction History")}
           </h3>
-          <div className="p-4">
-            {/* list of tansactions */}
-            <p className="text-sub text-center">{t("No transactions")}</p>
+          <div className="h-50 overflow-y-auto p-4">
+            {promisedData.transactions.length ? (
+              <>
+                {promisedData.transactions.map((trans) => (
+                  <Item
+                    key={trans.id}
+                    id={trans.id}
+                    title={trans.title}
+                    desc={trans.created_at}
+                    price={isCreditCard ? trans.amount : undefined}
+                    currency={
+                      isCreditCard
+                        ? promisedData.currency
+                        : t("points", { count: promisedData.points })
+                    }
+                    image={trans.image}
+                  />
+                ))}
+              </>
+            ) : (
+              <p className="text-sub text-center">{t("No transactions")}</p>
+            )}
           </div>
         </div>
       </DialogContent>

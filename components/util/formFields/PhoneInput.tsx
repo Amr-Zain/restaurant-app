@@ -31,7 +31,6 @@ interface PhoneNumberProps<T extends FieldValues> {
   disabled?: boolean;
   codeClass?: string;
   phoneClass?: string;
-  
 }
 
 function PhoneNumber<T extends FieldValues>({
@@ -43,7 +42,7 @@ function PhoneNumber<T extends FieldValues>({
   isLoading,
   codeClass,
   phoneClass,
-  disabled
+  disabled,
 }: PhoneNumberProps<T>) {
   const t = useTranslations();
 
@@ -53,19 +52,19 @@ function PhoneNumber<T extends FieldValues>({
         control={control}
         name={phoneCodeName}
         render={({ field }) => (
-          <FormItem className="min-w-6 ">
+          <FormItem className="min-w-6">
             <Select
               onValueChange={field.onChange}
               defaultValue={field.value}
               value={field.value}
-              disabled={isLoading||disabled}
+              disabled={isLoading || disabled}
             >
               <FormControl>
-                <SelectTrigger className={"text-text p-1 sm:p-4 "+codeClass}>
+                <SelectTrigger className={"text-text p-1 sm:p-4 " + codeClass} dir={t("lang")}>
                   <SelectValue placeholder={t("labels.phoneCode")} />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent dir={t("lang")}>
                 {countries?.map((country) => (
                   <SelectItem key={country.id} value={`${country.phone_code}`}>
                     <div className="flex items-center gap-2">
@@ -87,13 +86,14 @@ function PhoneNumber<T extends FieldValues>({
           <FormItem className="grow-1">
             <FormControl>
               <Input
+                dir={t("lang")}
                 {...field}
                 className={phoneClass}
                 onChange={(e) => {
                   field.onChange(e);
                 }}
                 value={field.value || ""}
-                disabled={isLoading ||disabled}
+                disabled={isLoading || disabled}
                 placeholder={
                   currentPhoneLimit
                     ? t("labels.phoneNumberWithLimit", {

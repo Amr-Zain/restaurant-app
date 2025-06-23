@@ -1,6 +1,9 @@
-import * as z from "zod";
 
-export const createRegisterFormSchema = ({ t, currentPhoneLimit }: { t: any, currentPhoneLimit: number | null }) => z
+import * as z from "zod";
+import { useTranslations } from "next-intl";
+
+type Translator = ReturnType<typeof useTranslations>;
+export const createRegisterFormSchema = ({ t, currentPhoneLimit }: { t: Translator, currentPhoneLimit: number | null }) => z
     .object({
         full_name: z
             .string()
@@ -41,7 +44,7 @@ export const createRegisterFormSchema = ({ t, currentPhoneLimit }: { t: any, cur
 export const ForgatPasswordSchema = ({
     t,
 }: {
-    t: any;
+    t: Translator;
 }) => z.object({
     password: z
         .string()
@@ -51,8 +54,8 @@ export const ForgatPasswordSchema = ({
         .string()
         .min(1, t("requiredField", { field: t("labels.confirmPassword") })),
 });
-export const OTPSchema = ({ t }: { t: any }) => z.object({ reset_code: z.string().min(4, t("passwordTooShort")) })
-export const loginSchema = ({ t, currentPhoneLimit }: { t: any, currentPhoneLimit: number | null }) => z.object({
+export const OTPSchema = ({ t }: { t: Translator }) => z.object({ reset_code: z.string().min(4, t("passwordTooShort")) })
+export const loginSchema = ({ t, currentPhoneLimit }: { t: Translator, currentPhoneLimit: number | null }) => z.object({
     phone_code: z
         .string()
         .min(1, t("requiredField", { field: t("labels.phoneCode") })),
@@ -76,7 +79,7 @@ export const loginSchema = ({ t, currentPhoneLimit }: { t: any, currentPhoneLimi
     rememberMe: z.boolean().default(false).optional(),
 });
 export const reservationSchema =
-    ({ t, currentPhoneLimit }: { t: any, currentPhoneLimit: number | null }) =>
+    ({ t, currentPhoneLimit }: { t: Translator, currentPhoneLimit: number | null }) =>
         z.object({
             name: z.string().min(1, t("requiredField", { field: t("labels.fullName") }))
                 .max(50, t("errors.nameTooLong")),
@@ -112,7 +115,7 @@ export const contactFormSchema = ({
     t,
     currentPhoneLimit,
 }: {
-    t: any;
+    t: Translator;
     currentPhoneLimit: number | null;
 }) =>
     z.object({
@@ -141,7 +144,7 @@ export const phoneSchema = ({
     t,
     currentPhoneLimit,
 }: {
-    t: any;
+    t: Translator;
     currentPhoneLimit: number | null;
 }) => z.object({
     phone_code: z
@@ -161,7 +164,7 @@ export const phoneSchema = ({
             })
         ),
 });
-export const profileSchema = ({ t }: { t: any }) => z.object({
+export const profileSchema = ({ t }: { t: Translator }) => z.object({
     full_name: z
         .string()
         .min(1, t("requiredField", { field: t("labels.fullName") }))
@@ -180,7 +183,7 @@ export const profileSchema = ({ t }: { t: any }) => z.object({
         .max(100, t("errors.addressTooLong")),
     avatar: z.string().optional()
 });
-export const checkoutSchema = ({ t }: { t: any }) => z
+export const checkoutSchema = () => z
     .object({
         order_type: z.enum(["delivery", "take_away"], {
             required_error: "You need to select an order type.",
@@ -223,6 +226,44 @@ export const checkoutSchema = ({ t }: { t: any }) => z
             }
         }
     });
+
+export const addressSchema = ({ t }: { t: Translator }) => z.object({
+    title: z.string().min(1, t("requiredField", { field: t("labels.title") })),
+    lat: z.string()
+        .min(1, t("requiredField", { field: t("labels.latitude") }))
+        .refine(
+            (val) => {
+                const num = parseFloat(val);
+                return !isNaN(num) && num >= -90 && num <= 90;
+            },
+            t("errors.latitudeRange")
+        ),
+    lng: z.string()
+        .min(1, t("requiredField", { field: t("labels.longitude") }))
+        .refine(
+            (val) => {
+                const num = parseFloat(val);
+                return !isNaN(num) && num >= -180 && num <= 180;
+            },
+            t("errors.longitudeRange")
+        ),
+    desc: z.string().min(1, t("requiredField", { field: t("labels.description") })),
+    is_default: z.boolean().optional(),
+    building: z.string()
+        .regex(/^[0-9]*$/, t("errors.buildingNumberInteger"))
+        .optional()
+        .default(""),
+    floor: z.string()
+        .regex(/^[0-9]*$/, t("errors.floorNumberInteger"))
+        .optional()
+        .default(""),
+    apartment: z.string()
+        .regex(/^[0-9]*$/, t("errors.apartmentNumberInteger"))
+        .optional()
+        .default(""),
+});
+export type AddressSchemaType = z.infer<ReturnType<typeof addressSchema>>;
+
 export type ContactFormType = z.infer<ReturnType<typeof contactFormSchema>>;
 export type OTPSchemaType = z.infer<ReturnType<typeof OTPSchema>>;
 export type PhoneFormType = z.infer<ReturnType<typeof phoneSchema>>;

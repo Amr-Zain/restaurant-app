@@ -5,9 +5,9 @@ interface ProductImage {
 interface Notification {
   body: string;
   id: number;
-  image: string | null; 
+  image: string | null;
   notify_id: number;
-  notify_type: "order"| 'reservation'; 
+  notify_type: "order" | 'reservation';
   read_at: string;
   time_ago: string;
   title: string;
@@ -57,9 +57,9 @@ interface FoodIcon {
 interface PriceDetails {
   price: number;
   currency: string;
-  percentage?: number; 
-  discount_value?: number; 
-  price_after?: number; 
+  percentage?: number;
+  discount_value?: number;
+  price_after?: number;
   offer?: {
     id: number;
     from_day: string | null;
@@ -107,11 +107,11 @@ interface ProductData {
   favourite_id: number | null;
   price: PriceDetails;
   seo: ProductSeo;
-  combo: []; 
+  combo: [];
   sub_modifiers: SubModifier[];
 }
 
- interface PriceDetails {
+interface PriceDetails {
   price: number;
   currency: string;
   percentage: number;
@@ -126,7 +126,7 @@ interface Product {
   slug: string
   name: string;
   slug: string;
-  desc: string | null; 
+  desc: string | null;
   type: string;
   image: string;
   rating: number;
@@ -137,32 +137,32 @@ interface Product {
   price: PriceDetails;
 }
 interface Address {
-    id:number;
-    title: string;
-    desc: string;
-    lat: number;
-    lng: number
-    type: string;
-    building: number;
-    floor: number;
-    apartment: number;
-    is_default: boolean;
+  id: number;
+  title: string;
+  desc: string;
+  lat: number;
+  lng: number
+  type: string;
+  building: number;
+  floor: number;
+  apartment: number;
+  is_default: boolean;
 }
- interface Links {
-    first: string;
-    last: string;
-    prev: string | null;
-    next: string | null;
-  };
- interface Meta {
-    current_page: number;
-    from: number;
-    last_page: number;
-    path: string;
-    per_page: number;
-    to: number;
-    total: number;
-  };
+interface Links {
+  first: string;
+  last: string;
+  prev: string | null;
+  next: string | null;
+};
+interface Meta {
+  current_page: number;
+  from: number;
+  last_page: number;
+  path: string;
+  per_page: number;
+  to: number;
+  total: number;
+};
 
 interface User {
   avatar: string;
@@ -181,7 +181,7 @@ interface User {
   wallet: number;
 }
 
-interface Branch  {
+interface Branch {
   id: number;
   image: string;
   name: string;
@@ -197,7 +197,7 @@ interface CMSPage {
   slug: string;
   in_menu: boolean;
   icon: string;
-  user_type: "both" | "customer" | "admin"; 
+  user_type: "both" | "customer" | "admin";
   created_at: string;
 }
 interface AdditionData {
@@ -221,23 +221,23 @@ interface CmsPageContent {
   created_at: string;
 }
 interface SubmissionResult {
-    data: unknown;
-    message: string;
-    status?: string;
+  data: unknown;
+  message: string;
+  status?: string;
 }
 interface HomePageData {
   //address: any; 
-  offers: Product[]; 
+  offers: Product[];
   popular_products: Product[];
   products: Product[]
-  sliders:{ image: string; title: string; desc: string; id: number }[];
-  subscription_content:  {
-      image?: string | StaticImageData;
-      title: string;
-      heading?: string;
-      desc: string;
-      desc2?: string;
-    };
+  sliders: { image: string; title: string; desc: string; id: number }[];
+  subscription_content: {
+    image?: string | StaticImageData;
+    title: string;
+    heading?: string;
+    desc: string;
+    desc2?: string;
+  };
   web_content: {
     id: number;
     title: string;
@@ -284,43 +284,43 @@ interface ProductReviewsResponse {
   star_rate: StarRate[];
 }
 interface OtpFormValues extends FieldValues {
-    phone_code: string;
-    phone: string;
-    reset_code: string;
+  phone_code: string;
+  phone: string;
+  reset_code: string;
 }
 interface Topping {
-    name: string;
-    price: number | null;
-    quantity: number;
-    weight: number;
+  name: string;
+  price: number | null;
+  quantity: number;
+  weight: number;
 }
 interface ApiErrorResponseData {
-    message?: string;
-    messages?: {
-        [key: string]: string[];
-    };
+  message?: string;
+  messages?: {
+    [key: string]: string[];
+  };
 }
 interface CountryCodeData {
-    id: number;
-    name: string;
-    phone_code: string;
-    phone_limit: number;
-    flag: string;
+  id: number;
+  name: string;
+  phone_code: string;
+  phone_limit: number;
+  flag: string;
 }
 
 
 
 interface Page {
-    title: string;
-    content: string;
+  title: string;
+  content: string;
 }
 interface Service {
-    icon: string;
-    color: string;
-    title: string;
-    desc: string;
-    service_slug: string;
-    id: number
+  icon: string;
+  color: string;
+  title: string;
+  desc: string;
+  service_slug: string;
+  id: number
 }
 
 interface MenuSubcategory {
@@ -328,7 +328,22 @@ interface MenuSubcategory {
   name: string;
   image: string;
 }
-
+interface Transaction {
+  amount: number;
+  created_at: string; 
+  id: number;
+  image: string;
+  status: "come_in" | "come_out"; 
+  title: string; 
+  points: numbe;
+}
+interface Wallet {
+  id: number;
+  currency?: string;
+  bending_balance?: number;
+  points?: number;
+  transactions: Transaction[];
+}
 interface MenuCategory {
   id: number;
   name: string;
@@ -338,30 +353,30 @@ interface MenuCategory {
 }
 
 interface Section {
-    type: string
+  type: string
+  id: number;
+  title: string;
+  desc: string;
+  background: string;
+  image: string;
+  features: {
     id: number;
     title: string;
     desc: string;
-    background: string;
-    image: string;
-    features: {
-        id: number;
-        title: string;
-        desc: string;
-        icon: string
-    }[];
+    icon: string
+  }[];
 }
 
 interface ServiceType {
-    title: string;
-    desc: string;
-    image: string;
-    video: string;
-    background: string;
-    icon: string;
-    sub_title: string;
-    sub_desc: string;
-    name: string;
-    type: string;
-    sections: Section[]
+  title: string;
+  desc: string;
+  image: string;
+  video: string;
+  background: string;
+  icon: string;
+  sub_title: string;
+  sub_desc: string;
+  name: string;
+  type: string;
+  sections: Section[]
 }

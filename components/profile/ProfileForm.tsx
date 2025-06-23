@@ -57,8 +57,15 @@ function ProfileForm({
   }, [updated]);
   return (
     <div className="my-8 grid grid-cols-1 items-center gap-4 md:grid-cols-2">
-      <ProfileImage avatar={defaultValues.avatar} form={form} />
-      <div className="w-126 max-w-[95%] mx-auto">
+      <div data-aos="fade-right" data-aos-duration="700" data-aos-delay="200">
+        <ProfileImage avatar={defaultValues.avatar} form={form} />
+      </div>
+      <div
+        data-aos="fade-left"
+        data-aos-duration="700"
+        data-aos-delay="400"
+        className="mx-auto w-126 max-w-[95%]"
+      >
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}

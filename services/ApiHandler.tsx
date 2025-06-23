@@ -19,7 +19,7 @@ export const getServiceBySlug = async (slug: string) => {
 export const getHomeData = async () => {
   try {
     const { data } = await axiosInstance.get("/home");
-    console.log(data)
+    console.log(data);
     return data.data as HomePageData;
   } catch (error) {
     if (error instanceof Error) {
@@ -115,7 +115,7 @@ export const getMenuFilter = async (): Promise<{
   }
 };
 export const getMenuProducts = async (params: {
-[key: string]: string|number;
+  [key: string]: string | number;
 }): Promise<{ data: Product[]; meta: unknown }> => {
   try {
     const { data } = await axiosInstance.get("product", { params });
@@ -146,52 +146,74 @@ export const getOffers = async (params?: { lat: number; lng: number }) => {
     throw "error loading data";
   }
 };
-export const getProfuctDeiltals = async(slug:string)=>{
+export const getProfuctDeiltals = async (slug: string) => {
   try {
-    const { data } = await axiosInstance.get(`product/${slug}`)
-    return data.data as ProductData || {}
-
+    const { data } = await axiosInstance.get(`product/${slug}`);
+    return (data.data as ProductData) || {};
   } catch (error) {
     console.error(error);
-    throw error
+    throw error;
   }
-}
-export const getProductReviews = async (id:number)=>{
+};
+export const getProductReviews = async (id: number) => {
   try {
-    const { data } = await axiosInstance.get(`products/${id}/reviews`)
-    return data as ProductReviewsResponse
-  
+    const { data } = await axiosInstance.get(`products/${id}/reviews`);
+    return data as ProductReviewsResponse;
   } catch (error) {
     console.log(error);
-    throw error 
+    throw error;
   }
-
-}
-export const getCartServer = async ():Promise<CartApiResponse> => {
+};
+export const getCartServer = async (): Promise<CartApiResponse> => {
   const { data } = await axiosInstance.get("carts");
   return data;
 };
-export const getOrdersReservations= async({status, page}:{status:string, page:number}):Promise<OrdersResponse>=>{
-  const { data } = await axiosInstance.get('orders-and-reservations',{params:{status, page}});
+export const getOrdersReservations = async ({
+  status,
+  page,
+}: {
+  status: string;
+  page: number;
+}): Promise<OrdersResponse> => {
+  const { data } = await axiosInstance.get("orders-and-reservations", {
+    params: { status, page },
+  });
   return data as OrdersResponse;
-}
-export const getOrder= async(id:string):Promise<{data:Order}>=>{
-  const { data } = await axiosInstance.get('orders/'+id);
-  return data as {data:Order};
-}
-export const getReservations= async(id:string)=>{
-  const { data } = await axiosInstance.get('reservations/'+id);
+};
+export const getOrder = async (id: string): Promise<{ data: Order }> => {
+  const { data } = await axiosInstance.get("orders/" + id);
+  return data as { data: Order };
+};
+export const getReservations = async (id: string) => {
+  const { data } = await axiosInstance.get("reservations/" + id);
   return data.data as Reservation;
-}
-export const getNotifications = async() => {
-  try{
+};
+export const getNotifications = async () => {
+  try {
     const { data } = await axiosInstance.get("notifications");
-    return data.data as Notification[] ||[]  
-
-  }catch(err){
-    console.log(err)
+    return (data.data as Notification[]) || [];
+  } catch (err) {
+    console.log(err);
   }
-  return []
+  return [];
+};
+export const getWallet = async () => {
+  try {
+    const { data } = await axiosInstance.get("wallet");
+    return data.data;
+  } catch (err: unknown) {
+    console.error(err);
+    return;
+  }
+};
+export const getLoyalCard = async () => {
+  try {
+    const { data } = await axiosInstance.get("loyal_card");
+    return data.data;
+  } catch (err: unknown) {
+    console.error(err);
+    return;
+  }
 };
 /* export const getSettingsData = async () => {
   return await axiosInstance.get("web_settings");
@@ -210,7 +232,7 @@ export const getNotifications = async() => {
 //   return await axiosInstance.get("/relations");
 // };
 
-// 
+//
 
 // export const getTermsData = async () => {
 //   return await axiosInstance.get(`/term`);

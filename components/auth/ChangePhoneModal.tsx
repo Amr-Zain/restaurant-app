@@ -12,6 +12,8 @@ import {
 import { useTranslations } from "next-intl";
 import PhoneForm from "./PhoneForm";
 import VerifyModal from "./VerifyModal";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { X } from "lucide-react";
 
 export default function ChangePhoneModal({
   isProfile = false,
@@ -30,21 +32,23 @@ export default function ChangePhoneModal({
             {t("links.editPhoneNumber")}
           </div>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] [&>button:last-child]:hidden">
+          <DialogClose className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute end-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:pointer-events-none">
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </DialogClose>
           <DialogHeader>
-            <DialogTitle>Change Number</DialogTitle>
-            <DialogDescription>
-              Please enter your phone number so we can verify it.
-            </DialogDescription>
+            <DialogTitle>{t("TEXT.changePhone")}</DialogTitle>
+            <DialogDescription>{t("TEXT.changePhoneDesc")}</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <PhoneForm
               isModal
               onClose={() => {
                 setIsOpen(false);
-                setTimeout(()=>{
-                  setIsVerifyOpen(true)
-                },100)
+                setTimeout(() => {
+                  setIsVerifyOpen(true);
+                }, 100);
               }}
               isProfile={isProfile}
             />

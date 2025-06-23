@@ -8,7 +8,6 @@ function Theme({ colors }: { colors: Record<string, string> }) {
       if (Object.hasOwnProperty.call(colors, key)) {
         const value = colors[key];
         let cssVarName: string;
-
         switch (key) {
           case "website_primary_color":
             cssVarName = "--color-primary";

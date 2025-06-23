@@ -44,6 +44,9 @@
   "TEXT": {
     "order":"Order",
     "reservation":"Reservation",
+    "followInstgram":"follow us on instagram",
+    "changePhone":"Change Number",
+    "changePhoneDesc":" Please enter your phone number so we can verify it.",
     "notifications":"Notifications",
     "reviews": "{count, plural, =0 {no reviews} one {# review} other {# reviews}}",
     "items": "{count, plural, =0 {no Items} one {# Item} other {# Items}}",
@@ -151,6 +154,8 @@
     "exact": "Combo",
     "email": "Email",
     "phone": "Phone",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
     "phoneNumber": "Phone",
     "address": "Address",
     "rememberMe": "Remember me",
@@ -186,7 +191,9 @@
     "bookTable": "Book a Table",
     "cancel": "Cancel",
     "ok": "OK",
-    "reservations": "reservations"
+    "reservations": "reservations",
+    "title": "Title",
+    "description": "Description"
   },
   "checkout": {
     "orderType": "Order Type",
@@ -231,7 +238,7 @@
   "card": {
     "cridtCard": "Credit Card",
     "loyaltyCard": "Loyalty Card",
-    "points": "points",
+    "points": "{count, plural, =0 {no Points} one {# Point} other {# Points}}",
     "Transaction History": "Transaction History",
     "No transactions": "No transactions"
   },
@@ -264,7 +271,15 @@
     "messageTypeRequired": "Please select a message type.",
     "messageRequired": "Message content is required.",
     "logoutFailed": "Failed To logout, Please Try Again",
-    "messageTooLong": "Message cannot exceed {max} characters."
+    "messageTooLong": "Message cannot exceed {max} characters.",
+    "latitudeRange": "Latitude must be between -90 and 90",
+    "longitudeRange": "Longitude must be between -180 and 180",
+    "buildingNumberRequiredPositive": "Building number is required and must be a positive number",
+    "buildingNumberInteger": "Building number must be a whole number",
+    "floorNumberNonNegative": "Floor number cannot be negative",
+    "floorNumberInteger": "Floor number must be a whole number",
+    "apartmentNumberRequiredPositive": "Apartment number is required and must be a positive number",
+    "apartmentNumberInteger": "Apartment number must be a whole number"
   },
   "enter": "Enter",
   "requiredField": "{field} is required",

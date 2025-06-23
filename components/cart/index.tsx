@@ -2,8 +2,6 @@
 import { useCartStore } from "@/stores/cart";
 import CartItem from "./CartItem";
 import OrderSummary from "../orders/orderDetails/OrderSummary";
-import { Link } from "@/i18n/routing";
-import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
 
 function Cart() {
@@ -36,7 +34,7 @@ function Cart() {
   };
 
   return (
-    <div className="mb-4 flex h-[85vh] flex-col justify-between px-4">
+    <div className="mb-4 flex h-[88vh] flex-col justify-between px-4">
       {!items.length ? (
         <div className="flex h-full flex-col items-center justify-center">
           <h3 className="text-text font-medium">{t("cart.noproducts")}</h3>
@@ -44,7 +42,7 @@ function Cart() {
         </div>
       ) : (
         <>
-          <div className="max-h-[50vh] overflow-y-auto px-2">
+          <div className="max-h-[55vh] overflow-y-auto px-2">
             {items.map((item, i) => (
               <CartItem
                 id={item.product.id}
@@ -61,11 +59,6 @@ function Cart() {
           </div>
           <div>
             <OrderSummary {...orderSummary} />
-            <Link href={"/checkout"}>
-              <Button variant={"default"} className="my-2 !h-12 !w-full">
-                {t("cart.checkoutButton")}
-              </Button>
-            </Link>
           </div>
         </>
       )}

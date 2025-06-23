@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 import {
   Sheet,
@@ -22,8 +22,7 @@ import { cn } from "@/lib/utils";
 import CardModal from "./CardModal";
 import Notifiable from "./Notifiable";
 
-const Profile = () => {
-  // Corrected typo here
+const Profile = ({ wallet, loyalCard }:{wallet:Promise<Wallet>; loyalCard:Promise<Wallet>}) => {
   const [profileSheetOpen, setProfileSheetOpen] = useState(false);
   const [favoritesOpen, setFavoritesOpen] = useState(false);
   const [addressOpen, setAddressOpen] = useState(false);
@@ -105,8 +104,12 @@ const Profile = () => {
               </div>
               {t("profile.favorite")}
             </div>
-            <CardModal type="cridtCard" />
-            <CardModal type="loyaltyCard"  />
+           <Suspense fallback={"loading..."}>
+              <CardModal type="cridtCard" data={wallet} />
+            </Suspense>
+            <Suspense fallback={"loading..."}>
+              <CardModal type="loyaltyCard" data={loyalCard}/>
+            </Suspense>
             <Notifiable />
             <DeleteAccount />
             <div

@@ -5,18 +5,17 @@ import { useAuthStore } from "@/stores/auth";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import { SkeletonStore } from "../skelton/SkeltonStore";
-import { useEffect, useState } from "react"; 
+import { useEffect, useState } from "react";
 
 const Stores = dynamic(() => import("./stores"), {
   ssr: false,
 });
 
 const Profile = dynamic(() => import("./Profile"), {
-
   ssr: false,
 });
 
-function AuthdUser() {
+function AuthdUser({ wallet, loyalCard }:{wallet:Promise<Wallet>; loyalCard:Promise<Wallet>}) {
   const user = useAuthStore((state) => state.user);
   const T = useTranslations("NAV");
 
@@ -27,7 +26,6 @@ function AuthdUser() {
   }, []);
 
   if (!mounted) {
-  
     return (
       <>
         <div className="size-8 shrink-0 animate-pulse rounded-full bg-gray-300"></div>
@@ -36,12 +34,11 @@ function AuthdUser() {
     );
   }
 
-
   return (
     <>
       {user?.id ? (
         <>
-          <Profile />
+          <Profile {...{ wallet, loyalCard }} />
           <Stores />
         </>
       ) : (

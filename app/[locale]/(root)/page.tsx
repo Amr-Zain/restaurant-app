@@ -41,7 +41,11 @@ export default async function HomePage() {
           ))}
         />
       )}
-      <div className="mx-auto w-full sm:w-[90%]">
+      <div
+        data-aos="fade-right"
+        data-aos-delay="100"
+        className="mx-auto w-full sm:w-[90%]"
+      >
         <ReservationForm />
       </div>
       {homeData?.web_content_link && (

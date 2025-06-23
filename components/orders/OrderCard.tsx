@@ -28,22 +28,37 @@ async function OrderCard({
 
   return (
     <Card className="order-card">
-      <div className="flex justify-between">
+      <div 
+        className="flex justify-between"
+        data-aos="fade-right"
+        data-aos-duration="500"
+      >
         <p className="text-sub flex gap-1 whitespace-nowrap">
           <span className="hidden sm:block">{t(`TEXT.${type}`)}</span> #
           {order_num || id}
         </p>
         <div className="flex gap-1">
           {types.map((type, index) => (
-            <div key={index} className="order-status">
+            <div 
+              key={index} 
+              className="order-status"
+              data-aos="fade-left"
+              data-aos-duration="400"
+              data-aos-delay={index * 100}
+            >
               {type}
             </div>
           ))}
         </div>
       </div>
-      <div>
+      <div data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
         <div className="flex flex-col-reverse items-start gap-2 sm:flex-row sm:items-center">
-          <div className="flex flex-row items-center justify-center gap-2 sm:flex-col">
+          <div 
+            className="flex flex-row items-center justify-center gap-2 sm:flex-col"
+            data-aos="zoom-in"
+            data-aos-duration="500"
+            data-aos-delay="300"
+          >
             <OverlappingImages
               images={images}
               size={50}
@@ -56,23 +71,29 @@ async function OrderCard({
             </div>
           </div>
           <div className="flex w-full grow-1 justify-between gap-2">
-            <div>
+            <div data-aos="fade-left" data-aos-duration="500" data-aos-delay="400">
               <p className="text-text font-semibold whitespace-nowrap">
                 {t(`TEXT.${type}`)} #{order_num || name}
               </p>
               <div className="text-sub line-clamp-3">{desc}</div>
             </div>
-            <Link
-              href={
-                type === "reservation" ? `/reservations/${id}` : `/orders/${id}`
-              }
+            <div 
+              data-aos="zoom-in" 
+              data-aos-duration="400" 
+              data-aos-delay="500"
             >
-              <Button
-                className={`!size-10 cursor-pointer self-end ${t("lang") === "rtl" ? "rotate-180" : ""}`}
+              <Link
+                href={
+                  type === "reservation" ? `/reservations/${id}` : `/orders/${id}`
+                }
               >
-                <RightArrow />
-              </Button>
-            </Link>
+                <Button
+                  className={`!size-10 cursor-pointer self-end ${t("lang") === "rtl" ? "rotate-180" : ""}`}
+                >
+                  <RightArrow />
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

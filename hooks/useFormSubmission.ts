@@ -1,9 +1,9 @@
 'use client';
 
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { FieldPath, FieldValues } from "react-hook-form";
+import { useRouter } from "@/i18n/routing";
 
 interface UseFormSubmissionOptions<TFormValues extends FieldValues> {
     submitFunction: (values: TFormValues) => Promise<SubmissionResult>;

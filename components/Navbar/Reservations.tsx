@@ -15,7 +15,7 @@ export default function Reservation() {
         <div className="cursor-pointer">{t("Reservation")}</div>
       </DialogTrigger>
 
-      <DialogContent className="max-h-[95vh] sm:max-w-2xl rounded-3xl p-0 overflow-y-auto scrollbar-hide">
+      <DialogContent className="max-h-[95vh] sm:max-w-2xl rounded-3xl p-0 overflow-y-auto scrollbar-hide [&>button:last-child]:hidden">
         <ReservationForm className="pb-4" onClick={() => setIsOpen(false)} />
       </DialogContent>
     </Dialog>

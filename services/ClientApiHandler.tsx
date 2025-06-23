@@ -303,3 +303,21 @@ export const Reorder = async (id: number) => {
   const { data } = await axiosInstance.post(`orders/${id}/re_order`);
   return data
 };
+export const getWallet = async () => {
+  try {
+    const { data } = await axiosInstance.get("wallet");
+    return data.data;
+  } catch (err: unknown) {
+    console.error(err);
+    return {};
+  }
+};
+export const getLoyalCard = async () => {
+  try {
+    const { data } = await axiosInstance.get("loyal_card");
+    return data.data;
+  } catch (err: unknown) {
+    console.error(err);
+    return;
+  }
+};

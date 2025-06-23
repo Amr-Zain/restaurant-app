@@ -19,7 +19,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const data = await getSettingsData();
-  console.log(data);
 
   return (
     <>

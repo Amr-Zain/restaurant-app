@@ -3,12 +3,11 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
@@ -17,19 +16,9 @@ import GoogleMapComponent from "./GoogleMap";
 import { useFormSubmission } from "@/hooks/useFormSubmission";
 import { postAddress, updateAddress } from "@/services/ClientApiHandler";
 import { useAddressStore } from "@/stores/address";
+import { addressSchema, AddressSchemaType } from "@/helper/schema";
+import { useTranslations } from "next-intl";
 
-const addressSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  lat: z.string().min(1, "Location is required"),
-  lng: z.string().min(1, "Location is required"),
-  desc: z.string().min(1, "Description is required"),
-  is_default: z.boolean().optional(),
-  building: z.string().min(1, "Building number is required"),
-  floor: z.string().min(1, "Floor number is required"),
-  apartment: z.string().min(1, "Apartment number is required"),
-});
-
-export type AddressFormData = z.infer<typeof addressSchema>;
 
 interface AddAddressFormProps {
   isOpen: boolean;
@@ -48,17 +37,18 @@ export default function AddAddressForm({
     updateAddress: setUpdated,
   } = useAddressStore((state) => state);
   const defaultValues = data.find((item) => item.id === updateId);
-  const form = useForm<AddressFormData>({
-    resolver: zodResolver(addressSchema),
-    defaultValues: {
-      apartment: defaultValues?.apartment,
-      building: defaultValues?.building,
-      desc: defaultValues?.desc,
-      floor: defaultValues?.floor,
-      is_default: defaultValues?.is_default,
-      lat: defaultValues?.lat,
-      lng: defaultValues?.lng,
-    },
+  const t = useTranslations();
+  const form = useForm<AddressSchemaType>({
+    resolver: zodResolver(addressSchema({t})),
+    defaultValues: defaultValues? {
+      apartment: defaultValues.apartment,
+      building: defaultValues.building,
+      desc: defaultValues.desc,
+      floor: defaultValues.floor,
+      is_default: defaultValues.is_default,
+      lat: defaultValues.lat,
+      lng: defaultValues.lng,
+    }:undefined,
   });
   const isSubmitting = form.formState.isLoading;
 
@@ -145,7 +135,7 @@ export default function AddAddressForm({
               </fieldset>
               <Button
                 type="submit"
-                className="w-full rounded-lg bg-blue-600 py-3 font-medium text-white hover:bg-blue-700"
+                className="w-full rounded-lg bg-primary py-3 font-medium text-white cursor-pointer"
                 disabled={
                   !form.watch("lat") || !form.watch("lng") || isSubmitting
                 }

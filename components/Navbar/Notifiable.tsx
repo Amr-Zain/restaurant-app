@@ -39,7 +39,7 @@ function Notifiable() {
         </div>
       </DialogTrigger>
 
-      <DialogContent className="bg-backgroud max-w-[95%] rounded-2xl border-0 px-4 shadow-xl">
+      <DialogContent className="bg-backgroud max-w-[95%] rounded-2xl border-0 px-4 shadow-xl [&>button:last-child]:hidden">
         <DialogHeader className="pb-4">
           <DialogTitle className="text-text text-center text-xl font-semibold">
             {t("TEXT.changeNotifications")}

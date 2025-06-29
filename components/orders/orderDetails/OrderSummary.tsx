@@ -1,17 +1,6 @@
 
-interface Props {
-  title: string;
-  currency: string;
-  items: {
-    label: string | React.ReactNode;
-    value: number;
-  }[];
-  totalAmount: {
-    label: string;
-    value: number;
-  };
-}
-function OrderSummary({ title, items, totalAmount, currency }: Props) {
+
+function OrderSummary({ title, items, totalAmount, currency }: OrderSummary) {
   
   return (
     <div>

@@ -1,9 +1,14 @@
 import NotFound from "@/components/NotFound";
-import { getCmsPage, getCmsPages } from "@/services/ApiHandler";
+import {
+  getCmsPage,
+  getCmsPages,
+  getSettingsData,
+} from "@/services/ApiHandler";
 import GeneralSection from "@/components/general/GeneralSection";
 import HeroSection from "@/components/general/HeroSection";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
 interface CmsPageForPaths {
   slug: string;
@@ -21,7 +26,26 @@ export async function generateStaticParams(): Promise<CmsPageForPaths[]> {
     return [];
   }
 }
-
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ cms: string }>;
+}): Promise<Metadata> {
+  const { cms } = await params;
+  try {
+    const page = (await getCmsPage("cms-pages/" + cms)).data;
+    const title = (await getSettingsData()).website_setting.website_title;
+    return {
+      title: `${page.title} - ${title}`,
+      description: page.desc,
+      openGraph: {
+        images: page.image,
+      },
+    };
+  } catch {
+    return {};
+  }
+}
 export default async function CMSPage({
   params,
 }: {
@@ -40,7 +64,7 @@ export default async function CMSPage({
     console.error("Error fetching CMS page:", error);
     if (error?.status && error.status === 404) {
       console.log(`CMS page not found (404) for slug: ${cms}`);
-      notFound()
+      notFound();
     } else {
       console.error(`An unexpected error occurred for slug: ${cms}`, error);
     }
@@ -58,7 +82,7 @@ export default async function CMSPage({
         home={t("NAV.home")}
         section={pageData.title}
         href={pageData.slug}
-        dir={t('lang')}
+        dir={t("lang")}
       />
       <div className="container mx-auto p-4 sm:p-6 lg:p-8">
         <GeneralSection
@@ -70,21 +94,19 @@ export default async function CMSPage({
           }}
         />
 
-        {
-          pageData.addition_data &&
-            pageData.addition_data.map((item, i) => (
-              <GeneralSection
-                key={`${cms} ${item.id}`}
-                className={i % 2 === 0 ? "order-last my-8" : "my-8"}
-                item={{
-                  title: item.heading,
-                  heading: pageData.heading,
-                  image: item.image,
-                  desc: item.desc,
-                }}
-              />
-            ))
-        }
+        {pageData.addition_data &&
+          pageData.addition_data.map((item, i) => (
+            <GeneralSection
+              key={`${cms} ${item.id}`}
+              className={i % 2 === 0 ? "order-last my-8" : "my-8"}
+              item={{
+                title: item.heading,
+                heading: pageData.heading,
+                image: item.image,
+                desc: item.desc,
+              }}
+            />
+          ))}
       </div>
     </>
   );

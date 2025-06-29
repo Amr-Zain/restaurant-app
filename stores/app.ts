@@ -27,14 +27,16 @@ export type SettingsType = {
     youtube?: string
 }
 
-type Verify = { type: 'register' | 'reset' | null; code: string | null; phone: string | null, resetCode: string | null, updated: boolean }
 
 interface AppStore {
     settings: SettingsType;
-    verify: Verify
     setSettings: (settings: SettingsType) => void;
-    setVerify: (values: Verify) => void;
-    clearVerify: () => void;
+    points: {
+        isPointsCovers: boolean;
+        usePoints: boolean;
+        points: number;
+    };
+    setPointsStatues: (value: Record<string, boolean | number>) => void;
 }
 
 const inititals = {
@@ -60,12 +62,15 @@ const inititals = {
         x: '',
         youtube: '',
     },
-    verify: { type: null, code: null, phone: null, resetCode: null, updated: false }
+    points: {
+        isPointsCovers: false,
+        usePoints: false,
+        points: 0,
+    }
 }
 
-export const appStore = create<AppStore>((set) => ({
+export const appStore = create<AppStore>((set, get) => ({
     ...inititals,
     setSettings: (settings) => set(() => ({ settings })),
-    setVerify: (verify: Verify) => set(() => ({ verify })),
-    clearVerify: () => set(() => ({ verify: { type: null, code: null, phone: null, resetCode: null, updated: false } }))
+    setPointsStatues: (value: Record<string, boolean | number>) => set({ points: { ...get().points, ...value } })
 }));

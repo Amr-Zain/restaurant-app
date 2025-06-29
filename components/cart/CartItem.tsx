@@ -20,6 +20,7 @@ function CartItem({
   sub_modifiers,
   price,
   quantity,
+  isCheckout
 }: {
   id: number;
   title: string;
@@ -29,6 +30,7 @@ function CartItem({
   price: number;
   cart_product_id: number;
   quantity: number;
+  isCheckout?: boolean;
 }) {
   const updateItem = useCartStore((state) => state.updateItemQuantity);
   const deleteItem = useCartStore((state) => state.removeItem);
@@ -71,7 +73,7 @@ function CartItem({
                   .join(", ")}
               </CardDescription>
             </div>
-            <Button
+           {!isCheckout&& <Button
               variant={"ghost"}
               disabled={isLoadingRemove || isLoadingUpdate}
               onClick={() => {
@@ -86,13 +88,13 @@ function CartItem({
               ) : (
                 <Trash className="size-5" />
               )}
-            </Button>
+            </Button>}
           </div>
           <div className="flex justify-between gap-6">
             <div className="text-text text-sm font-semibold">
               {price} {currency}
             </div>
-            <div className="border-primary/20 flex w-fit items-center rounded-full border">
+            {!isCheckout&&<div className="border-primary/20 flex w-fit items-center rounded-full border">
               <Button
                 variant="outline"
                 size="icon"
@@ -127,7 +129,7 @@ function CartItem({
               >
                 <Plus size={20} />
               </Button>
-            </div>
+            </div>}
           </div>
         </div>
       </div>

@@ -45,7 +45,7 @@ const OrderInfo = async ({
       Label: t("callCenter"),
       labelIcon: <Phone className="text-sub size-6" />,
       value: (
-        <div className="rounded-xl bg-white p-4">
+        <div className="rounded-xl bg-white">
           {callCenterMessage && (
             <p className="mb-2 text-sm text-red-500">{callCenterMessage}</p>
           )}

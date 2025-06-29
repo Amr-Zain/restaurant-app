@@ -20,7 +20,12 @@ interface AuthStore {
         lng: number;
     }) => void;
     clearUser: () => void
+    verify: Verify
+    setVerify: (values: Verify) => void;
+    clearVerify: () => void;
 }
+type Verify = { type: 'register' | 'reset' | null; code: string | null; phone: string | null, resetCode: string | null, updated: boolean }
+
 const userCookie = Cookies.get("user") || '';
 const locationCookie = Cookies.get("location");
 const location = locationCookie ? JSON.parse(locationCookie) : {
@@ -31,7 +36,9 @@ const inititals = {
     user: userCookie ? JSON.parse(userCookie) : null,
     token: Cookies.get("token") || null,
     isLoading: false,
-    location
+    location,
+    verify: { type: null, code: null, phone: null, resetCode: null, updated: false }
+
 }
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
@@ -66,5 +73,8 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         Cookies.remove('user');
         Cookies.remove('guest_token');
         return ({ user: null, token: null })
-    })
+    }),
+    setVerify: (verify: Verify) => set(() => ({ verify })),
+    clearVerify: () => set(() => ({ verify: { type: null, code: null, phone: null, resetCode: null, updated: false } }))
+
 }));

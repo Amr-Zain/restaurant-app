@@ -44,7 +44,6 @@ const Notifications = ({
         </div>
       </SheetTrigger>
       <SheetContent side="left" className="rounded-r-2xl border-r-1 min-w-82">
-        {" "}
         <SheetHeader>
           <SheetTitle>{t('TEXT.notifications')}</SheetTitle>
         </SheetHeader>

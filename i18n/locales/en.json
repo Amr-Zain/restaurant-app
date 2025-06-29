@@ -42,12 +42,12 @@
     "toTimeRequired": "Please select end time."
   },
   "TEXT": {
-    "order":"Order",
-    "reservation":"Reservation",
-    "followInstgram":"follow us on instagram",
-    "changePhone":"Change Number",
-    "changePhoneDesc":" Please enter your phone number so we can verify it.",
-    "notifications":"Notifications",
+    "order": "Order",
+    "reservation": "Reservation",
+    "followInstgram": "follow us on instagram",
+    "changePhone": "Change Number",
+    "changePhoneDesc": " Please enter your phone number so we can verify it.",
+    "notifications": "Notifications",
     "reviews": "{count, plural, =0 {no reviews} one {# review} other {# reviews}}",
     "items": "{count, plural, =0 {no Items} one {# Item} other {# Items}}",
     "guests": "{count, plural, =0 {no Guests} one {# Guest} other {# Guests}}",
@@ -61,7 +61,7 @@
     "viewMenu": "View Our Menus",
     "offers": "Offers",
     "off": "Off",
-    "noResults":"No Results",
+    "noResults": "No Results",
     "popularItems": "Popular Items",
     "cancelOrderDes": "Are You Sure, You want Cancel this Order",
     "deleteAccount": "Delete Account",
@@ -73,25 +73,34 @@
     "viewAll": " View All",
     "changeNotificationsDesc": "Are you sure you want to change the Notification State"
   },
-  "share":{
-  "shareThisItem": "Share This Item",
-  "copyLink": "Copy Link",
-  "whatsApp": "WhatsApp",
-  "facebook": "Facebook",
-  "twitter": "Twitter",
-  "email": "Email",
-  "checkThisOut": "Check this out!"
-},
-  "searchFilters":{
-  "selectedFilters": "Selected filters",
-  "clearAll": "Clear all",
-  "search": "Search",
-  "searchPlaceholder": "Search...",
-  "noFiltersSelected": "No filters selected.",
-  "selectMainCategories": "Select Main Categories",
-  "selectSubcategories": "Select Subcategories",
-  "applyFilter": "Apply Filter"
-},
+
+  "reviewItem": {
+    "rate": "Rate",
+    "addReview": "Add review",
+    "doYouIntendToVisitAgain": "Do you intend to visit the restaurant again in the future?",
+    "typeYourReview": "Type your review",
+    "confirm": "Confirm",
+    "errorSubmittingReview": "Error submitting review"
+  },
+  "share": {
+    "shareThisItem": "Share This Item",
+    "copyLink": "Copy Link",
+    "whatsApp": "WhatsApp",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "email": "Email",
+    "checkThisOut": "Check this out!"
+  },
+  "searchFilters": {
+    "selectedFilters": "Selected filters",
+    "clearAll": "Clear all",
+    "search": "Search",
+    "searchPlaceholder": "Search...",
+    "noFiltersSelected": "No filters selected.",
+    "selectMainCategories": "Select Main Categories",
+    "selectSubcategories": "Select Subcategories",
+    "applyFilter": "Apply Filter"
+  },
   "Footer": {
     "sectionsHeading": "Sections",
     "linksHeading": "Links",

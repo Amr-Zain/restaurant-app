@@ -7,7 +7,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
-import SocialLinks from "../general/SocialLinks";
+// import SocialLinks from "../general/SocialLinks";
 import type { Swiper as SwiperType } from "swiper/types";
 import { useTranslations } from "next-intl";
 
@@ -38,9 +38,7 @@ const HomeSlider = ({
         {slides.map((slide, index) => (
           <SwiperSlide key={`slider ${slide.id}`}>
             <div className={`relative h-full w-full`}>
-              <div
-                className="h-full w-full"
-              >
+              <div className="h-full w-full">
                 <Image
                   src={slide.image}
                   alt={`slider image ${index}`}
@@ -50,13 +48,13 @@ const HomeSlider = ({
                 />
               </div>
             </div>
-            
+
             <div className="absolute top-[50%] left-[50%] z-20 flex w-full translate-x-[-50%] translate-y-[-50%] flex-col gap-3 px-4 text-center text-white">
               <h1
                 dangerouslySetInnerHTML={{
                   __html: slide.title,
                 }}
-                className="font-Allura  text-4xl md:text-6xl"
+                className="font-Allura text-4xl md:text-6xl"
               />
               <p
                 dangerouslySetInnerHTML={{
@@ -74,7 +72,7 @@ const HomeSlider = ({
               >
                 <Link
                   href="/menu"
-                  className="flex justify-center gap-2 underline hover:opacity-80 transition-opacity"
+                  className="flex justify-center gap-2 underline transition-opacity hover:opacity-80"
                 >
                   {t("buttons.discoverMore")}{" "}
                   <svg
@@ -83,7 +81,7 @@ const HomeSlider = ({
                     viewBox="0 0 16 15"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className={t('lang')==='rtl'?"-rotate-90":''}
+                    className={"rtl:-rotate-90"}
                   >
                     <path
                       d="M5.86574 1.6942L14.4173 2.44237L13.6692 10.994M1.39459 13.3698L14.2871 2.55164"
@@ -97,25 +95,23 @@ const HomeSlider = ({
                 </Link>
               </div>
             </div>
-            
-            <div 
-              className="absolute inset-0 z-10 bg-black/60"
-            ></div>
+
+            <div className="absolute inset-0 z-10 bg-black/60"></div>
           </SwiperSlide>
         ))}
       </Swiper>
 
       <div className="absolute right-0 bottom-0 left-0 z-20 flex items-center justify-between p-4">
-        <div 
+        {/*  <div 
           className="flex text-white"
           data-aos="fade-right"
           data-aos-delay="800"
           data-aos-duration="800"
         >
           <SocialLinks className="flex gap-2" />
-        </div>
-
-        <div 
+        </div> */}
+        <div></div>
+        <div
           className="flex gap-2"
           data-aos="fade-left"
           data-aos-delay="800"
@@ -123,14 +119,14 @@ const HomeSlider = ({
         >
           <button
             onClick={() => swiperRef.current?.slidePrev()}
-            className={`flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white transition-colors hover:bg-white/30 cursor-pointer ${t('lang')==='rtl'?' rotate-180':''}`}
+            className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white/20 text-white transition-colors hover:bg-white/30 ${t("lang") === "rtl" ? "rotate-180" : ""}`}
             aria-label="Previous slide"
-            >
+          >
             <ChevronLeft className="h-6 w-6" />
           </button>
           <button
             onClick={() => swiperRef.current?.slideNext()}
-            className={`flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white transition-colors hover:bg-white/30 cursor-pointer ${t('lang')==='rtl'?' rotate-180':''}`}
+            className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white/20 text-white transition-colors hover:bg-white/30 ${t("lang") === "rtl" ? "rotate-180" : ""}`}
           >
             <ChevronRight className="h-6 w-6" />
           </button>

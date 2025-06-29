@@ -34,7 +34,7 @@ export interface CartState {
     clearCart: boolean;
   };
   error: string | null;
-  fetchCartItems: () => Promise<void>;
+  fetchCartItems: (params?:Record<string,string>) => Promise<void>;
   addItem: (item: CartItem) => Promise<void>;
   removeItem: (itemId: number) => Promise<void>;
   clearCart: () => Promise<void>;
@@ -56,10 +56,10 @@ export const useCartStore = create<CartState>((set, get) => ({
   },
   error: null,
 
-  fetchCartItems: async () => {
+  fetchCartItems: async (params) => {
     set((state) => ({ isLoading: { ...state.isLoading, fetchCartItems: true }, error: null }));
     try {
-      const data = await getCart();
+      const data = await getCart({params});
       set({
         items: data.data?.products||[],
         price: data?.price||null,

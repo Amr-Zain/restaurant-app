@@ -6,15 +6,15 @@ import PasswordField from "../util/formFields/PasswordField";
 import { useFormSubmission } from "@/hooks/useFormSubmission";
 import { resetPassword } from "@/services/ClientApiHandler";
 import { ForgatPasswordFormType, ForgatPasswordSchema } from "@/helper/schema";
-import { appStore } from "@/stores/app";
 import { Form } from "../ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuthStore } from "@/stores/auth";
 
 const ChangePasswordForm = () => {
   const t = useTranslations();
-  const { phone, code, resetCode } = appStore((state) => state.verify);
-  const clearVerify = appStore((state) => state.clearVerify);
+  const { phone, code, resetCode } = useAuthStore((state) => state.verify);
+  const clearVerify = useAuthStore((state) => state.clearVerify);
   const formSchema = ForgatPasswordSchema({ t });
   const form = useForm<ForgatPasswordFormType>({
     resolver: zodResolver(formSchema),

@@ -57,13 +57,14 @@ export default async function OrdersPage({
       value: res.data.price_detail.total_price || 0,
     },
   };
-
+  console.log(res)
   return (
     <div 
       className="container my-10 grid grid-cols-1 gap-6 md:grid-cols-[1fr_360px]"
       data-aos="fade-up"
       data-aos-duration="800"
     >
+    
       <div
         data-aos="fade-right"
         data-aos-duration="700"
@@ -95,5 +96,6 @@ export default async function OrdersPage({
         />
       </div>
     </div>
+
   );
 }

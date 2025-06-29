@@ -43,7 +43,7 @@ function SliderSection({ title, to, items }: { title: string, to: string, items:
           data-aos-delay="200"
         >
          {t("TEXT.viewAll")+" "}
-          <span className={t('lang') ==="rtl"?"rotate-180":''}>
+          <span className={"rtl:rotate-180"}>
             <ArrowRight />
           </span>
         </Link>

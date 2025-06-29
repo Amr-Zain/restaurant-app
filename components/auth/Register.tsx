@@ -15,7 +15,7 @@ import { register } from "@/services/ClientApiHandler";
 import { createRegisterFormSchema, RegisterFormType } from "@/helper/schema";
 import { useFormSubmission } from "@/hooks/useFormSubmission";
 import usePhoneCode from "@/hooks/usePhoneCode";
-import { appStore } from "@/stores/app";
+import { useAuthStore } from "@/stores/auth";
 
 const RegisterForm = () => {
   const t = useTranslations();
@@ -29,7 +29,7 @@ const RegisterForm = () => {
     },
   });
   const { countries } = usePhoneCode({ form, setCurrentPhoneLimit });
-  const setVerify = appStore((state) => state.setVerify);
+  const setVerify = useAuthStore((state) => state.setVerify);
   const isPending = form.formState.isLoading;
   const { handleSubmit: registerUser } = useFormSubmission<RegisterFormType>(
     form,
@@ -46,6 +46,7 @@ const RegisterForm = () => {
         code: data.phone_code,
         phone: data.phone,
         resetCode: null,
+        updated: false
       });
     }
   };

@@ -219,9 +219,14 @@ export const updateAddress = async (form: AddressSchemaType, id: number) => {
   const { data } = await axiosInstance.patch(`address/${id}`, form);
   return data;
 };
-export const getCart = async (): Promise<CartApiResponse> => {
+export const getCart = async ({
+  params,
+}: {
+  params?: Record<string, string>;
+}): Promise<CartApiResponse> => {
   const { data } = await axiosInstance.get("carts", {
     params: {
+      ...params,
       lat: useAuthStore.getState().location.lat,
       lng: useAuthStore.getState().location.lng,
     },
@@ -237,6 +242,16 @@ export const addToCart = async (
       lng: useAuthStore.getState().location.lng,
     },
   });
+  return data;
+};
+export const postProductReview = async (
+  orderId: string,
+  payload: { order_item_id: number; rate: number; review: string },
+): Promise<CartApiResponse> => {
+  const { data } = await axiosInstance.post(
+    `orders/${orderId}/review-item`,
+    payload,
+  );
   return data;
 };
 export const updateCart = async (body: {
@@ -294,13 +309,14 @@ export const cancelOrder = async (id: string) => {
   });
   return data;
 };
+export const createOrder = async () => {};
 export const postOrder = async (form: unknown) => {
   const { data } = await axiosInstance.post("orders", form);
   return data;
 };
 export const Reorder = async (id: number) => {
   const { data } = await axiosInstance.post(`orders/${id}/re_order`);
-  return data
+  return data;
 };
 export const getWallet = async () => {
   try {

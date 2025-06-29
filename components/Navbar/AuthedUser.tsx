@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { useAuthStore } from "@/stores/auth";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
-import { SkeletonStore } from "../skelton/SkeltonStore";
+import { SkeletonStore } from "../skelton/SkeltonCards";
 import { useEffect, useState } from "react";
 
 const Stores = dynamic(() => import("./stores"), {

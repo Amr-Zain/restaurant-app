@@ -11,6 +11,7 @@ export default async function AboutPage() {
   const locations = branches.map((branch) => ({
     id: branch.id,
     name: branch.name,
+    address:branch.name,
     position: { lat: branch.lat, lng: branch.lng! },
   }));
   return (

@@ -38,7 +38,7 @@ function CardModal({ type, data }: CardModalProps) {
             <div className="nav-icon">{cardIcon}</div>
             {cardTitle}
           </div>
-          <div className="text-success rounded-full bg-[#e9f4ec] px-4 py-2 text-sm font-semibold">
+          <div className="text-success rounded-full bg-success/10 px-4 py-2 text-sm font-semibold">
             {cardValue}
           </div>
         </div>

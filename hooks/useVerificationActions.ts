@@ -1,11 +1,10 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import {
     forgotPassword,
     sendProfileVerificationCode,
     updatePhone,
     verifyForgotPassword,
 } from "@/services/ClientApiHandler";
-import { appStore } from "@/stores/app";
 import { useAuthStore } from "@/stores/auth";
 
 interface ResendCodeData {
@@ -22,11 +21,11 @@ export const useVerificationActions = (
     onClose?: () => void
 ) => {
     const [isLoading, setIsLoading] = useState(false);
-    const verify = appStore((state) => state.verify);
-    const setVerify = appStore((state) => state.setVerify);
+    const verify = useAuthStore((state) => state.verify);
+    const setVerify = useAuthStore((state) => state.setVerify);
     const setUser = useAuthStore((state) => state.setUser);
 
-    const resendCode = useCallback(async (data: ResendCodeData) => {
+    const resendCode = async (data: ResendCodeData) => {
         setIsLoading(true);
         try {
             const response = isProfile
@@ -36,9 +35,9 @@ export const useVerificationActions = (
         } finally {
             setIsLoading(false);
         }
-    }, [isProfile]);
+    };
 
-    const verifyCode = useCallback(async (formData: VerifyCodeData) => {
+    const verifyCode = async (formData: VerifyCodeData) => {
         setVerify({ ...verify, resetCode: formData.reset_code });
 
         if (isProfile) {
@@ -55,9 +54,9 @@ export const useVerificationActions = (
             : "verify_forgot_password_code";
 
         return await verifyForgotPassword(formData, endpoint);
-    }, [isProfile, onClose, verify, setVerify]);
+    };
 
-    const onVerifySuccess = useCallback((response: unknown) => {
+    const onVerifySuccess = (response: unknown) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
         if (response.status === "success" && verify.type === "register") {
@@ -65,7 +64,7 @@ export const useVerificationActions = (
             //@ts-ignore
             setUser(response.data as User);
         }
-    }, [verify.type, setUser]);
+    };
 
     return {
         isLoading,

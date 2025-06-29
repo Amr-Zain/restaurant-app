@@ -40,7 +40,7 @@ async function OrderCard({
         <div className="flex gap-1">
           {types.map((type, index) => (
             <div 
-              key={index} 
+              key={`status ${index}`} 
               className="order-status"
               data-aos="fade-left"
               data-aos-duration="400"
@@ -75,12 +75,13 @@ async function OrderCard({
               <p className="text-text font-semibold whitespace-nowrap">
                 {t(`TEXT.${type}`)} #{order_num || name}
               </p>
-              <div className="text-sub line-clamp-3">{desc}</div>
+              <div className="text-sub line-clamp-3 sm:h-20">{desc}</div>
             </div>
             <div 
               data-aos="zoom-in" 
               data-aos-duration="400" 
               data-aos-delay="500"
+              className="self-center"
             >
               <Link
                 href={
@@ -88,7 +89,7 @@ async function OrderCard({
                 }
               >
                 <Button
-                  className={`!size-10 cursor-pointer self-end ${t("lang") === "rtl" ? "rotate-180" : ""}`}
+                  className={`!size-12 cursor-pointer self-end rtl:rotate-180`}
                 >
                   <RightArrow />
                 </Button>

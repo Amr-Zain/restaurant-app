@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useState } from "react";
 import {
   Dialog,
@@ -7,12 +7,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
+} from "../../ui/dialog";
+import { Button } from "../../ui/button";
 import { useTranslations } from "next-intl";
 import { cancelOrder } from "@/services/ClientApiHandler";
 import { toast } from "sonner";
-//import { useRouter } from "@/i18n/routing";
+import useWebSocket from "@/hooks/useWebSocket";
+import { useRouter } from "@/i18n/routing";
 
 function CancelOrder({
   canCancel,
@@ -28,15 +29,15 @@ function CancelOrder({
   const t = useTranslations();
   const [canCancelState, setCanCancel] = useState(canCancel);
   const [statusState, setStatus] = useState(status);
-  //const router = useRouter();
+  const router = useRouter();
   const cancelOrderHandler = async () => {
     try {
-        setLoading(true)
+      setLoading(true);
       const res = await cancelOrder(id);
       if (res.status === "success") {
         setCanCancel(false);
         setStatus("customer_cancel");
-        setOpen(false)
+        setOpen(false);
         toast.success(res.message);
       }
     } catch (error: unknown) {
@@ -45,17 +46,15 @@ function CancelOrder({
         //@ts-ignore
         error.response.data.message || "Error in order cancel",
       );
-    }
-    finally{
-        setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
- /*  useEffect(() => {
-    const intervalId = setInterval(() => {
-      router.refresh();
-    }, 10000); 
-    return () => clearInterval(intervalId);
-  }, [router]); */
+  const { isStatusUpdated, setIsStatusUpdated } = useWebSocket();
+  if (isStatusUpdated) {
+    router.refresh();
+    setIsStatusUpdated(false);
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -63,7 +62,7 @@ function CancelOrder({
         <Button
           variant={"ghost"}
           disabled={!canCancelState}
-          className={`cursor-pointer text-red-600 font-bold hover:bg-transparent px-0`}
+          className={`cursor-pointer px-0 font-bold text-red-600 hover:bg-transparent`}
         >
           {statusState === "customer_cancel"
             ? t("TEXT.cancelled")
@@ -93,9 +92,7 @@ function CancelOrder({
             className="!h-10 cursor-pointer rounded-xl px-6"
             disabled={loading}
           >
-            {loading?
-            t('buttons.loading')
-            :t("labels.ok")}
+            {loading ? t("buttons.loading") : t("labels.ok")}
           </Button>
         </div>
       </DialogContent>

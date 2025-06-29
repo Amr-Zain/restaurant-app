@@ -193,7 +193,7 @@ export const checkoutSchema = () => z
         }),
         order_date: z.date().optional(),
         order_time: z.string().optional(),
-        pay_type: z.enum(["1", "0"], {
+        pay_type: z.enum(["1", "0","2"], {
             required_error: "You need to select a payment method.",
         }),
         address_id: z.number().optional(),

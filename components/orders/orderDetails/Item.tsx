@@ -13,6 +13,7 @@ function OrderItem({
   onUpdate,
   className,
   url,
+  children,
 }: {
   id: number;
   title: string;
@@ -22,6 +23,7 @@ function OrderItem({
   image: string | StaticImageData;
   price?: number;
   currency?: string;
+  children?: React.ReactNode;
   onDelete?: (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => Promise<void> | void;
@@ -48,8 +50,8 @@ function OrderItem({
           </div>
           <div>
             <div>
-              <CardTitle className="text-lg line-clamp-2">
-                {url ? <Link href={url}>{title}</Link> :  title }
+              <CardTitle className="line-clamp-2 text-lg">
+                {url ? <Link href={url}>{title}</Link> : title}
               </CardTitle>
               <CardDescription className="text-sub line-clamp-5 text-sm">
                 {desc}
@@ -99,6 +101,7 @@ function OrderItem({
             </button>
           )}
         </div>
+        {children}
       </div>
     </Card>
   );

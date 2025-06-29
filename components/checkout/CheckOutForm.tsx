@@ -3,7 +3,6 @@ import { CreditCard, Package } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import DateFields from "../util/formFields/DateField";
 import { TimePickerField } from "../reservation/TimePickr";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -27,9 +26,11 @@ import { CheckoutFromType, checkoutSchema } from "@/helper/schema";
 import { useTranslations } from "next-intl";
 import { useCartStore } from "@/stores/cart";
 import { format } from "date-fns";
+import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "@/i18n/routing";
-
-
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { appStore } from "@/stores/app";
 
 function CheckOutForm() {
   const t = useTranslations();
@@ -43,7 +44,7 @@ function CheckOutForm() {
       icon: CreditCard,
     },
   ];
-
+  const user = useAuthStore((state) => state.user!);
   const payment = [
     { id: 1, label: t("checkout.card"), value: "1", icon: CreditCard },
     {
@@ -52,8 +53,13 @@ function CheckOutForm() {
       value: "0",
       icon: Package,
     },
+    {
+      id: 3,
+      label: "Points",
+      value: "2",
+      icon: CreditCard,
+    },
   ];
-
   const formSchema = checkoutSchema();
   const form = useForm<CheckoutFromType>({
     resolver: zodResolver(formSchema),
@@ -66,26 +72,57 @@ function CheckOutForm() {
     },
   });
 
+  const router = useRouter();
   const { fetchAdderss, data } = useAddressStore((state) => state);
   const [address, setAddress] = useState(
     data.find((item) => item.is_default === true) || data[0],
   );
   const store_id = useBranchStore((state) => state.currentBranch?.id || 1);
-
+  const { points:{isPointsCovers, usePoints}, setPointsStatues } = appStore((state) => state);
+  const total_price = useCartStore((state) => state.price?.total)!;
+  const fetchCart = useCartStore((state) => state.fetchCartItems);
+  const [openAddress, setOpenAddress] = useState(false);
   useEffect(() => {
     form.setValue("address_id", address?.id);
-  }, [address, form]);
+    setPointsStatues({
+      isPointsCovers: total_price <= user.points,
+      points: user.points,
+    });
+  }, [address, form, setPointsStatues, total_price, user.points]);
 
-  const total_price = useCartStore(state => state.price?.total);
-
-  const [openAddress, setOpenAddress] = useState(false);
-  const router = useRouter()
   const onSubmit = async (data: CheckoutFromType) => {
     if (!store_id) throw new Error("Branch ID is required");
+    const pay_type = [];
+    if (data.pay_type === "1") {
+      if (usePoints)
+        pay_type.push(
+          { wallet: total_price - user.points },
+          { points: user.points },
+        );
+      else pay_type.push({ credit: total_price });
+
+      const { data: url } = await axios.post("create-order", {
+        address_id: address?.id,
+        pay_type,
+        is_schedule: data.is_schedule,
+        order_type: data.order_type,
+      });
+      console.log(url);
+      return;
+    } else if (data.pay_type === "0") {
+      if (usePoints)
+        pay_type.push(
+          { cash: total_price - user.points },
+          { points: user.points },
+        );
+      else pay_type.push({ cash: total_price });
+    } else {
+      pay_type.push({ points: total_price });
+    }
     return await postOrder({
       ...data,
       address_id: address?.id,
-      pay_type: JSON.stringify(data.pay_type === "1" ? [{ wallet: total_price }] : [{ cash: total_price }]),
+      pay_type: JSON.stringify(pay_type),
       order_date: data?.order_date ? format(data.order_date, "yyyy-MM-dd") : "",
       store_id,
     });
@@ -95,9 +132,9 @@ function CheckOutForm() {
     submitFunction: onSubmit,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
-    onSuccess:(data:{data:Order})=>{
-      router.push(`orders/${data.data.id}`)
-    }
+    onSuccess: (data: { data: Order }) => {
+      router.push(`orders/${data.data.id}`);
+    },
   });
 
   const scheduleOption = form.watch("is_schedule");
@@ -113,7 +150,9 @@ function CheckOutForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
           <div>
-            <h4 className="text-text mb-3 text-sm font-bold">{t("checkout.orderType")}</h4>
+            <h4 className="text-text mb-3 text-sm font-bold">
+              {t("checkout.orderType")}
+            </h4>
             <FormField
               control={form.control}
               name="order_type"
@@ -121,7 +160,14 @@ function CheckOutForm() {
                 <FormItem>
                   <FormControl>
                     <RadioGroup
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => {
+                        fetchCart({
+                          order_type: value,
+                          address_id: address?.id?.toString(),
+                        });
+                        router.refresh();
+                        field.onChange(value);
+                      }}
                       defaultValue={field.value}
                       className="grid grid-cols-2 gap-4"
                     >
@@ -132,7 +178,7 @@ function CheckOutForm() {
                             className="flex h-full w-full cursor-pointer items-center gap-2"
                           >
                             <item.icon className="text-sub size-5" />
-                            <span className="text-text font-bold text-sm">
+                            <span className="text-text text-sm font-bold">
                               {item.label}
                             </span>
                           </FormLabel>
@@ -160,7 +206,8 @@ function CheckOutForm() {
               <FormField
                 control={form.control}
                 name="address_id"
-                render={() => ( // Removed field destructuring as it's not directly used here
+                render={() => (
+                  // Removed field destructuring as it's not directly used here
                   <FormItem>
                     <FormControl>
                       <OrderItem
@@ -197,7 +244,7 @@ function CheckOutForm() {
                         </FormControl>
                         <FormLabel
                           htmlFor={"schedule-order"}
-                          className="text-text font-bold cursor-pointer"
+                          className="text-text cursor-pointer font-bold"
                         >
                           {t("checkout.scheduleOrder")}
                         </FormLabel>
@@ -208,7 +255,7 @@ function CheckOutForm() {
                         </FormControl>
                         <FormLabel
                           htmlFor={"order-now"}
-                          className="text-text font-bold cursor-pointer"
+                          className="text-text cursor-pointer font-bold"
                         >
                           {t("checkout.orderNow")}
                         </FormLabel>
@@ -257,25 +304,32 @@ function CheckOutForm() {
                       defaultValue={field.value}
                       className="grid grid-cols-2 gap-4"
                     >
-                      {payment.map((item) => (
-                        <FormItem key={item.id} className="checkout-input justify-between">
-                          <FormLabel
-                            htmlFor={`payment-${item.value}`}
-                            className="flex h-full w-full cursor-pointer items-center gap-2"
-                          >
-                            <item.icon className="text-sub size-5" />
-                            <span className="text-text font-bold text-sm">
-                              {item.label}
-                            </span>
-                          </FormLabel>
-                          <FormControl>
-                            <RadioGroupItem
-                              value={item.value}
-                              id={`payment-${item.value}`}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      ))}
+                      {payment.map((item, i) => {
+                        return (
+                          (i !== 2 || isPointsCovers) && (
+                            <FormItem
+                              key={item.id}
+                              className="checkout-input justify-between"
+                            >
+                              <FormLabel
+                                htmlFor={`payment-${item.value}`}
+                                className="flex h-full w-full cursor-pointer items-center gap-2"
+                              >
+                                <item.icon className="text-sub size-5" />
+                                <span className="text-text text-sm font-bold">
+                                  {item.label}
+                                </span>
+                              </FormLabel>
+                              <FormControl>
+                                <RadioGroupItem
+                                  value={item.value}
+                                  id={`payment-${item.value}`}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )
+                        );
+                      })}
                     </RadioGroup>
                   </FormControl>
                   <FormMessage />
@@ -287,7 +341,7 @@ function CheckOutForm() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="min-w-45 !h-11 font-semibold"
+            className="!h-11 min-w-45 font-semibold"
           >
             {isLoading ? t("buttons.loading") : t("buttons.submit")}
           </Button>

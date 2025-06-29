@@ -46,7 +46,7 @@ const CartModal = () => {
             />
           </svg>
           {!!cartItemsLen && (
-            <span className="border-backgroud bg-primary absolute end-2 top-2 flex size-4 items-center justify-center rounded-full border-2 text-[8px] font-semibold text-white">
+            <span className="border-backgroud bg-primary absolute end-2 top-2 flex size-4.5 items-center justify-center rounded-full border-2 text-[8px] font-semibold text-white">
               {cartItemsLen}
             </span>
           )}
@@ -65,7 +65,7 @@ const CartModal = () => {
           </SheetTitle>
         </SheetHeader>
         <Cart />
-        <Link href={"/checkout"} className="px-4">
+        {!!cartItemsLen&&<Link href={"/checkout"} className="px-4">
           <Button
             variant={"default"}
             className="my-2 !h-12 !w-full"
@@ -73,7 +73,7 @@ const CartModal = () => {
           >
             {t("cart.checkoutButton")}
           </Button>
-        </Link>
+        </Link>}
       </SheetContent>
     </Sheet>
   );

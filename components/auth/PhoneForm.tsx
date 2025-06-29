@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { PhoneFormType, phoneSchema } from "@/helper/schema";
-import { appStore } from "@/stores/app";
 import PhoneNumber from "../util/formFields/PhoneInput";
 import usePhoneCode from "@/hooks/usePhoneCode";
 import { Button } from "../ui/button";
@@ -16,6 +15,7 @@ import {
   forgotPassword,
   sendProfileVerificationCode,
 } from "@/services/ClientApiHandler";
+import { useAuthStore } from "@/stores/auth";
 
 const PhoneForm = ({
   isModal,
@@ -27,7 +27,7 @@ const PhoneForm = ({
   onClose?: () => void;
 }) => {
   const t = useTranslations();
-  const { phone, code } = appStore((state) => state.verify);
+  const { phone, code } = useAuthStore((state) => state.verify);
 
   const [currentPhoneLimit, setCurrentPhoneLimit] = useState<number | null>(
     null,
@@ -43,7 +43,7 @@ const PhoneForm = ({
     mode: "onChange",
   });
   const { countries } = usePhoneCode({ form, setCurrentPhoneLimit });
-  const setVerify = appStore((state) => state.setVerify);
+  const setVerify = useAuthStore((state) => state.setVerify);
   const { handleSubmit } = useFormSubmission<PhoneFormType>(form, {
     submitFunction: isProfile ? sendProfileVerificationCode : forgotPassword,
     onSuccessPath: isModal ? undefined : "/auth/verification",

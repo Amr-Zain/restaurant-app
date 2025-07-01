@@ -1,17 +1,7 @@
 import Footer from "@/components/Footer";
 import NavBar from "@/components/Navbar";
 import { getSettingsData } from "@/services/ApiHandler";
-/* 
-driver_tips
-footer_main_part_availability
-offers
-schedule_orders
-slider_availability
-slider_multi_image
-title_availability
-top_bar_availability
-top_bar_logo_position
-*/
+
 
 export default async function RootLayout({
   children,
@@ -35,8 +25,12 @@ export default async function RootLayout({
         desc={data.website_setting.footer_desc}
         logo={data.website_setting.website_logo}
         offers={data.website_customization.offers as string}
-        phoneNumber={data.contact_us.phone_number[0]}
-        email={data.contact_us.email[0] as string}
+        phoneNumber={(data.contact_us.phone_number as {
+    flag: string;
+    phone: number;
+    phone_code: string;
+}[])[0]  }
+        email={(data.contact_us.emailas as string)[0] }
         mainPartAvailability={
           data.website_customization.footer_main_part_availability as boolean
         }

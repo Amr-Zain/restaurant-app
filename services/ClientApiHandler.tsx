@@ -127,7 +127,7 @@ export const postReservation = async ({
 };
 export const postContactForm = async (
   form: ContactFormType,
-): Promise<Branch[]> => {
+)=> {
   const { data } = await axiosInstance.post(`contact_us`, form);
   return data || [];
 };

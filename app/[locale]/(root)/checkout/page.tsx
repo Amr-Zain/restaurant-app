@@ -3,7 +3,7 @@ import { getCartServer } from "@/services/ApiHandler";
 import { getTranslations } from "next-intl/server";
 import Cart from "@/components/cart";
 
-async function CheckOut({ searchParams }:{searchParams:Promise<any>}) {
+async function CheckOut({ searchParams }:{searchParams:Promise<Record<string, string>>}) {
   const cart = await getCartServer();
   const t = await getTranslations();
   const params = await searchParams;

@@ -17,6 +17,7 @@ function CardModal({ type, data }: CardModalProps) {
   const t = useTranslations("card");
   const full_name = useAuthStore((state) => state.user!.full_name);
   const promisedData = use(data);
+  console.log(promisedData)
   if (!data) return;
   const isCreditCard = type === "cridtCard";
   const cardTitle = isCreditCard ? t("cridtCard") : t("loyaltyCard");

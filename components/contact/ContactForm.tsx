@@ -45,6 +45,7 @@ const ContactUsForm = () => {
 
   const { handleSubmit: handleContactSubmit } =
     useFormSubmission<ContactFormType>(form, {
+      
       submitFunction: postContactForm,
     });
 

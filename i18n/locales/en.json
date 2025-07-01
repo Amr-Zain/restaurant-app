@@ -45,6 +45,9 @@
     "order": "Order",
     "reservation": "Reservation",
     "followInstgram": "follow us on instagram",
+    "gettingYourCurrentLocation": "Getting your current location...",
+    "noAddressesFound": "No Addresses Found",
+    "selected": "Selected:",
     "changePhone": "Change Number",
     "changePhoneDesc": " Please enter your phone number so we can verify it.",
     "notifications": "Notifications",
@@ -169,6 +172,7 @@
     "customerReview": "Customer Review",
     "selectTopping": "{type} {value} Topping",
     "min_max": "Select",
+    "selectAddress": "Select Address",
     "exact": "Combo",
     "email": "Email",
     "phone": "Phone",
@@ -225,7 +229,8 @@
     "selectTime": "Select time",
     "paymentMethods": "Payment Methods",
     "card": "Card",
-    "cash": "Cash"
+    "cash": "Cash",
+    "points": "Points"
   },
   "buttons": {
     "login": "Log In",

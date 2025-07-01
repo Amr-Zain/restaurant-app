@@ -40,7 +40,7 @@ function Cart({ isCheckout }: { isCheckout?: boolean }) {
   };
 
   return (
-    <div className="mb-4 flex h-[85vh] flex-col justify-between rounded-2xl bg-white p-4">
+    <div className="mb-2 flex h-[80vh] flex-col justify-between rounded-2xl bg-white p-4">
       {!items.length ? (
         <div className="flex h-full flex-col items-center justify-center">
           <h3 className="text-text font-medium">{t("cart.noproducts")}</h3>
@@ -74,15 +74,15 @@ function Cart({ isCheckout }: { isCheckout?: boolean }) {
                   setPointsStatues({ usePoints: checked as boolean })
                 }
               />
-              <Label htmlFor="points" className="cursor-pointer">Use your loyalty points</Label>
+              <Label htmlFor="points" className="cursor-pointer">
+                Use your loyalty points
+              </Label>
               <div className="text-success bg-success/10 w-fit rounded-full px-4 py-2 text-sm font-semibold">
                 {t("card.points", { count: points || 0 })}
               </div>
             </div>
           )}
-          <div>
-            <OrderSummary {...orderSummary} />
-          </div>
+          <OrderSummary {...orderSummary} />
         </>
       )}
     </div>

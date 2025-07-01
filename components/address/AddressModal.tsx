@@ -87,6 +87,7 @@ const AddressModal = ({
             )}
           </div>
           <Button
+            type="button"
             variant={"default"}
             className="m-4"
             onClick={() => setIsFormOpen(true)}

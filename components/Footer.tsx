@@ -39,15 +39,11 @@ async function Footer({
   ];
 
   return (
-    <footer className="text-sub mt-auto bg-footer pt-10 pb-4">
+    <footer className="text-sub bg-footer mt-auto pt-10 pb-4">
       <div className="container mx-auto px-4">
         <div className="mb-8 grid grid-cols-1 gap-8 sm:grid-cols-[1fr_1.5fr]">
           {mainPartAvailability && (
-            <div
-              className="space-y-4"
-              data-aos="fade-right"
-              data-aos-delay="100"
-            >
+            <div className="space-y-4">
               <Image
                 src={logo}
                 width={80}
@@ -59,7 +55,7 @@ async function Footer({
             </div>
           )}
           <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
-            <div className="space-y-4" data-aos="fade-up" data-aos-delay="200">
+            <div className="space-y-4">
               <h3 className="mb-4 text-sm font-semibold text-white uppercase">
                 {t("sectionsHeading")}
               </h3>
@@ -88,7 +84,7 @@ async function Footer({
               </ul>
             </div>
 
-            <div className="space-y-4" data-aos="fade-up" data-aos-delay="300">
+            <div className="space-y-4">
               <h3 className="mb-4 text-sm font-bold text-white uppercase">
                 {t("linksHeading")}
               </h3>
@@ -106,7 +102,7 @@ async function Footer({
               </ul>
             </div>
 
-            <div className="space-y-4" data-aos="fade-up" data-aos-delay="400">
+            <div className="space-y-4">
               <h3 className="mb-4 text-sm font-bold text-white uppercase">
                 {t("contactHeading")}
               </h3>
@@ -131,11 +127,7 @@ async function Footer({
           </div>
         </div>
 
-        <div
-          className="flex justify-between border-t border-white pt-4"
-          data-aos="fade-up"
-          data-aos-delay="500"
-        >
+        <div className="flex justify-between border-t border-white pt-4">
           <p className="text-sm text-gray-500">
             © {new Date().getFullYear()} {t("rightsReserved")}
           </p>

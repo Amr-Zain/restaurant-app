@@ -32,9 +32,9 @@ export async function generateMetadata({
 export default async function ItemDetailsPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const { slug } = params;
+  const { slug } =await params;
   const t = await getTranslations();
   let item: ProductData | null = null;
   try {

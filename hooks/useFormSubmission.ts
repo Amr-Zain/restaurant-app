@@ -31,7 +31,7 @@ export const useFormSubmission = <TFormValues extends FieldValues>(
         try {
             const result = await submitFunction(values);
 
-            toast.success(result.message || successMessageKey || "Operation successful!");
+            toast.success(result?.message || successMessageKey || "Operation successful!");
             if (onSuccess) {
                 onSuccess(result);
             }

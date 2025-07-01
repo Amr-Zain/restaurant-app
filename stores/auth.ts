@@ -20,6 +20,7 @@ interface AuthStore {
         lng: number;
     }) => void;
     clearUser: () => void
+    updateUserPoints: (points:number) => void
     verify: Verify
     setVerify: (values: Verify) => void;
     clearVerify: () => void;
@@ -49,6 +50,14 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         Cookies.remove('guest_token');
         return ({ user, token: user.token })
     }),
+    updateUserPoints: (points: number) => {
+        const currentUser = get().user;
+        if (currentUser) { 
+            get().setUser({ ...currentUser, points });
+        } else {
+            console.warn("Attempted to update points for a null user.");
+        }
+    },
     setLocation: (location: {
         lat: number;
         lng: number;

@@ -3,15 +3,15 @@ import { getCartServer } from "@/services/ApiHandler";
 import { getTranslations } from "next-intl/server";
 import Cart from "@/components/cart";
 
-async function CheckOut() {
+async function CheckOut({ searchParams }:{searchParams:Promise<any>}) {
   const cart = await getCartServer();
   const t = await getTranslations();
-
+  const params = await searchParams;
   return (
     <div>
       {cart?.data?.products ? (
-        <div className="container my-10 grid grid-cols-1 gap-6 md:grid-cols-[1fr_400px]">
-          <CheckOutForm />
+        <div className="container my-10 grid grid-cols-1 gap-6 md:grid-cols-[1fr_380px]">
+          <CheckOutForm params={params} />
           <Cart isCheckout />
         </div>
       ) : (

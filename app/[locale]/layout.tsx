@@ -15,14 +15,7 @@ import Location from "@/components/Location";
 import { getSettingsData } from "@/services/ApiHandler";
 import Theme from "@/components/general/Theme";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
-  const { locale } = await params;
-  const isArabic = locale === "ar";
-  console.log(isArabic);
+export async function generateMetadata( ): Promise<Metadata> {
   const websiteSetting = (await getSettingsData()).website_setting;
   return {
     
@@ -49,7 +42,6 @@ export default async function RootLayout({
   const setting = await getSettingsData();
   const defaultLanguage = setting.website_setting .website_default_language
   const { locale } = await params;
-  console.log(setting)
   const messages = await getMessages({ locale: locale||defaultLanguage });
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>

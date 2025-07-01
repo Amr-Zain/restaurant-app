@@ -44,6 +44,9 @@
     "reservation": "حجز",
     "notifications": "الإشعارات",
     "changePhone": "تغيير الرقم",
+    "gettingYourCurrentLocation": "جاري الحصول على موقعك الحالي...",
+      "noAddressesFound": "لا توجد عناوين",
+    "selected": "المحدد:",
     "changePhoneDesc": "الرجاء إدخال رقم هاتفك حتى نتمكن من التحقق منه.",
     "followInstgram": "تابعنا على انستغرام",
     "reviews": "{count, plural, =0 {لا توجد مراجعات} one {مراجعة واحدة} other {# مراجعات}}",
@@ -71,7 +74,7 @@
     "viewAll": " عرض الكل",
     "changeNotificationsDesc": "هل أنت متأكد من أنك تريد تغيير حالة الإشعارات؟"
   },
-   "reviewItem": {
+  "reviewItem": {
     "rate": "تقييم",
     "addReview": "إضافة مراجعة",
     "doYouIntendToVisitAgain": "هل تنوي زيارة المطعم مرة أخرى في المستقبل؟",
@@ -167,6 +170,7 @@
     "selectTopping": "{type} {value} الإضافات",
     "min_max": "حدد",
     "exact": "وجبة",
+    "selectAddress": "اختر العنوان",
     "latitude": "خط العرض",
     "longitude": "خط الطول",
     "email": "البريد الإلكتروني",
@@ -222,7 +226,8 @@
     "selectTime": "حدد الوقت",
     "paymentMethods": "طرق الدفع",
     "card": "بطاقة",
-    "cash": "نقدًا"
+    "cash": "نقدًا",
+    "points": "النقاط"
   },
   "buttons": {
     "login": "تسجيل الدخول",

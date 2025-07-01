@@ -28,7 +28,6 @@ export async function authMiddleware(
     const isAuthRoute = AUTH_ROUTES.some(route => 
         currentPath.includes(route)
     );
-
     if (isAuthRoute && token) {
         const homeUrl = new URL(
             `${isArabicLocale ? '/ar' : ""}/`, 

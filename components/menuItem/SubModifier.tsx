@@ -138,7 +138,7 @@ function SubModifierComponent({ subModifier }: { subModifier: SubModifier }) {
                     </span>
                   </div>
                 </div>
-                <div className="flex flex-col sm:flex-row items-center sm:space-x-2">
+                <div className="flex items-center sm:space-x-2">
                   <Button
                     variant="outline"
                     size="icon"

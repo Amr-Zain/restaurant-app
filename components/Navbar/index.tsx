@@ -38,18 +38,18 @@ async function NavBar({
       icon: item.icon,
     })),
   ];
-  const logoOrder =
-    (logoPosition === "left" && t("lang") === "ltr") ||
-    (logoPosition === "right" && t("lang") === "rtl")
-      ? "order-1"
-      : "order-last";
 
   return (
     <div className="p-sec text-sub bg-backgroud h-[4.5rem] w-full backdrop-blur-md">
-      <div
-        className={`mx-auto flex h-full items-center justify-${logoOrder === "order-1" ? "start" : "end"}`}
-      >
-        <Link href="/" className={`mx-4 shrink-0 ${logoOrder}`}>
+      <div className={`mx-auto flex h-full items-center justify-between`}>
+        <Link
+          href="/"
+          className={`mx-4 shrink-0 ${
+            logoPosition === "right"
+              ? "ltr:order-last rtl:order-1"
+              : "ltr:order-1 rtl:order-last"
+          }`}
+        >
           <Image src={logo} alt={"logo"} width={50} height={50} />
         </Link>
         <div className="flex w-full items-center justify-between gap-2">

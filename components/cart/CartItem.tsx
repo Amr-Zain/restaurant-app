@@ -5,7 +5,6 @@ import { Minus, Plus } from "lucide-react";
 import { useCartStore } from "@/stores/cart";
 import { Loader2 } from "lucide-react";
 import { Link, usePathname } from "@/i18n/routing";
-import { useRouter } from "next/navigation";
 import { Trash } from "../Icons";
 
 interface SubModifier {
@@ -40,7 +39,6 @@ function CartItem({
     removeItem: isRemoving,
     updateItemQuantity: isUpdatingQuantity,
   } = useCartStore((state) => state.isLoading);
-  const router = useRouter();
   const isLoadingUpdate = isUpdatingQuantity && itemId === cart_product_id;
   const isLoadingRemove = isRemoving && itemId === cart_product_id;
   const pathname = usePathname();
@@ -79,7 +77,6 @@ function CartItem({
               onClick={() => {
                 deleteItem(cart_product_id);
                 console.log(pathname.split("/").at(-1));
-                if (pathname.split("/").at(-1) === "checkout") router.refresh();
               }}
               className={`cursor-pointer text-red-500 hover:bg-transparent ${isLoadingRemove ? "cursor-not-allowed opacity-50" : ""}`}
             >
@@ -102,8 +99,7 @@ function CartItem({
                 onClick={() => {
                   updateItem(cart_product_id, Math.max(1, quantity - 1));
                   pathname.split("/").at(-1);
-                  if (pathname.split("/").at(-1) === "checkout")
-                    router.refresh();
+                 
                 }}
                 className="size-6 cursor-pointer border-0"
               >
@@ -121,8 +117,7 @@ function CartItem({
                 size="icon"
                 onClick={() => {
                   updateItem(cart_product_id, quantity + 1);
-                  if (pathname.split("/").at(-1) === "checkout")
-                    router.refresh();
+               
                 }}
                 disabled={isLoadingRemove || isLoadingUpdate}
                 className="size-6 cursor-pointer border-0"

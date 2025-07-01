@@ -303,6 +303,18 @@ export const changeNotificationStatus = async () => {
     return error;
   }
 };
+export const deleteNotification = async (id:number|string) => {
+  try {
+    const { data } = await axiosInstance.delete(
+      `notification/${id}`,
+    );
+    console.log(data);
+    return data;
+  } catch (error: unknown) {
+    console.log(error);
+    return error;
+  }
+};
 export const cancelOrder = async (id: string) => {
   const { data } = await axiosInstance.post(`orders/${id}/cancel`, {
     _method: "put",

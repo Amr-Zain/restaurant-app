@@ -54,7 +54,7 @@ const CartModal = () => {
       </SheetTrigger>
       <SheetContent
         side="left"
-        className="w-180 max-w-[100%] rounded-r-2xl border-r-1"
+        className="w-180 max-w-[100%] rounded-r-2xl border-e-1 gap-0"
       >
         <SheetHeader>
           <SheetTitle className="flex gap-2 text-lg">
@@ -68,7 +68,7 @@ const CartModal = () => {
         {!!cartItemsLen&&<Link href={"/checkout"} className="px-4">
           <Button
             variant={"default"}
-            className="my-2 !h-12 !w-full"
+            className="my-2 !h-10 !w-full"
             onClick={() => setOpen(false)}
           >
             {t("cart.checkoutButton")}

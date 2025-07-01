@@ -5,6 +5,8 @@ import { useItemDetailsStore } from "@/stores/itemDitails";
 import { useCartStore } from "@/stores/cart";
 import { CartIcon } from "../Icons";
 import { useTranslations } from "next-intl";
+import SuccessPopup from "../util/SuccessPopup";
+import { useState } from "react";
 
 function ItemCardButtons({
   id,
@@ -15,12 +17,14 @@ function ItemCardButtons({
   price: number;
   currency: string;
 }) {
-  const { quantity, selectedModifiers, setQuantity } =
-    useItemDetailsStore((state) => state);
+  const { quantity, selectedModifiers, setQuantity } = useItemDetailsStore(
+    (state) => state,
+  );
+  const [openSuccess,setOpenSuccess] = useState(false)
   const isLoading = useCartStore((state) => state.isLoading.addItem);
   const addToCart = useCartStore((state) => state.addItem);
-  const t = useTranslations()
- 
+  const t = useTranslations();
+
   const calculateCurrentPrice = () => {
     let currentPrice = price;
     currentPrice += selectedModifiers.reduce(
@@ -31,22 +35,23 @@ function ItemCardButtons({
   };
 
   const addToCartHandler = async () => {
-    addToCart({
+    await addToCart({
       product_id: id,
       price: calculateCurrentPrice(),
       quantity,
       sub_modifiers: selectedModifiers,
     });
+    setOpenSuccess(true)
   };
   return (
     <div className="mb-4 flex flex-col items-center justify-end gap-4 sm:flex-row">
-      <div className="border-primary/20 h-12 flex items-center space-x-1 rounded-lg border p-2">
+      <div className="border-primary/20 flex h-12 items-center space-x-1 rounded-lg border p-2">
         <Button
           variant="ghost"
           size="icon"
           disabled={quantity === 1}
           onClick={() => setQuantity(Math.max(1, quantity - 1))}
-          className="size-10 cursor-pointer text-primary"
+          className="text-primary size-10 cursor-pointer"
         >
           <Minus size={25} />
         </Button>
@@ -57,7 +62,7 @@ function ItemCardButtons({
           variant="ghost"
           size="icon"
           onClick={() => setQuantity(quantity + 1)}
-          className="size-10 cursor-pointer text-primary"
+          className="text-primary size-10 cursor-pointer"
         >
           <Plus size={25} />
         </Button>
@@ -72,11 +77,21 @@ function ItemCardButtons({
         ) : (
           <>
             <CartIcon />
-             {t('buttons.addToCart') +" "+calculateCurrentPrice().toFixed(2)}{" "}
+            {t("buttons.addToCart") +
+              " " +
+              calculateCurrentPrice().toFixed(2)}{" "}
             <span className="self-end text-[.6rem]">{currency}</span>
           </>
         )}
       </Button>
+      <SuccessPopup
+        cancelLabel="Continue Shopping"
+        cancelUrl={"/"}
+        open={openSuccess}
+        setOpen={setOpenSuccess}
+        successLabel={"Checkout"}
+        successUrl={"/checkout"}
+      />
     </div>
   );
 }

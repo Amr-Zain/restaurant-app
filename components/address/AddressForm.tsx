@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -36,19 +36,14 @@ export default function AddAddressForm({
     data,
     updateAddress: setUpdated,
   } = useAddressStore((state) => state);
-  const defaultValues = data.find((item) => item.id == updateId);
+  const defaultValues = isUpdate
+    ? data.find((item) => item.id == updateId)
+    : undefined;
   const t = useTranslations();
+  console.log(defaultValues)
   const form = useForm<AddressSchemaType>({
     resolver: zodResolver(addressSchema({t})),
-    defaultValues: defaultValues? {
-      apartment: defaultValues.apartment,
-      building: defaultValues.building,
-      desc: defaultValues.desc,
-      floor: defaultValues.floor,
-      is_default: defaultValues.is_default,
-      lat: defaultValues.lat,
-      lng: defaultValues.lng,
-    }:undefined,
+    
   });
   const isSubmitting = form.formState.isLoading;
 
@@ -67,17 +62,39 @@ export default function AddAddressForm({
     form.reset();
     onClose();
   };
-
+useEffect(() => {
+    if (isOpen && isUpdate && defaultValues) {
+      form.reset({
+        apartment: defaultValues.apartment || "",
+        building: defaultValues.building || "",
+        desc: defaultValues.desc || "",
+        floor: defaultValues.floor || "",
+        is_default: defaultValues.is_default || false,
+        lat: defaultValues.lat || '0',
+        lng: defaultValues.lng || '0',
+        title: defaultValues.title || "", 
+      });
+    } else if (isOpen && !isUpdate) {
+        form.reset({
+            apartment: "",
+            building: "",
+            desc: "",
+            floor: "",
+            is_default: false,
+            title: "",
+        });
+    }
+  }, [isOpen, isUpdate, defaultValues, form]);
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="mx-auto max-h-[90vh] max-w-md overflow-y-auto">
+      <DialogContent className="mx-auto max-h-[90vh] max-w-md">
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold">
             {isUpdate ? "Update Address" : "Add new address"}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-4 max-h-[75vh] px-2 overflow-y-auto">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(handleSubmit)}

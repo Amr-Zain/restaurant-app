@@ -11,11 +11,11 @@ import PhoneNumber from "../util/formFields/PhoneInput";
 import Field from "../util/formFields/FormField";
 import { Form } from "../ui/form";
 import ChangePhoneModal from "../auth/ChangePhoneModal";
-import { appStore } from "@/stores/app";
 import ProfileImage from "./PofileImage";
 import { useFormSubmission } from "@/hooks/useFormSubmission";
 import { updateUserProfile } from "@/services/ClientApiHandler";
 import { profileFromType, profileSchema } from "@/helper/schema";
+import { useAuthStore } from "@/stores/auth";
 function ProfileForm({
   defaultValues,
 }: {
@@ -35,7 +35,7 @@ function ProfileForm({
   );
 
   const formSchema = profileSchema({ t });
-  const { updated, phone } = appStore((state) => state.verify);
+  const { updated, phone } = useAuthStore((state) => state.verify);
   const form = useForm<profileFromType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,7 +54,7 @@ function ProfileForm({
     if (updated) {
       form.setValue("phone", phone!);
     }
-  }, [updated]);
+  }, [form, phone, updated]);
   return (
     <div className="my-8 grid grid-cols-1 items-center gap-4 md:grid-cols-2">
       <div data-aos="fade-right" data-aos-duration="700" data-aos-delay="200">

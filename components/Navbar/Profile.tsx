@@ -22,7 +22,13 @@ import { cn } from "@/lib/utils";
 import CardModal from "./CardModal";
 import Notifiable from "./Notifiable";
 
-const Profile = ({ wallet, loyalCard }:{wallet:Promise<Wallet>; loyalCard:Promise<Wallet>}) => {
+const Profile = ({
+  wallet,
+  loyalCard,
+}: {
+  wallet: Promise<Wallet>;
+  loyalCard: Promise<Wallet>;
+}) => {
   const [profileSheetOpen, setProfileSheetOpen] = useState(false);
   const [favoritesOpen, setFavoritesOpen] = useState(false);
   const [addressOpen, setAddressOpen] = useState(false);
@@ -59,7 +65,10 @@ const Profile = ({ wallet, loyalCard }:{wallet:Promise<Wallet>; loyalCard:Promis
             <ProfileIcon />
           </div>
         </SheetTrigger>
-        <SheetContent side="left" className="rounded-r-2xl border-r-1">
+        <SheetContent
+          side="left"
+          className="rounded-r-2xl border-r-1"
+        >
           <SheetHeader>
             <SheetTitle>{t("profile.title")}</SheetTitle>
           </SheetHeader>
@@ -104,11 +113,11 @@ const Profile = ({ wallet, loyalCard }:{wallet:Promise<Wallet>; loyalCard:Promis
               </div>
               {t("profile.favorite")}
             </div>
-           <Suspense fallback={"loading..."}>
+            <Suspense fallback={"loading..."}>
               <CardModal type="cridtCard" data={wallet} />
             </Suspense>
             <Suspense fallback={"loading..."}>
-              <CardModal type="loyaltyCard" data={loyalCard}/>
+              <CardModal type="loyaltyCard" data={loyalCard} />
             </Suspense>
             <Notifiable />
             <DeleteAccount />

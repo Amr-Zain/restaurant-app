@@ -76,11 +76,11 @@ async function ItemReviews({ itemId }: { itemId: number }) {
           </div>
         </div>
 
-        <div className="grow-1 space-y-6">
+        <div className="grow-1 space-y-6 overflow-y-auto pe-2">
           {customerReviews.map((review) => (
             <div
               key={review.id}
-              className="w-full border-t border-gray-100 pt-6"
+              className="w-full border-t border-gray-100"
             >
               <div className="mb-2 flex w-full items-center justify-between">
                 <div className="flex w-full items-start justify-between">

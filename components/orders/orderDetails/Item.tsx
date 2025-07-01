@@ -64,12 +64,12 @@ function OrderItem({
         </div>
         <div className="flex gap-1">
           {onDelete && (
-            <button onClick={onDelete} className="cursor-pointer text-red-600">
+            <button type="button" onClick={onDelete} className="cursor-pointer text-red-600">
               <Trash />
             </button>
           )}
           {onUpdate && (
-            <button onClick={onUpdate} className="cursor-pointer text-red-600">
+            <button type="button" onClick={onUpdate} className="cursor-pointer text-red-600">
               <svg
                 width="20"
                 height="20"

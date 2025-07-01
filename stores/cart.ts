@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import { addToCart, clearCart, deleteFromCart, getCart, updateCart } from "@/services/ClientApiHandler";
 import { create } from "zustand";
 import { toast } from "sonner";
+import { appStore } from "./app";
+import { useAuthStore } from "./auth";
 
 export interface SelectedModifier {
   sub_modifier_id: number;
@@ -34,10 +36,10 @@ export interface CartState {
     clearCart: boolean;
   };
   error: string | null;
-  fetchCartItems: (params?:Record<string,string>) => Promise<void>;
+  fetchCartItems: (params?: Record<string, string>) => Promise<void>;
   addItem: (item: CartItem) => Promise<void>;
   removeItem: (itemId: number) => Promise<void>;
-  clearCart: () => Promise<void>;
+  clearCart: (flag?:boolean) => Promise<void>;
   updateItemQuantity: (itemId: number, newQuantity: number) => Promise<void>;
 }
 
@@ -59,12 +61,16 @@ export const useCartStore = create<CartState>((set, get) => ({
   fetchCartItems: async (params) => {
     set((state) => ({ isLoading: { ...state.isLoading, fetchCartItems: true }, error: null }));
     try {
-      const data = await getCart({params});
+      const data = await getCart({ params });
       set({
-        items: data.data?.products||[],
-        price: data?.price||null,
-        totalItems: data.data?.item_count||0,
-        currency: data?.currency||'',
+        items: data.data?.products || [],
+        price: data?.price || null,
+        totalItems: data.data?.item_count || 0,
+        currency: data?.currency || '',
+      });
+      appStore.getState().setPointsStatues({
+        isPointsCovers: (data.price?.total || 0) <= (useAuthStore.getState()?.user?.points || 0),
+        points: (useAuthStore.getState()?.user?.points || 0),
       });
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Failed to fetch cart items.";
@@ -88,7 +94,9 @@ export const useCartStore = create<CartState>((set, get) => ({
         currency: data.currency,
       });
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to add item to cart.";
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const errorMessage = err instanceof Error ? err.response.data.message : "Failed to add item to cart.";
       console.error("Error adding item to cart:", err);
       set({ error: errorMessage });
       toast.error(errorMessage);
@@ -114,9 +122,15 @@ export const useCartStore = create<CartState>((set, get) => ({
         currency: data.currency,
       }
       Cookies.set('cart', JSON.stringify(cart), { expires: 30 })
+      appStore.getState().setPointsStatues({
+        isPointsCovers: (data.price?.total || 0) <= (useAuthStore.getState()?.user?.points || 0),
+        points: (useAuthStore.getState()?.user?.points || 0),
+      });
       set(cart);
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to remove item from cart.";
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const errorMessage = err instanceof Error ? err.response.data.message : "Failed to remove item from cart.";
       console.error("Error removing item from cart:", err);
       set({ error: errorMessage });
       toast.error(errorMessage);
@@ -142,9 +156,15 @@ export const useCartStore = create<CartState>((set, get) => ({
         currency: data.currency,
       }
       Cookies.set('cart', JSON.stringify(cart), { expires: 30 })
+      appStore.getState().setPointsStatues({
+        isPointsCovers: (data.price?.total || 0) <= (useAuthStore.getState()?.user?.points || 0),
+        points: (useAuthStore.getState()?.user?.points || 0),
+      });
       set(cart);
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to update item quantity.";
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const errorMessage = err instanceof Error ? err.response.data.message : "Failed to update item quantity.";
       console.error("Error updating item quantity:", err);
       set({ error: errorMessage });
       toast.error(errorMessage);
@@ -153,17 +173,22 @@ export const useCartStore = create<CartState>((set, get) => ({
     }
   },
 
-  clearCart: async () => {
+  clearCart: async (flag) => {
     set((state) => ({ isLoading: { ...state.isLoading, clearCart: true }, error: null }));
     try {
-      const data = await clearCart(); const cart = {
+      if(!flag){
+        const data = await clearCart(); 
+        toast.success(data.message || "Cart cleared successfully!");
+      }
+    const cart = {
         items: [], totalItems: 0, price: null,
       }
       Cookies.set('cart', JSON.stringify(cart), { expires: 30 })
       set(cart);
-      toast.success(data.message || "Cart cleared successfully!");
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to clear cart.";
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const errorMessage = err instanceof Error ? err.response.data.message : "Failed to clear cart.";
       console.error("Error clearing cart:", err);
       set({ error: errorMessage });
       toast.error(errorMessage);

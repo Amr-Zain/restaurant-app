@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Sheet,
@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/sheet";
 import Item from "../orders/orderDetails/Item";
 import { useTranslations } from "next-intl";
+import { deleteNotification } from "@/services/ClientApiHandler";
+import { useRouter } from "@/i18n/routing";
 
 const Notifications = ({
   notifications,
@@ -17,7 +19,21 @@ const Notifications = ({
   notifications: Notification[];
 }) => {
   const [open, setOpen] = useState(false);
-  const t = useTranslations()
+  const t = useTranslations();
+  
+    const [mounted, setMounted] = useState(false);
+    const router = useRouter();
+    useEffect(() => {
+      setMounted(true);
+    }, []);
+  
+    if (!mounted) {
+      return (
+        <>
+          <div className="size-8 shrink-0 animate-pulse rounded-full bg-gray-300"></div>
+        </>
+      );
+    }
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -60,10 +76,11 @@ const Notifications = ({
                 notification.image ||
                 "https://saas-website.ui.aait-d.com/_nuxt/notification.CQzkf6dx.png"
               }
-              /* onDelete={(event: React.MouseEvent<HTMLButtonElement>) => {
+              onDelete={async(event: React.MouseEvent<HTMLButtonElement>) => {
                 event.stopPropagation();
-                deleteFromAdderss(item.id);
-              }} */
+                await deleteNotification(notification.id);
+                router.refresh();
+              }}
             />
           ))}
         </div>

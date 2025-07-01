@@ -9,7 +9,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const data = await getSettingsData();
-
+  console.log(data.contact_us)
   return (
     <>
       {data.website_customization.top_bar_availability && (
@@ -30,7 +30,7 @@ export default async function RootLayout({
     phone: number;
     phone_code: string;
 }[])[0]  }
-        email={(data.contact_us.emailas as string)[0] }
+        email={(data.contact_us.email as string[])[0] }
         mainPartAvailability={
           data.website_customization.footer_main_part_availability as boolean
         }

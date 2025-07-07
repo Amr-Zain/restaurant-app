@@ -70,6 +70,7 @@ const VerifyForm = ({ isProfile = false, onClose }: VerifyFormProps) => {
 
   const handleFormSubmit = async (values: OTPSchemaType) => {
     setVerify({ ...verify, resetCode: values.reset_code });
+
     await verifyHandler({
       phone_code: verify.code!,
       phone: verify.phone!,
@@ -93,19 +94,7 @@ const VerifyForm = ({ isProfile = false, onClose }: VerifyFormProps) => {
       router.back();
       return;
     }
-
-    const initializeForm = async () => {
-      if (verify.type === "register") {
-        await resendCode({
-          phone: verify.phone!,
-          phone_code: verify.code!,
-        });
-      }
-      resetTimer();
-    };
-
-    initializeForm();
-  }, [verify.code, verify.phone, verify.type, router, resendCode, resetTimer]);
+  }, [router, verify.code, verify.phone]);
 
   return (
     <Form {...form}>

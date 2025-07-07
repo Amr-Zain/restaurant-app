@@ -1,8 +1,8 @@
 "use client";
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 
 function Theme({ colors }: { colors: Record<string, string> }) {
-  useEffect(() => {
+   useLayoutEffect(() => {
 
     for (const key in colors) {
       if (Object.hasOwnProperty.call(colors, key)) {

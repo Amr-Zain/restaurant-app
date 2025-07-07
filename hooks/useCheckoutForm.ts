@@ -7,7 +7,7 @@ import { useBranchStore } from "@/stores/branchs";
 import { appStore } from "@/stores/app";
 import { useCartStore } from "@/stores/cart";
 import { useAuthStore } from "@/stores/auth";
-import { postOrder } from "@/services/ClientApiHandler";
+import { payment, postOrder } from "@/services/ClientApiHandler";
 import { CheckoutFromType, checkoutSchema } from "@/helper/schema";
 import { format } from "date-fns";
 import { useFormSubmission } from "@/hooks/useFormSubmission";
@@ -69,18 +69,9 @@ export const useCheckoutForm = ({ setOpenSuccess, setOrderId }: { setOpenSuccess
       store_id: currentBranch?.id || 1,
     }
 
-    const response = await fetch('/api/create-order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    const session = await payment(checkoutPayload);
 
-      body: JSON.stringify(checkoutPayload),
-    });
-
-    const session = await response.json();
-
-    if (response.ok && session.url) {
+    if (session.url) {
       window.location.href = session.url;
     }
   }

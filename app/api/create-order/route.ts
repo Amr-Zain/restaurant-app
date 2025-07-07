@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-type CheckoutRequestBody  = Record<string,string>& {
+type CheckoutRequestBody = Record<string, string> & {
   cartProducts: CartProduct[];
   total: number;
 }
@@ -11,10 +11,10 @@ type CheckoutRequestBody  = Record<string,string>& {
 
 export async function POST(req: Request) {
   try {
-   /*  if (!process.env.STRIPE_SECRET_KEY) {
-      throw new Error('Stripe secret key not configured');
-    }
- */
+    /*  if (!process.env.STRIPE_SECRET_KEY) {
+       throw new Error('Stripe secret key not configured');
+     }
+  */
     const body: CheckoutRequestBody = await req.json();
     const { cartProducts, total, ...additionalParams } = body;
 
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     for (const cartProduct of cartProducts) {
       const { product, quantity, sub_modifiers } = cartProduct;
       const currency = product.price.currency;
-      const unitAmount = Math.round(product.price.price * 100);
+      const unitAmount = Math.round(cartProduct.total_price * 100);
       if (sessionCurrency && sessionCurrency !== currency) {
         return NextResponse.json(
           { message: 'All products must use the same currency' },
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
 
       line_items.push({
         price_data: {
-          currency:"usd",
+          currency: "usd",
           product_data: {
             name: product.name,
             description: description || undefined,
@@ -64,7 +64,7 @@ export async function POST(req: Request) {
     }
 
     const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_BASE_URL;
-    
+
     // Construct search parameters from additionalParams
     const searchParams = new URLSearchParams();
     for (const key in additionalParams) {

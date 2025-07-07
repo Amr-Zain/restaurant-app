@@ -40,7 +40,6 @@ export default function AddAddressForm({
     ? data.find((item) => item.id == updateId)
     : undefined;
   const t = useTranslations();
-  console.log(defaultValues)
   const form = useForm<AddressSchemaType>({
     resolver: zodResolver(addressSchema({t})),
     
@@ -106,7 +105,7 @@ useEffect(() => {
                   placeholder="title"
                   name="title"
                   label="Title"
-                  disabl
+                  disabled={isSubmitting}
                 />
                 <Field
                   control={form.control}
@@ -114,7 +113,7 @@ useEffect(() => {
                   name="desc"
                   label="Description"
                   textarea
-                  dis
+                  disabled={isSubmitting}
                 />
                 <Field
                   control={form.control}

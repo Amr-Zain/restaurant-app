@@ -1,6 +1,5 @@
 "use client";
-import { Suspense, useState } from "react";
-
+import { Suspense } from "react";
 import {
   Sheet,
   SheetContent,
@@ -8,20 +7,19 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { LogOut, Package, User, MapPin, Heart } from "lucide-react";
-import { logout } from "@/services/ClientApiHandler";
-import { useAuthStore } from "@/stores/auth";
-import { toast } from "sonner";
-import { Link, useRouter } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import Favorites from "../Favorites";
 import AddressModal from "../address/AddressModal";
-import DeleteAccount from "./DeleteAccount";
 import { ProfileIcon } from "../Icons";
 import { cn } from "@/lib/utils";
 import CardModal from "./CardModal";
-import Notifiable from "./Notifiable";
-
+import ConfirmModal from "../general/ConfirmModal";
+import { Switch } from "../ui/switch";
+import { useProfile } from "@/hooks/useProfile";
+import { LogOut, Package, User, MapPin, Heart } from "lucide-react";
+import { Bell, Trash } from "@/components/Icons";
+import { useAuthStore } from "@/stores/auth";
 const Profile = ({
   wallet,
   loyalCard,
@@ -29,34 +27,69 @@ const Profile = ({
   wallet: Promise<Wallet>;
   loyalCard: Promise<Wallet>;
 }) => {
-  const [profileSheetOpen, setProfileSheetOpen] = useState(false);
-  const [favoritesOpen, setFavoritesOpen] = useState(false);
-  const [addressOpen, setAddressOpen] = useState(false);
-
-  const clearUser = useAuthStore((state) => state.clearUser);
   const t = useTranslations();
-  const router = useRouter();
+  const isNotifiable = useAuthStore((state) => state.user?.notifiable)!;
 
-  const handleLogout = async () => {
-    const res = await logout();
-    if (res.status === "success") {
-      toast.success(res.message);
-      clearUser();
-      router.refresh();
-      router.replace("/auth/login");
-      return;
-    }
-    toast.error(res.message || t("errors.logoutFailed"));
-  };
+  const {
+    addressOpen,
+    confirmModalState,
+    favoritesOpen,
+    profileSheetOpen,
+    openConfirmationModal,
+    handleOpenModal,
+    setProfileSheetOpen,
+    setFavoritesOpen,
+    setAddressOpen,
+    setConfirmModalState,
+  } = useProfile();
 
-  const handleOpenModal = (type: "favorite" | "address") => {
-    setProfileSheetOpen(false);
-    setTimeout(() => {
-      if (type === "favorite") setFavoritesOpen(true);
-      else setAddressOpen(true);
-    }, 100);
-  };
-
+  const navItems = [
+    {
+      label: "profile.orders",
+      icon: <Package className="size-5" />,
+      href: "/orders",
+      type: "link",
+    },
+    {
+      label: "profile.myAccount",
+      icon: <User className="size-5" />,
+      href: "/profile",
+      type: "link",
+    },
+    {
+      label: "profile.myAddress",
+      icon: <MapPin className="size-5" />,
+      onClick: () => handleOpenModal("address"),
+      type: "button",
+    },
+    {
+      label: "profile.favorite",
+      icon: <Heart className="size-5" />,
+      onClick: () => handleOpenModal("favorite"),
+      type: "button",
+    },
+    {
+      label: "NAV.notification",
+      icon: <Bell className="size-5 hover:!text-primary" />,
+      type: "switch",
+      checked: isNotifiable,
+      onClick: () => openConfirmationModal("notify"),
+    },
+    {
+      label: "TEXT.deleteAccount",
+      icon: <Trash />,
+      className: "!text-red-600",
+      onClick: () => openConfirmationModal("deleteAccout"),
+      type: "button",
+    },
+    {
+      label: "buttons.logout",
+      icon: <LogOut className="size-5" />,
+      className: "!text-red-600",
+      onClick: () => openConfirmationModal("logout"),
+      type: "button",
+    },
+  ];
   return (
     <>
       <Sheet open={profileSheetOpen} onOpenChange={setProfileSheetOpen}>
@@ -65,77 +98,82 @@ const Profile = ({
             <ProfileIcon />
           </div>
         </SheetTrigger>
-        <SheetContent
-          side="left"
-          className="rounded-r-2xl border-r-1"
-        >
+        <SheetContent side="left" className="rounded-r-2xl border-r-1">
           <SheetHeader>
             <SheetTitle>{t("profile.title")}</SheetTitle>
           </SheetHeader>
           <div className="flex flex-col overflow-y-auto p-2">
-            <Link
-              className="nav-item gap-2 p-4"
-              href={"/orders"}
-              onClick={() => setProfileSheetOpen(false)}
-            >
-              <div className="nav-icon">
-                <Package className="size-5" />
-              </div>
-              {t("profile.orders")}
-            </Link>
-            <Link
-              className="nav-item gap-2 p-4"
-              href={"/profile"}
-              onClick={() => setProfileSheetOpen(false)}
-            >
-              <div className="nav-icon">
-                <User className="size-5" />
-              </div>
-              {t("profile.myAccount")}
-            </Link>
-            <div
-              className="nav-item p-3"
-              onClick={() => handleOpenModal("address")}
-            >
-              <div className="nav-icon">
-                <MapPin className="size-5" />
-              </div>
-              {t("profile.myAddress")}
-            </div>
-            <div
-              className="nav-item p-3"
-              onClick={() => handleOpenModal("favorite")}
-            >
-              <div className="nav-icon">
-                <div className="nav-icon">
-                  <Heart className="size-5" />
-                </div>
-              </div>
-              {t("profile.favorite")}
-            </div>
             <Suspense fallback={"loading..."}>
               <CardModal type="cridtCard" data={wallet} />
             </Suspense>
             <Suspense fallback={"loading..."}>
               <CardModal type="loyaltyCard" data={loyalCard} />
             </Suspense>
-            <Notifiable />
-            <DeleteAccount />
-            <div
-              className={cn("nav-item p-3", "p-4 !text-red-600")}
-              onClick={handleLogout}
-            >
-              <div className="nav-icon">
-                <LogOut className="size-6" />
+            {navItems.map((item, index) => (
+              <div key={index}>
+                {item.type === "link" ? (
+                  <Link
+                    className="nav-item gap-2 p-4"
+                    href={item.href!}
+                    onClick={() => setProfileSheetOpen(false)}
+                  >
+                    <div className="nav-icon">{item.icon}</div>
+                    {t(item.label)}
+                  </Link>
+                ) : item.type === "button" ? (
+                  <div
+                    className={cn("nav-item p-3", item.className)}
+                    onClick={item.onClick}
+                  >
+                    <div
+                      className={cn(
+                        "nav-icon",
+                        item.className 
+                          ? item.className
+                          : "",
+                      )}
+                    >
+                      <div className="nav-icon">{item.icon}</div>
+                    </div>
+                      {t(item.label)}
+                  </div>
+                ) : item.type === "switch" ? (
+                  <div
+                    className="flex items-center justify-between"
+                    onClick={item.onClick}
+                  >
+                    <div className={"nav-item p-3"}>
+                      <div className="nav-icon">{item.icon}</div>
+                      {t(item.label)}
+                    </div>
+                    <Switch
+                      dir="ltr"
+                      checked={item.checked}
+                      className="data-[state=checked]:bg-primary scale-120 cursor-pointer"
+                    />
+                  </div>
+                ) : null}
               </div>
-              <div>{t("buttons.logout")}</div>
-            </div>
+            ))}
           </div>
         </SheetContent>
       </Sheet>
 
       <Favorites open={favoritesOpen} onOpenChange={setFavoritesOpen} />
       <AddressModal open={addressOpen} onOpenChange={setAddressOpen} />
+      {confirmModalState && (
+        <ConfirmModal
+          open={confirmModalState.open}
+          setOpen={(open: boolean) => {
+            if (!open) {
+              setConfirmModalState(null);
+            }
+          }}
+          title={confirmModalState.title}
+          desc={confirmModalState.desc}
+          onClick={confirmModalState.onConfirm}
+        />
+      )}
     </>
   );
 };

@@ -6,6 +6,7 @@ import image5 from "@/assets/images/imgeSection/5.jpg";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
+import { FadeIn ,ScaleIn} from "../animations"; 
 const images = [
   { img: image1, span: false },
   { img: image2, span: false },
@@ -20,11 +21,11 @@ async function ImagesSection() {
     <section>
       <div className="relative my-8 grid grid-cols-2 gap-4 md:grid-cols-3">
         {images.map((img, index) => (
-          <div
+          <FadeIn
             key={index}
+            direction="up"
+            delay={index * 0.1} 
             className={`${img.span ? "col-span-2 hidden md:block" : ""}`}
-            data-aos="fade-up"
-            data-aos-delay={index * 100}
           >
             <Image
               src={img.img}
@@ -33,17 +34,17 @@ async function ImagesSection() {
               width={100}
               height={100}
             />
-          </div>
+          </FadeIn>
         ))}
-        <div
+        <ScaleIn
+          initialScale={0.8}
+          delay={0.6} 
           className="bg-primary absolute top-[50%] left-[50%] flex size-36 -translate-x-[50%] -translate-y-[50%] items-center justify-center rounded-full sm:size-56"
-          data-aos="zoom-in"
-          data-aos-delay="600"
         >
           <p className="text-background text-center text-lg sm:text-2xl">
             {t("TEXT.followInstgram")}
           </p>
-        </div>
+        </ScaleIn>
       </div>
     </section>
   );

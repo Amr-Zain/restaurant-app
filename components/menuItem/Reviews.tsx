@@ -5,8 +5,10 @@ import ReviewStars from "./ReviewStars";
 import { getProductReviews } from "@/services/ApiHandler";
 import { getTranslations } from "next-intl/server";
 
+import { FadeIn } from "@/components/animations"; 
+
 async function ItemReviews({ itemId }: { itemId: number }) {
-  const t = await getTranslations()
+  const t = await getTranslations();
   const review = await getProductReviews(itemId);
   const customerReviews = review.data;
   const productRating = review.rate;
@@ -24,9 +26,12 @@ async function ItemReviews({ itemId }: { itemId: number }) {
     .sort((a, b) => b.rating - a.rating);
   return (
     <div>
-      <h2 className="text-text mb-6 text-3xl md:text-5xl font-bold">{t('labels.customerReview')}</h2>
+      <FadeIn direction="up" delay={0.1} duration={0.8}>
+        <h2 className="text-text mb-6 text-3xl md:text-5xl font-bold">{t('labels.customerReview')}</h2>
+      </FadeIn>
+
       <div className="border-primary/20 container flex flex-col gap-6 rounded-xl border-1 p-6 md:flex-row">
-        <div className="mb-8 flex shrink-0 basis-80 flex-col items-center gap-8">
+        <FadeIn direction="left" delay={0.2} duration={0.7} className="mb-8 flex shrink-0 basis-80 flex-col items-center gap-8">
           <div className="flex flex-shrink-0 flex-col items-center">
             <span className="text-5xl font-extrabold text-gray-900">
               {productRating.toFixed(1)}
@@ -51,11 +56,8 @@ async function ItemReviews({ itemId }: { itemId: number }) {
             </span>
           </div>
           <div className="w-full shrink-0">
-            {ratingBreakdown.map((breakdown) => (
-              <div
-                key={breakdown.rating}
-                className="mb-2 flex items-center gap-2"
-              >
+            {ratingBreakdown.map((breakdown, index) => (
+              <FadeIn key={breakdown.rating} direction="left" delay={0.3 + index * 0.1} duration={0.6} className="mb-2 flex items-center gap-2">
                 <span className="text-text flex w-8 gap-1 text-right font-medium">
                   {breakdown.rating}{" "}
                   <Star
@@ -71,17 +73,14 @@ async function ItemReviews({ itemId }: { itemId: number }) {
                 <span className="w-10 text-left text-sm text-gray-500">
                   {breakdown.count}%
                 </span>
-              </div>
+              </FadeIn>
             ))}
           </div>
-        </div>
+        </FadeIn>
 
-        <div className="grow-1 space-y-6 overflow-y-auto pe-2">
-          {customerReviews.map((review) => (
-            <div
-              key={review.id}
-              className="w-full border-t border-gray-100"
-            >
+        <FadeIn direction="right" delay={0.4} duration={0.7} className="grow-1 space-y-6 overflow-y-auto pe-2">
+          {customerReviews.map((review, index) => (
+            <FadeIn key={review.id} direction="right" delay={0.5 + index * 0.1} duration={0.6} className="w-full border-t border-gray-100">
               <div className="mb-2 flex w-full items-center justify-between">
                 <div className="flex w-full items-start justify-between">
                   <div className="flex gap-2">
@@ -113,9 +112,9 @@ async function ItemReviews({ itemId }: { itemId: number }) {
               <p className="text-sub line-clamp-2">
                 {review.review}
               </p>
-            </div>
+            </FadeIn>
           ))}
-        </div>
+        </FadeIn>
       </div>
     </div>
   );

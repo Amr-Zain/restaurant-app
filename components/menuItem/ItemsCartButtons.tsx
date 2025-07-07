@@ -44,25 +44,27 @@ function ItemCardButtons({
     setOpenSuccess(true)
   };
   return (
-    <div className="mb-4 flex flex-col items-center justify-end gap-4 sm:flex-row">
+    <div className="mb-4 flex items-center  md:justify-end justify-center gap-4">
       <div className="border-primary/20 flex h-12 items-center space-x-1 rounded-lg border p-2">
         <Button
           variant="ghost"
           size="icon"
-          disabled={quantity === 1}
+          disabled={quantity === 1||isLoading}
           onClick={() => setQuantity(Math.max(1, quantity - 1))}
-          className="text-primary size-10 cursor-pointer"
+          
+          className="text-primary size-8 sm:size-10 cursor-pointer"
         >
           <Minus size={25} />
         </Button>
-        <span className="text-text w-8 cursor-pointer text-center text-lg font-bold">
+        <span className="text-text w-5 sm:w-8 cursor-pointer text-center sm:text-lg font-bold">
           {quantity}
         </span>
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setQuantity(quantity + 1)}
-          className="text-primary size-10 cursor-pointer"
+          disabled={isLoading}
+          className="text-primary size-8 sm:size-10 cursor-pointer"
         >
           <Plus size={25} />
         </Button>

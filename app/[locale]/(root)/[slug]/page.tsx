@@ -63,7 +63,7 @@ export default async function CMSPage({
   } catch (error: any) {
     console.error("Error fetching CMS page:", error);
     if (error?.status && error.status === 404) {
-      console.log(`CMS page not found (404) for slug: ${cms}`);
+      console.error(`CMS page not found (404) for slug: ${cms}`);
       notFound();
     } else {
       console.error(`An unexpected error occurred for slug: ${cms}`, error);

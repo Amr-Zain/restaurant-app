@@ -85,6 +85,11 @@
     "confirm": "Confirm",
     "errorSubmittingReview": "Error submitting review"
   },
+   "confirmModal": {
+    "logoutTitle": "Logout",
+    "logoutDesc": "Are you sure you want to log out?",
+    "confirmDesc": "Are you sure you want to confirm?"
+  },
   "share": {
     "shareThisItem": "Share This Item",
     "copyLink": "Copy Link",

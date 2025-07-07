@@ -12,6 +12,7 @@ import HomeSlider from "@/components/home/Slider";
 import ReservationForm from "@/components/reservation/ReservationForm";
 import { getHomeData } from "@/services/ApiHandler";
 import { getTranslations } from "next-intl/server";
+import { FadeIn } from "@/components/animations";
 
 export default async function HomePage() {
   const homeData = await getHomeData();
@@ -41,13 +42,13 @@ export default async function HomePage() {
           ))}
         />
       )}
-      <div
-        data-aos="fade-right"
-        data-aos-delay="100"
+      <FadeIn
+        direction="up"
+        delay={0.1}
         className="mx-auto w-full sm:w-[90%]"
       >
         <ReservationForm />
-      </div>
+      </FadeIn>
       {homeData?.web_content_link && (
         <GeneralSection item={homeData.web_content_link} className="order-last">
           <div className="flex gap-6">

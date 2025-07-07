@@ -17,14 +17,13 @@ function CardModal({ type, data }: CardModalProps) {
   const t = useTranslations("card");
   const full_name = useAuthStore((state) => state.user!.full_name);
   const promisedData = use(data);
-  console.log(promisedData)
-  if (!data) return;
+  if (!promisedData?.id) return;
   const isCreditCard = type === "cridtCard";
   const cardTitle = isCreditCard ? t("cridtCard") : t("loyaltyCard");
   const cardIcon = isCreditCard ? (
-    <Wallet className="hover:!bg-primary size-5" />
+    <Wallet className="size-5" />
   ) : (
-    <Loyalty className="hover:!bg-primary size-5" />
+    <Loyalty className="size-5" />
   );
 
   const cardValue = isCreditCard
@@ -36,7 +35,7 @@ function CardModal({ type, data }: CardModalProps) {
       <DialogTrigger asChild className="cursor-pointer">
         <div className="flex items-center justify-between">
           <div className={"nav-item p-3"}>
-            <div className="nav-icon">{cardIcon}</div>
+            <div className="nav-icon hover:fill-primary">{cardIcon}</div>
             {cardTitle}
           </div>
           <div className="text-success rounded-full bg-success/10 px-4 py-2 text-sm font-semibold">

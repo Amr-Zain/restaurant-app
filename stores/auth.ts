@@ -14,7 +14,7 @@ interface AuthStore {
         lng: number;
     };
     setUser: (user: User) => void;
-    setNotifiable: () => void;
+    setNotifiable: () => Promise<void>;
     setLocation: (location: {
         lat: number;
         lng: number;

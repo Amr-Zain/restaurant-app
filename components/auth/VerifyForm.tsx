@@ -37,7 +37,6 @@ const VerifyForm = ({ isProfile = false, onClose }: VerifyFormProps) => {
 
   const { timeLeft, canResend, resetTimer } = useResendTimer();
 
-  // Form setup
   const formSchema = OTPSchema({ t });
   const form = useForm<OTPSchemaType>({
     resolver: zodResolver(formSchema),
@@ -71,7 +70,6 @@ const VerifyForm = ({ isProfile = false, onClose }: VerifyFormProps) => {
 
   const handleFormSubmit = async (values: OTPSchemaType) => {
     setVerify({ ...verify, resetCode: values.reset_code });
-
     await verifyHandler({
       phone_code: verify.code!,
       phone: verify.phone!,

@@ -1,108 +1,111 @@
 "use client";
 
-import { useEffect } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
+import { useEffect, useState } from "react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 import { Link } from "@/i18n/routing";
-import AOS from "aos";
-import "aos/dist/aos.css";
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "../Icons";
-
-function SliderSection({ title, to, items }: { title: string, to: string, items: React.ReactNode[]}) {
-  useEffect(() => {
-    AOS.init({
-      duration: 800,
-      easing: 'ease-in-out',
-      once: true,
-      offset: 100,
-    });
-  }, []);
+import { FadeIn, ScaleIn } from "../animations";
+function SliderSection({
+  title,
+  to,
+  items,
+}: {
+  title: string;
+  to: string;
+  items: React.ReactNode[];
+}) {
+  const [api, setApi] = useState<CarouselApi>();
   const t = useTranslations();
-  if(!items.length) return;
+
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      api.scrollNext();
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [api]);
+
+  if (!items.length) return null;
+
   return (
     <div className="p-sec">
-      <div 
-        className="flex justify-between items-center mb-4"
-        data-aos="fade-up"
-        data-aos-delay="100"
+      <FadeIn
+        direction="up"
+        delay={0.1}
+        duration={0.6}
+        className="mb-4 flex items-center justify-between"
       >
-        <h3 
-          className="text-2xl font-bold text-text md:text-4xl md:font-bold"
-          data-aos="fade-right"
-          data-aos-delay="200"
+        <FadeIn
+          direction="left"
+          delay={0.2}
+          duration={0.6}
+          className="text-text text-2xl font-bold md:text-4xl md:font-bold"
         >
           {title}
-        </h3>
-        <Link 
-          href={to} 
-          className="flex gap-2 items-center text-primary cursor-pointer text-sm md:text-lg font-medium hover:opacity-80 transition-opacity"
-          data-aos="fade-left"
-          data-aos-delay="200"
+        </FadeIn>
+        <FadeIn
+          direction="right"
+          delay={0.2}
+          duration={0.6}
         >
-         {t("TEXT.viewAll")+" "}
-          <span className={"rtl:rotate-180"}>
-            <ArrowRight />
-          </span>
-        </Link>
-      </div>
+          <Link
+            href={to}
+            className="text-primary flex cursor-pointer items-center gap-2 text-sm font-medium transition-opacity hover:opacity-80 md:text-lg"
+          >
+            {t("TEXT.viewAll") + " "}
+            <span className={"rtl:rotate-180"}>
+              <ArrowRight />
+            </span>
+          </Link>
+        </FadeIn>
+      </FadeIn>
 
-      <div
-        data-aos="fade-up"
-        data-aos-delay="300"
+      <FadeIn
+        direction="up"
+        delay={0.3}
+        duration={0.6}
       >
-        <Swiper
-          modules={[Autoplay]}
-          spaceBetween={5}
-          slidesPerView={1.2}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
+        <Carousel
+          setApi={setApi}
+          opts={{
+            align: "start",
+            loop: true,
           }}
-          breakpoints={{
-            400:{
-              spaceBetween: 10,
-              slidesPerView: 1.8,
-            },
-            555: {
-              slidesPerView: 2.5,
-              spaceBetween: 10,
-            },
-            
-            740: {
-              slidesPerView: 3,
-              spaceBetween: 10,
-            },
-            930: {
-              slidesPerView: 3.5,
-              spaceBetween: 10,
-            },
-            1150: {
-              slidesPerView: 4.5,
-              spaceBetween: 10,
-            },
-            1536: {
-              slidesPerView: 5,
-              spaceBetween: 30,
-            },
-          }}
-          className="mySwiper"
+          className="w-full"
         >
-          {items.map((item, index) => (
-            <SwiperSlide key={index}>
-              <div 
-                className="pb-10"
-                data-aos="zoom-in"
-                data-aos-delay={400 + (index * 100)}
+          <CarouselContent className="-ml-1">
+            {items.map((item, index) => (
+              <CarouselItem
+                key={index}
+                className="basis-4/5 pl-1 sm:basis-1/2 md:basis-1/3 lg:basis-1/3 xl:basis-1/5 2xl:basis-1/6"
               >
-                {item}
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+                <ScaleIn
+                  initialScale={0.8}
+                  duration={0.5}
+                  delay={0.4 + index * 0.1} 
+                  className="pb-10"
+                >
+                  {item}
+                </ScaleIn>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          {/*  <CarouselPrevious className="hidden sm:flex -left-4 h-10 w-10" />
+          <CarouselNext className="hidden sm:flex -right-4 h-10 w-10" /> */}
+        </Carousel>
+      </FadeIn>
     </div>
   );
 }

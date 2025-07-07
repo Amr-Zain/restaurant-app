@@ -74,6 +74,11 @@
     "viewAll": " عرض الكل",
     "changeNotificationsDesc": "هل أنت متأكد من أنك تريد تغيير حالة الإشعارات؟"
   },
+   "confirmModal": {
+    "logoutTitle": "تسجيل الخروج",
+    "logoutDesc": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+    "confirmDesc": "هل أنت متأكد أنك تريد التأكيد؟"
+  },
   "reviewItem": {
     "rate": "تقييم",
     "addReview": "إضافة مراجعة",

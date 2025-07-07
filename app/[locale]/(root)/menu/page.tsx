@@ -1,10 +1,10 @@
 import HeroSection from "@/components/general/HeroSection";
-//import CategoryTabs from "@/components/menu/CategoryTabs";
 import MenuCard from "@/components/menu/ProductCard";
 import { getTranslations } from "next-intl/server";
-//import PaginationControls from "@/components/general/Pagenation";
 import { getMenuFilter, getMenuProducts } from "@/services/ApiHandler";
 import FiltersLayout from "@/components/menu/FiltersLayout";
+
+import { FadeIn } from "@/components/animations";
 
 export default async function HomePage({
   searchParams,
@@ -18,12 +18,15 @@ export default async function HomePage({
 }) {
   const t = await getTranslations();
   const params = await searchParams;
-  console.log(params)
   const [filters, menuList] = await Promise.all([
     getMenuFilter(),
     getMenuProducts(params),
   ]);
-  console.log(menuList)
+
+  const lang = t('lang');
+
+  const filtersLayoutDirection = lang === 'ltr' ? 'left' : 'right';
+
   return (
     <div>
       <HeroSection
@@ -31,33 +34,35 @@ export default async function HomePage({
         home={t("NAV.home")}
         section={t("NAV.menu")}
         href="/menu"
-        dir={t('lang')}
+        dir={lang}
       />
       <div className="p-sec mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-[250px_1fr]">
-        <FiltersLayout
-          filters={filters?.content}
-          initialCategoryIds={params?.categories?.split(',')}
-          initialSubCategoryIds={params?.sub_categories?.split(',')}
-          keyword={params?.keyword}
-        />
+        <FadeIn direction={filtersLayoutDirection} delay={0.2} duration={0.7}>
+          <FiltersLayout
+            filters={filters?.content}
+            initialCategoryIds={params?.categories?.split(',')}
+            initialSubCategoryIds={params?.sub_categories?.split(',')}
+            keyword={params?.keyword}
+          />
+        </FadeIn>
         <div className="flex min-h-[70vh] flex-col items-center justify-between">
           {!menuList.data.length ? (
-            <p className="text-sub mt-8 text-center">{t("TEXT.noResults")}</p>
-
+            <FadeIn direction="up" delay={0.3} duration={0.6}>
+              <p className="text-sub mt-8 text-center">{t("TEXT.noResults")}</p>
+            </FadeIn>
           ) : (
             <>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {menuList?.data.map((product, index) => (
-                  <MenuCard
-                    key={product.id + `item ${index}`}
-                    product={product}
-                  />
-                ))}
-              </div>
-              {/*  <PaginationControls
-              currentPage={Number(params?.page)}
-              totalPages={8}
-            /> */}
+              <FadeIn direction="up" delay={0.3} duration={0.8}>
+                <div className="container my-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {menuList?.data.map((product, index) => (
+                    <MenuCard
+                      key={product.id + `item ${index}`}
+                      product={product}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              </FadeIn>
             </>
           )}
         </div>

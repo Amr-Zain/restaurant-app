@@ -4,6 +4,8 @@ import { Button } from "../ui/button";
 import { Link } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
 
+import { FadeIn } from "../animations"; 
+
 type Props = {
   item: {
     image?: string | StaticImageData;
@@ -27,15 +29,16 @@ const GeneralSection = async ({
   const animationDirection = t("lang");
   const isImageStart = className ? false : true;
 
-  let imageAnim ;
-  let contentAnim;
+  let imageAnimDirection: "left" | "right" | "up";
+  let contentAnimDirection: "left" | "right" | "up";
+
   if (animationDirection === "ltr") {
-    contentAnim = isImageStart ? "fade-left" : "fade-right";
-    imageAnim = isImageStart ? "fade-right" : "fade-left";
+    contentAnimDirection = isImageStart ? "left" : "right";
+    imageAnimDirection = isImageStart ? "right" : "left";
   } else {
-  imageAnim = isImageStart ? "fade-left" : "fade-right";
-  contentAnim = isImageStart ? "fade-right" : "fade-left";
-}
+    imageAnimDirection = isImageStart ? "left" : "right";
+    contentAnimDirection = isImageStart ? "right" : "left";
+  }
 
   return (
     <div className="my-8 bg-bottom-right bg-no-repeat">
@@ -46,11 +49,11 @@ const GeneralSection = async ({
           }`}
         >
           {item.image && (
-            <div
-              className={`h-full w-full ${className}`}
-              data-aos={imageAnim}
-              data-aos-duration="1300"
-              data-aos-delay="100"
+            <FadeIn
+              direction={imageAnimDirection}
+              duration={1.3} 
+              delay={0.1} 
+              className={`h-full w-full ${className ? className : ""}`}
             >
               <Image
                 width={560}
@@ -59,63 +62,70 @@ const GeneralSection = async ({
                 alt={item.title}
                 className="mx-auto h-[700px] max-h-full w-[560px] max-w-full rounded-t-[300px] rounded-b-[300px] object-cover"
               />
-            </div>
+            </FadeIn>
           )}
 
-          <div
+          <FadeIn
+            direction={contentAnimDirection}
+            duration={1.3} 
+            delay={0.2}
             className={`max-w-[800px] space-y-5 bg-bottom-right bg-no-repeat`}
-            data-aos={contentAnim}
-            data-aos-duration="1300"
-            data-aos-delay="200"
           >
             {item.heading && (
-              <div
+              <FadeIn
+                direction="up" 
+                delay={0.4}
+                duration={0.8}
                 className="font-500 text-primary flex items-center gap-4 whitespace-nowrap uppercase"
-                data-aos="fade-up"
-                data-aos-delay="400"
-                data-aos-duration="800"
               >
                 {item.heading}
                 <hr className="border-primary hidden w-[50%] md:flex" />
-              </div>
+              </FadeIn>
             )}
 
-            <h3
-              className="text-4xl font-extrabold"
-              dangerouslySetInnerHTML={{
-                __html: item.title,
-              }}
-              data-aos="fade-up"
-              data-aos-delay="500"
-              data-aos-duration="1000"
-            />
+            <FadeIn
+              direction="up" 
+              delay={0.5}
+              duration={1.0} 
+            >
+              <h3
+                className="text-4xl font-extrabold"
+                dangerouslySetInnerHTML={{
+                  __html: item.title,
+                }}
+              />
+            </FadeIn>
 
-            <div
-              className="text-sub text-lg font-thin"
-              dangerouslySetInnerHTML={{
-                __html: item.desc,
-              }}
-              data-aos="fade-up"
-              data-aos-delay="600"
-              data-aos-duration="1000"
-            />
-
-            {item.desc2 && (
+            <FadeIn
+              direction="up" 
+              delay={0.6} 
+              duration={1.0} 
+            >
               <div
                 className="text-sub text-lg font-thin"
-                data-aos="fade-up"
-                data-aos-delay="700"
-                data-aos-duration="1000"
+                dangerouslySetInnerHTML={{
+                  __html: item.desc,
+                }}
+              />
+            </FadeIn>
+
+            {item.desc2 && (
+              <FadeIn
+                direction="up"
+                delay={0.7} 
+                duration={1.0}
               >
-                {item.desc2}
-              </div>
+                <div className="text-sub text-lg font-thin">
+                  {item.desc2}
+                </div>
+              </FadeIn>
             )}
 
             {to && (
-              <div
-                data-aos="fade-up"
-                data-aos-delay="800"
-                data-aos-duration="1000"
+              <FadeIn
+                direction="up"
+                delay={0.8} 
+                duration={1.0}
               >
                 <Link href={to}>
                   <Button
@@ -125,19 +135,19 @@ const GeneralSection = async ({
                     {t("buttons.discoverMore")}
                   </Button>
                 </Link>
-              </div>
+              </FadeIn>
             )}
 
             {children && (
-              <div
-                data-aos="fade-up"
-                data-aos-delay="900"
-                data-aos-duration="1000"
+              <FadeIn
+                direction="up"
+                delay={0.9} 
+                duration={1.0}
               >
                 {children}
-              </div>
+              </FadeIn>
             )}
-          </div>
+          </FadeIn>
         </div>
       </div>
     </div>

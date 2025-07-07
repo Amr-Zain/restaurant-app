@@ -40,7 +40,7 @@ export const useAddressStore = create<AddressStore>((set, get) => ({
             return false;
         })
         if (!item) {
-            console.log(`Product with ID ${id} is not in favorites, cannot remove.`);
+            console.error(`Product with ID ${id} is not in favorites, cannot remove.`);
             return;
         }
 
@@ -59,16 +59,16 @@ export const useAddressStore = create<AddressStore>((set, get) => ({
             } else {
                 set({ error: res.message || 'Failed to remove from favorites', isLoading: false });
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             set(state => ({
                 data: [
                     ...state.data.slice(0, index),
                     item,
                     ...state.data.slice(index)
                 ],
-                error: err.message || 'Failed to remove from favorites', isLoading: false
+                error: err instanceof Error ?err.message : 'Failed to remove from favorites', isLoading: false
             }));
-            toast.error(err.message || "Operation faild!");
+            toast.error(err instanceof Error ?err.message : "Operation faild!");
         }
     },
     fetchAdderss: async () => {
@@ -76,8 +76,8 @@ export const useAddressStore = create<AddressStore>((set, get) => ({
         try {
             const response = await getAddress();
             set({ data: response.data, isLoading: false });
-        } catch (err: any) {
-            set({ error: err.message || 'Failed to fetch favorites', isLoading: false });
+        } catch (err: unknown) {
+            set({ error: err instanceof Error ?err.message : 'Failed to fetch favorites', isLoading: false });
         }
     },
 }));

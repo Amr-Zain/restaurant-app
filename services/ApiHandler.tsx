@@ -19,7 +19,6 @@ export const getServiceBySlug = async (slug: string) => {
 export const getHomeData = async () => {
   try {
     const { data } = await axiosInstance.get("/home");
-    console.log(data);
     return data.data as HomePageData;
   } catch (error) {
     if (error instanceof Error) {
@@ -47,17 +46,19 @@ export const getSettingsData = async () => {
     const { data } = await axiosInstance.get("/web_settings");
     return transformData(data.data);
   } catch (error) {
-    if (error instanceof Error) {
+    /* if (error instanceof Error) {
       throw new AppError(error.message, 500);
     } else {
       throw new AppError("Field to fetch home", 500);
-    }
+    } */
+   console.error(error)
+       throw "error loading data";
+
   }
 };
 export const getProfile = async () => {
   try {
     const { data } = await axiosInstance.get("profile");
-    console.log("data", data);
     return data.data;
   } catch (error) {
     if (error instanceof Error) {
@@ -89,7 +90,6 @@ export const getCmsPage = async (
 ): Promise<{ data: CmsPageContent }> => {
   try {
     const { data } = await axiosInstance.get(url);
-    console.log(data);
     return (data as { data: CmsPageContent }) || [];
   } catch (error) {
     throw error;
@@ -110,7 +110,7 @@ export const getMenuFilter = async (): Promise<{
       }
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw "error loading data";
   }
 };
@@ -125,7 +125,7 @@ export const getMenuProducts = async (params: {
       }
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw "error loading data";
   }
 };
@@ -134,7 +134,7 @@ export const getOffers = async (params?: { lat: number; lng: number }) => {
     const { data } = await axiosInstance.get(`offers`, {
       params,
     });
-    console.log(data);
+    console.error(data);
     return (
       (data as { data: Product[]; meta: Meta; links: Links }) || {
         data: [],
@@ -142,7 +142,7 @@ export const getOffers = async (params?: { lat: number; lng: number }) => {
       }
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw "error loading data";
   }
 };
@@ -160,7 +160,7 @@ export const getProductReviews = async (id: number) => {
     const { data } = await axiosInstance.get(`products/${id}/reviews`);
     return data as ProductReviewsResponse;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 };
@@ -199,7 +199,7 @@ export const getNotifications = async () => {
     const { data } = await axiosInstance.get("notifications");
     return (data.data as Notification[]) || [];
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
   return [];
 };

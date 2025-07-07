@@ -31,14 +31,14 @@ function PasswordField<T extends FieldValues>({
                 {...field}
                 type={showPassword ? "text" : "password"}
                 placeholder={placeholder}
-                className="pr-10"
+                className="pe-10"
                 disabled={isLoading}
               />
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="absolute top-0 right-0 h-full cursor-pointer px-3 py-1 hover:bg-transparent"
+                className="absolute top-0 end-0 h-full cursor-pointer px-3 py-1 hover:bg-transparent"
                 onClick={() => setShowPassword((prev) => !prev)}
                 disabled={isLoading}
               >

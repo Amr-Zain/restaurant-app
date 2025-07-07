@@ -76,7 +76,6 @@ function CartItem({
               disabled={isLoadingRemove || isLoadingUpdate}
               onClick={() => {
                 deleteItem(cart_product_id);
-                console.log(pathname.split("/").at(-1));
               }}
               className={`cursor-pointer text-red-500 hover:bg-transparent ${isLoadingRemove ? "cursor-not-allowed opacity-50" : ""}`}
             >

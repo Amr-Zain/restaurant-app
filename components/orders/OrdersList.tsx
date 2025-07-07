@@ -3,6 +3,8 @@ import { getTranslations } from "next-intl/server";
 import PaginationControls from "@/components/general/Pagenation";
 import { getOrdersReservations } from "@/services/ApiHandler";
 
+import { FadeIn, ScaleIn } from "@/components/animations";
+
 export default async function OrdersList({
   page,
   status,
@@ -18,32 +20,31 @@ export default async function OrdersList({
 
   if (!res.data.length) {
     return (
-      <div
+      <FadeIn
+        direction="none"
+        duration={0.8}
+        delay={0.4}
         className="text-sub my-10 text-center"
-        data-aos="fade-in"
-        data-aos-duration="800"
-        data-aos-delay="400"
       >
         {t("noOrdersFound")}
-      </div>
+      </FadeIn>
     );
   }
 
   return (
     <>
-      <div
+      <FadeIn
+        direction="up"
+        duration={0.8}
+        delay={0.4}
         className="grid grid-cols-1 gap-4 gap-x-0 lg:grid-cols-2"
-        data-aos="fade-up"
-        data-aos-duration="800"
-        data-aos-delay="400"
       >
         {res.data.map((order, i) =>
           order?.type === "reservation" ? (
-            <div
+            <ScaleIn
               key={`reservation ${order.id}`}
-              data-aos="zoom-in"
-              data-aos-duration="600"
-              data-aos-delay={50 * (i % 4)}
+              duration={0.6}
+              delay={(50 * (i % 4)) / 1000}
             >
               <OrderReservationCard
                 images={[order.store?.image]}
@@ -57,13 +58,12 @@ export default async function OrdersList({
                 ]}
                 name={order.store.name}
               />
-            </div>
+            </ScaleIn>
           ) : (
-            <div
+            <ScaleIn
               key={`order ${order.id}`}
-              data-aos="zoom-in"
-              data-aos-duration="600"
-              data-aos-delay={50 * (i % 4)}
+              duration={0.6}
+              delay={(50 * (i % 4)) / 1000}
             >
               <OrderReservationCard
                 images={order.item.map((item) => item.product.image)}
@@ -85,17 +85,17 @@ export default async function OrdersList({
                   .join(", ")}
                 types={[t(`TEXT.${order.type}`), order.status_trans]}
               />
-            </div>
+            </ScaleIn>
           ),
         )}
-      </div>
+      </FadeIn>
 
-      <div data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+      <FadeIn duration={0.6} delay={0.2}>
         <PaginationControls
           currentPage={+page}
           totalPages={res.meta.last_page}
         />
-      </div>
+      </FadeIn>
     </>
   );
 }

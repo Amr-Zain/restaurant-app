@@ -16,6 +16,9 @@ import { useFormSubmission } from "@/hooks/useFormSubmission";
 import { updateUserProfile } from "@/services/ClientApiHandler";
 import { profileFromType, profileSchema } from "@/helper/schema";
 import { useAuthStore } from "@/stores/auth";
+
+import { FadeIn } from "@/components/animations"; 
+
 function ProfileForm({
   defaultValues,
 }: {
@@ -44,7 +47,10 @@ function ProfileForm({
     mode: "onChange",
   });
   const { handleSubmit } = useFormSubmission(form, {
-    submitFunction: updateUserProfile,
+    submitFunction: async(data)=>{
+      delete data.avatar
+      return await updateUserProfile(data)
+    },
   });
 
   const { countries } = usePhoneCode({ form, setCurrentPhoneLimit });
@@ -55,15 +61,16 @@ function ProfileForm({
       form.setValue("phone", phone!);
     }
   }, [form, phone, updated]);
+
   return (
     <div className="my-8 grid grid-cols-1 items-center gap-4 md:grid-cols-2">
-      <div data-aos="fade-right" data-aos-duration="700" data-aos-delay="200">
-        <ProfileImage avatar={defaultValues.avatar} form={form} />
-      </div>
-      <div
-        data-aos="fade-left"
-        data-aos-duration="700"
-        data-aos-delay="400"
+      <FadeIn direction="right" duration={0.7} delay={0.2}>
+        <ProfileImage avatar={defaultValues.avatar} />
+      </FadeIn>
+      <FadeIn
+        direction="left"
+        duration={0.7}
+        delay={0.4}
         className="mx-auto w-126 max-w-[95%]"
       >
         <Form {...form}>
@@ -110,7 +117,7 @@ function ProfileForm({
             </Button>
           </form>
         </Form>
-      </div>
+      </FadeIn>
     </div>
   );
 }

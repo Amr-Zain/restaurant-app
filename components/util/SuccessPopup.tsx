@@ -21,8 +21,8 @@ function SuccessPopup({
 }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent
-        className="bg-backgroud max-w-[95%] rounded-2xl border-0 px-4 shadow-xl"
+      <DialogContent 
+        className="bg-backgroud max-w-[95%] rounded-2xl border-0 px-4 shadow-xl "
         onPointerDownOutside={(e) => e.preventDefault()}
       >
         <div className="mt-12 w-full">

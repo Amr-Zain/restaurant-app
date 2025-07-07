@@ -9,7 +9,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const data = await getSettingsData();
-  console.log(data.contact_us)
   return (
     <>
       {data.website_customization.top_bar_availability && (

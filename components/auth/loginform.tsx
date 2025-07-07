@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { Link } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -33,17 +33,20 @@ const LoginForm = () => {
       phone_code: "20",
     },
   });
+
   const { countries } = usePhoneCode({ form, setCurrentPhoneLimit });
   const isLoading = form.formState.isLoading;
+  const router = useRouter();
   const setAuthedUser = useAuthStore((state) => state.setUser);
-  const { handleSubmit: handleLogin } = useFormSubmission<LoginFormType>(form, {
+  const { handleSubmit } = useFormSubmission<LoginFormType>(form, {
     submitFunction: login,
     onSuccessPath: "/",
+    onSuccess:(res: SubmissionResult)=>{
+      setAuthedUser(res.data as User);
+      console.log(res.data)
+      router.refresh();
+    }
   });
-  const handleSubmit = async (data: LoginFormType) => {
-    const res = await handleLogin(data);
-    if (res.status === "success") setAuthedUser(res.data as User);
-  };
 
   return (
     <Form {...form}>

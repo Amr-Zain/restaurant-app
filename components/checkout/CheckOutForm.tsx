@@ -17,10 +17,10 @@ import { useCheckoutForm } from "@/hooks/useCheckoutForm";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { postOrder } from "@/services/ClientApiHandler";
-import { useRouter } from "@/i18n/routing";
 import SelectAddress from "../address/SelectAddress";
 import SuccessPopup from "../util/SuccessPopup";
 import { toast } from "sonner";
+import { useCartStore } from "@/stores/cart";
 
 const OrderTypeOptions = [
   { id: 1, label: "checkout.delivery", value: "delivery", icon: Package },
@@ -40,7 +40,6 @@ const PaymentOptions = [
 
 function CheckOutForm({ params }: { params: Record<string, string> }) {
   const t = useTranslations();
-  const router = useRouter();
   const [openSuccess, setOpenSuccess] = useState(false);
   const [orderId, setOrderId] = useState<number | null>(null);
   const {
@@ -56,7 +55,7 @@ function CheckOutForm({ params }: { params: Record<string, string> }) {
     orderType,
     scheduleOption,
   } = useCheckoutForm({ setOpenSuccess, setOrderId });
-
+  const clearCart = useCartStore(state=>state.clearCart)
   useEffect(() => {
     (async () => {
       if (params.status === "success") {
@@ -64,16 +63,17 @@ function CheckOutForm({ params }: { params: Record<string, string> }) {
           const res = await postOrder(params);
           setOrderId(res.data.id);
           setOpenSuccess(true);
-          router.replace(`orders/${res.data.id}`);
+          clearCart(true);
+          //router.replace(`orders/${res.data.id}`);
         } catch (err: unknown) {
-          console.log(err);
+          console.error(err);
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           //@ts-ignore
           toast.error(err?.response?.data || "unexpexted error");
         }
       }
     })();
-  }, [params, router]);
+  }, [clearCart, params]);
   return (
     <>
       <Form {...form}>

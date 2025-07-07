@@ -80,10 +80,10 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     if (error.response?.status === 401) {
-
+/* 
       (await cookies()).delete('token');
       (await cookies()).delete('user');
-      (await cookies()).delete('guest_token');
+      (await cookies()).delete('guest_token'); */
     }
     return Promise.reject(error);
   }

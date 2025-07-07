@@ -106,7 +106,7 @@ export const getCodes = async () => {
   } catch (error) {
     if (error instanceof Error) {
       //throw new AppError(error.message, 500);
-      console.log(error);
+      console.error(error);
     } else {
       //throw new AppError("Field to fetch home", 500);
     }
@@ -287,7 +287,7 @@ export const deleteAccount = async () => {
     useAuthStore.getState().clearUser();
     return data;
   } catch (error: unknown) {
-    console.log(error);
+    console.error(error);
     return error;
   }
 };
@@ -296,10 +296,9 @@ export const changeNotificationStatus = async () => {
     const { data } = await axiosInstance.post(
       "setting/change_notification_status",
     );
-    console.log(data);
     return data;
   } catch (error: unknown) {
-    console.log(error);
+    console.error(error);
     return error;
   }
 };
@@ -308,10 +307,9 @@ export const deleteNotification = async (id:number|string) => {
     const { data } = await axiosInstance.delete(
       `notification/${id}`,
     );
-    console.log(data);
     return data;
   } catch (error: unknown) {
-    console.log(error);
+    console.error(error);
     return error;
   }
 };
@@ -348,3 +346,14 @@ export const getLoyalCard = async () => {
     return;
   }
 };
+export const payment = async (checkoutPayload:Record<string,unknown>)=>{
+    const response = await fetch('/api/create-order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+
+      body: JSON.stringify(checkoutPayload),
+    });
+    return response.json()
+}

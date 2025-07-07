@@ -4,6 +4,8 @@ import { getOrder } from "@/services/ApiHandler";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import { FadeIn } from "@/components/animations";
+
 export default async function OrdersPage({
   params,
 }: {
@@ -14,7 +16,7 @@ export default async function OrdersPage({
   try {
     res = await getOrder(slug);
   } catch (error: unknown) {
-    console.log(error);
+    console.error(error);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     if (error.status === 404) return notFound();
@@ -57,18 +59,16 @@ export default async function OrdersPage({
       value: res.data.price_detail.total_price || 0,
     },
   };
-  console.log(res)
   return (
-    <div 
+    <FadeIn
+      direction="up"
+      duration={0.8}
       className="container my-10 grid grid-cols-1 gap-6 md:grid-cols-[1fr_360px]"
-      data-aos="fade-up"
-      data-aos-duration="800"
     >
-    
-      <div
-        data-aos="fade-right"
-        data-aos-duration="700"
-        data-aos-delay="200"
+      <FadeIn
+        direction="right"
+        duration={0.7}
+        delay={0.2}
       >
         <OrderInfo
           id={res.data.id}
@@ -79,11 +79,11 @@ export default async function OrdersPage({
           address={res.data.address}
           orderStatus={res.data.order_status!}
         />
-      </div>
-      <div
-        data-aos="fade-left"
-        data-aos-duration="700"
-        data-aos-delay="400"
+      </FadeIn>
+      <FadeIn
+        direction="left"
+        duration={0.7}
+        delay={0.4}
       >
         <OrderDetails
           canCancel={res.data.can_cancel}
@@ -94,8 +94,7 @@ export default async function OrdersPage({
           items={res.data.item}
           orderSummary={orderSummary}
         />
-      </div>
-    </div>
-
+      </FadeIn>
+    </FadeIn>
   );
 }

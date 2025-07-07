@@ -29,7 +29,7 @@ export const useFavoritesStore = create<FavoritesStore>((set, get) => ({
             return false;
         })
         if (!item) {
-            console.log(`Product with ID ${id} is not in favorites, cannot remove.`);
+            console.error(`Product with ID ${id} is not in favorites, cannot remove.`);
             return;
         }
 
@@ -68,7 +68,7 @@ export const useFavoritesStore = create<FavoritesStore>((set, get) => ({
             const item = await taggleFavorit({ favorit: true, id });
             set(state=>({data:[...state.data,item.data]}));
         }catch(err){
-            console.log(err)
+            console.error(err)
         }
     },
     fetchFavorites: async () => {

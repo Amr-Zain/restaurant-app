@@ -1,11 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import Image from "next/image";
 import profile from "@/assets/images/profile.png";
@@ -89,9 +84,12 @@ const Stores = () => {
         </div>
       </DialogTrigger>
 
-      <DialogContent className="bg-backgroud w-128 max-w-[90%] rounded-2xl border-0 px-4 shadow-xl">
-        <DialogHeader className="pb-4  sm:text-start">
-          <DialogTitle className="text-xl text-text text-center font-semibold">
+      <DialogContent
+        className="bg-backgroud w-128 max-w-[90%] rounded-2xl border-0 px-4 shadow-xl"
+        onPointerDownOutside={(e) => e.preventDefault()}
+      >
+        <DialogHeader className="pb-4 sm:text-start">
+          <DialogTitle className="text-text text-center text-xl font-semibold">
             {t("labels.selectStore")}
           </DialogTitle>
         </DialogHeader>

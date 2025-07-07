@@ -36,6 +36,9 @@ const RegisterForm = () => {
     {
       submitFunction: register,
       onSuccessPath: "/auth/verification",
+      onSuccess:()=>{
+        
+      }
     },
   );
   const handleSubmit = async (data: RegisterFormType) => {

@@ -1,11 +1,27 @@
 import HeroSection from "@/components/general/HeroSection";
 import MenuCard from "@/components/menu/ProductCard";
 import { getTranslations } from "next-intl/server";
-import { getMenuFilter, getMenuProducts } from "@/services/ApiHandler";
+import {
+  getSettingsData,
+  serverCachedFetch,
+} from "@/services/ApiHandler";
 import FiltersLayout from "@/components/menu/FiltersLayout";
 
 import { FadeIn } from "@/components/animations";
+import { Metadata } from "next";
+import { customFetch } from "@/helper/fetchServerOptions";
 
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const websiteSetting = (await getSettingsData()).website_setting;
+    const t = await getTranslations();
+    return {
+      title: `${t("NAV.menu")} - ${websiteSetting.website_title}`,
+    };
+  } catch {
+    return {};
+  }
+}
 export default async function HomePage({
   searchParams,
 }: {
@@ -18,14 +34,31 @@ export default async function HomePage({
 }) {
   const t = await getTranslations();
   const params = await searchParams;
-  const [filters, menuList] = await Promise.all([
-    getMenuFilter(),
-    getMenuProducts(params),
+  const { url: productUrl, fetchOptions: ProductOptions } = await customFetch(
+    "product",
+    { method: "GET" },
+    params as Record<string, string>,
+  );
+  const { url, fetchOptions } = await customFetch(`get-filter`, {
+    method: "GET",
+    headers: { os: "" },
+  });
+  const [{ data: filters }, menuList] = await Promise.all([
+    serverCachedFetch({
+      url,
+      requestHeaders: fetchOptions,
+      revalidate: 3600,
+    }),
+    serverCachedFetch({
+      url: productUrl,
+      requestHeaders: ProductOptions,
+      revalidate: 3600,
+    }) as Promise<{data:Product[]}>,
   ]);
 
-  const lang = t('lang');
+  const lang = t("lang");
 
-  const filtersLayoutDirection = lang === 'ltr' ? 'left' : 'right';
+  const filtersLayoutDirection = lang === "ltr" ? "left" : "right";
 
   return (
     <div>
@@ -40,8 +73,8 @@ export default async function HomePage({
         <FadeIn direction={filtersLayoutDirection} delay={0.2} duration={0.7}>
           <FiltersLayout
             filters={filters?.content}
-            initialCategoryIds={params?.categories?.split(',')}
-            initialSubCategoryIds={params?.sub_categories?.split(',')}
+            initialCategoryIds={params?.categories?.split(",")}
+            initialSubCategoryIds={params?.sub_categories?.split(",")}
             keyword={params?.keyword}
           />
         </FadeIn>

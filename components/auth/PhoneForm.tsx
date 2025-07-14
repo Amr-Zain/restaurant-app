@@ -42,6 +42,7 @@ const PhoneForm = ({
     },
     mode: "onChange",
   });
+  const isLoading =  form.formState.isSubmitting;
   const { countries } = usePhoneCode({ form, setCurrentPhoneLimit });
   const setVerify = useAuthStore((state) => state.setVerify);
   const { handleSubmit } = useFormSubmission<PhoneFormType>(form, {
@@ -68,9 +69,10 @@ const PhoneForm = ({
           phoneNumberName={"phone"}
           countries={countries}
           currentPhoneLimit={currentPhoneLimit}
+          disabled={isLoading}
         />
-        <Button className="w-full" type="submit">
-          {false ? t("buttons.loading") : t(`buttons.submit`)}
+        <Button className="w-full" type="submit" disabled={isLoading}>
+          {isLoading ? t("buttons.loading") : t(`buttons.submit`)}
         </Button>
       </form>
     </Form>

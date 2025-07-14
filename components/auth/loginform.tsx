@@ -35,7 +35,8 @@ const LoginForm = () => {
   });
 
   const { countries } = usePhoneCode({ form, setCurrentPhoneLimit });
-  const isLoading = form.formState.isLoading;
+  const isLoading = form.formState.isSubmitting;
+  console.log(isLoading)
   const router = useRouter();
   const setAuthedUser = useAuthStore((state) => state.setUser);
   const { handleSubmit } = useFormSubmission<LoginFormType>(form, {
@@ -58,6 +59,7 @@ const LoginForm = () => {
             phoneNumberName="phone"
             countries={countries}
             currentPhoneLimit={currentPhoneLimit}
+            disabled={isLoading}
           />
 
           <PasswordField

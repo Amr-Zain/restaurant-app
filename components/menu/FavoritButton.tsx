@@ -30,7 +30,7 @@ function FavoritButton({
     if(!favorit&& isFavorit){
       fetchFavorites()
     }
-  },[])
+  },[favorit, fetchFavorites, isFavorit])
   return (
     <Button
       variant="ghost"

@@ -1,12 +1,52 @@
 import ContactUsForm from "@/components/contact/ContactForm";
 import BranchCard from "@/components/branches/BranchCard";
 import HeroSection from "@/components/general/HeroSection";
-import { getBranchs } from "@/services/ApiHandler";
+import { serverCachedFetch } from "@/services/ApiHandler";
 import { getTranslations } from "next-intl/server";
 import GoogleMapWithBranches from "@/components/contact/Map";
+import { Metadata } from "next";
+import { customFetch } from "@/helper/fetchServerOptions";
+
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+     const { url: settingUrl, fetchOptions } = await customFetch(
+          "/web_settings",
+          {
+            method: "GET",
+          },
+        );
+        const title = (
+          await serverCachedFetch({
+            url: settingUrl,
+            requestHeaders: fetchOptions,
+            revalidate: 3600,
+          })
+        ).data.website_setting.website_title;
+    const t = await getTranslations();
+    return {
+      title: `${t('NAV.contact')} - ${title}`,
+    };
+  } catch {
+    return {};
+  }
+}
 export default async function AboutPage() {
   const t = await getTranslations();
-  const branches = await getBranchs();
+  const { url, fetchOptions } = await customFetch(
+      "/stores",
+      {
+        method: "GET",
+      },
+    );
+    const branches = (
+      await serverCachedFetch({
+        url,
+        requestHeaders: fetchOptions,
+        revalidate: 3600,
+      }) as Branch[]
+    );
+    console.log(branches)
+  //const branches = await getBranchs();
   
   const locations = branches.map((branch) => ({
     id: branch.id,

@@ -191,20 +191,27 @@ export const ProfileIcon = () => (
     />
   </svg>
 );
-export const CartIcon = ({ className }: { className?: string }) => (
+export const CartIcon = ({ className = "" }: { className?: string }) => (
   <svg
     className={className}
-    width="17"
-    height="18"
-    viewBox="0 0 17 18"
+    width="24"
+    height="25"
+    viewBox="0 0 24 25"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      d="M4.74937 5.3918V4.58346C4.74937 2.70846 6.2577 0.866798 8.1327 0.691797C8.65368 0.640612 9.1796 0.699071 9.67663 0.863412C10.1736 1.02775 10.6308 1.29434 11.0185 1.646C11.4063 1.99767 11.7162 2.42663 11.9281 2.90527C12.1401 3.38392 12.2496 3.90164 12.2494 4.42513V5.57513M5.99937 17.3335H10.9994C14.3494 17.3335 14.9494 15.9918 15.1244 14.3585L15.7494 9.35847C15.9744 7.32513 15.391 5.6668 11.8327 5.6668H5.16603C1.6077 5.6668 1.02437 7.32513 1.24937 9.35847L1.87437 14.3585C2.04937 15.9918 2.64937 17.3335 5.99937 17.3335Z"
-      stroke="white"
-      strokeWidth="1.2"
+      d="M7.50001 8.41986V7.44986C7.50001 5.19986 9.31001 2.98986 11.56 2.77986C12.1852 2.71844 12.8163 2.78859 13.4127 2.9858C14.0091 3.18301 14.5577 3.50291 15.023 3.92491C15.4883 4.34691 15.8602 4.86166 16.1145 5.43603C16.3689 6.01041 16.5002 6.63168 16.5 7.25986V8.63986M9.00001 22.7499H15C19.02 22.7499 19.74 21.1399 19.95 19.1799L20.7 13.1799C20.97 10.7399 20.27 8.74986 16 8.74986H8.00001C3.73001 8.74986 3.03001 10.7399 3.30001 13.1799L4.05001 19.1799C4.26001 21.1399 4.98001 22.7499 9.00001 22.7499Z"
+      stroke="#BDC1DF"
+      strokeWidth="1.5"
       strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M15.495 12.75H15.505M8.495 12.75H8.503"
+      stroke="#BDC1DF"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -228,7 +235,81 @@ export const Youtube = ({ className }: { className?: string }) => (
     <path d="M10 9l5 3l-5 3z" />
   </svg>
 );
-
+export const TransactionIN = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+  >
+    <g clip-path="url(#clip0_1589_5296)">
+      <path
+        d="M9.99935 18.3332C14.6018 18.3332 18.3327 14.6023 18.3327 9.99984C18.3327 5.39734 14.6018 1.6665 9.99935 1.6665C5.39685 1.6665 1.66602 5.39734 1.66602 9.99984C1.66602 14.6023 5.39685 18.3332 9.99935 18.3332ZM9.99935 12.9165V7.9165V12.9165Z"
+        fill="#06D6A0"
+      />
+      <path
+        d="M9.99935 12.9165V7.9165M9.99935 18.3332C14.6018 18.3332 18.3327 14.6023 18.3327 9.99984C18.3327 5.39734 14.6018 1.6665 9.99935 1.6665C5.39685 1.6665 1.66602 5.39734 1.66602 9.99984C1.66602 14.6023 5.39685 18.3332 9.99935 18.3332Z"
+        stroke="#F5F6FF"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M7.5 9.5835L10 7.0835L12.5 9.5835"
+        stroke="#F5F6FF"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_1589_5296">
+        <rect width="20" height="20" fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+);
+export const TransactionOut = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+  >
+    <g clip-path="url(#clip0_16077_5245)">
+      <path
+        d="M9.99935 1.66683C14.6018 1.66683 18.3327 5.39766 18.3327 10.0002C18.3327 14.6027 14.6018 18.3335 9.99935 18.3335C5.39685 18.3335 1.66602 14.6027 1.66602 10.0002C1.66602 5.39766 5.39685 1.66683 9.99935 1.66683ZM9.99935 7.0835V12.0835V7.0835Z"
+        fill="#FF445B"
+      />
+      <path
+        d="M9.99935 7.0835V12.0835M9.99935 1.66683C14.6018 1.66683 18.3327 5.39766 18.3327 10.0002C18.3327 14.6027 14.6018 18.3335 9.99935 18.3335C5.39685 18.3335 1.66602 14.6027 1.66602 10.0002C1.66602 5.39766 5.39685 1.66683 9.99935 1.66683Z"
+        stroke="#F5F6FF"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M7.5 10.4165L10 12.9165L12.5 10.4165"
+        stroke="#F5F6FF"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_16077_5245">
+        <rect
+          width="20"
+          height="20"
+          fill="white"
+          transform="matrix(1 0 0 -1 0 20)"
+        />
+      </clipPath>
+    </defs>
+  </svg>
+);
 export const Whatsapp = () => {
   <svg
     xmlns="http://www.w3.org/2000/svg"

@@ -45,7 +45,7 @@
     "notifications": "الإشعارات",
     "changePhone": "تغيير الرقم",
     "gettingYourCurrentLocation": "جاري الحصول على موقعك الحالي...",
-      "noAddressesFound": "لا توجد عناوين",
+    "noAddressesFound": "لا توجد عناوين",
     "selected": "المحدد:",
     "changePhoneDesc": "الرجاء إدخال رقم هاتفك حتى نتمكن من التحقق منه.",
     "followInstgram": "تابعنا على انستغرام",
@@ -74,7 +74,7 @@
     "viewAll": " عرض الكل",
     "changeNotificationsDesc": "هل أنت متأكد من أنك تريد تغيير حالة الإشعارات؟"
   },
-   "confirmModal": {
+  "confirmModal": {
     "logoutTitle": "تسجيل الخروج",
     "logoutDesc": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
     "confirmDesc": "هل أنت متأكد أنك تريد التأكيد؟"
@@ -220,6 +220,7 @@
     "description": "الوصف"
   },
   "checkout": {
+    "title": "الدفع",
     "orderType": "نوع الطلب",
     "delivery": "توصيل",
     "takeaway": "تيك أواي",

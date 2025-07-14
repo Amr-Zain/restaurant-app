@@ -59,7 +59,6 @@ axiosInstance.interceptors.request.use(
           console.warn("Failed to parse 'user' cookie:", parseError);
         }
       }
-
       config.headers["Accept-Language"] = locale;
 
     } catch (error) {

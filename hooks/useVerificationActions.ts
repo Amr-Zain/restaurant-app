@@ -39,6 +39,7 @@ export const useVerificationActions = (
 
     const verifyCode = async (formData: VerifyCodeData) => {
         setVerify({ ...verify, resetCode: formData.reset_code });
+        setIsLoading(true);
 
         if (isProfile) {
             onClose?.();
@@ -53,7 +54,15 @@ export const useVerificationActions = (
             ? "verify_phone"
             : "verify_forgot_password_code";
 
-        return await verifyForgotPassword(formData, endpoint);
+        try { return await verifyForgotPassword(formData, endpoint); }
+        catch (error) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
+            throw error.response.data.message
+        } finally {
+            setIsLoading(false);
+
+        }
     };
 
     const onVerifySuccess = (response: unknown) => {

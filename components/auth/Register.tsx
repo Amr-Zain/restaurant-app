@@ -30,7 +30,7 @@ const RegisterForm = () => {
   });
   const { countries } = usePhoneCode({ form, setCurrentPhoneLimit });
   const setVerify = useAuthStore((state) => state.setVerify);
-  const isPending = form.formState.isLoading;
+  const isPending = form.formState.isSubmitting;
   const { handleSubmit: registerUser } = useFormSubmission<RegisterFormType>(
     form,
     {

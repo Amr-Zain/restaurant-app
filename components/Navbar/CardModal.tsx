@@ -2,7 +2,7 @@
 import { use, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { useTranslations } from "next-intl";
-import { Loyalty, Wallet } from "../Icons";
+import { Loyalty, TransactionIN, TransactionOut, Wallet } from "../Icons";
 import { useAuthStore } from "@/stores/auth";
 import Image from "next/image";
 import logo from "@/assets/images/logo.png";
@@ -29,7 +29,7 @@ function CardModal({ type, data }: CardModalProps) {
   const cardValue = isCreditCard
     ? `${promisedData?.bending_balance} ${promisedData?.currency}`
     : t("points", { count: promisedData.points || 0 });
-
+  console.log(promisedData.transactions)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild className="cursor-pointer">
@@ -38,7 +38,7 @@ function CardModal({ type, data }: CardModalProps) {
             <div className="nav-icon hover:fill-primary">{cardIcon}</div>
             {cardTitle}
           </div>
-          <div className="text-success rounded-full bg-success/10 px-4 py-2 text-sm font-semibold">
+          <div className="text-success bg-success/10 rounded-full px-4 py-2 text-sm font-semibold">
             {cardValue}
           </div>
         </div>
@@ -76,18 +76,27 @@ function CardModal({ type, data }: CardModalProps) {
               <>
                 {promisedData.transactions.map((trans) => (
                   <Item
-                    key={trans.id}
+                    key={'trainsId '+trans.id}
                     id={trans.id}
                     title={trans.title}
                     desc={trans.created_at}
                     price={isCreditCard ? trans.amount : undefined}
-                    currency={
-                      isCreditCard
-                        ? promisedData.currency
-                        : t("points", { count: promisedData.points })
-                    }
+                    currency={isCreditCard ? promisedData.currency : undefined}
                     image={trans.image}
-                  />
+                  >
+                   { trans?.points&&<div className="flex flex-col justify-between items-end gap-2 self-center h-full">
+                      <div className="text-sm font-bold">
+                        {t("points", { count: trans.points })}
+                      </div>
+                      <div className="size-4">
+                        {trans.status === "come_in" ? (
+                          <TransactionIN />
+                        ) : (
+                          <TransactionOut />
+                        )}
+                      </div>
+                    </div>}
+                  </Item>
                 ))}
               </>
             ) : (

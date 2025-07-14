@@ -1,14 +1,16 @@
 import NotFound from "@/components/NotFound";
 import {
-  getCmsPage,
+  //getCmsPage,
   getCmsPages,
-  getSettingsData,
+  //getSettingsData,
+  serverCachedFetch,
 } from "@/services/ApiHandler";
 import GeneralSection from "@/components/general/GeneralSection";
 import HeroSection from "@/components/general/HeroSection";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import { customFetch } from "@/helper/fetchServerOptions";
 
 interface CmsPageForPaths {
   slug: string;
@@ -33,8 +35,28 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { cms } = await params;
   try {
-    const page = (await getCmsPage("cms-pages/" + cms)).data;
-    const title = (await getSettingsData()).website_setting.website_title;
+    //const page = (await getCmsPage("cms-pages/" + cms)).data;
+    //const title = (await getSettingsData()).website_setting.website_title;
+    const { url, fetchOptions } = await customFetch("cms-pages/" + cms, {
+      method: "GET",
+    });
+    //const homeData = await getHomeData(url,fetchOptions);
+    const {data:page} = await serverCachedFetch({
+      url,
+      requestHeaders: fetchOptions,
+      revalidate: 3600,
+    });
+
+    const { url: settingUrl } = await customFetch("/web_settings", {
+      method: "GET",
+    });
+    const title = (
+      await serverCachedFetch({
+        url: settingUrl,
+        requestHeaders: fetchOptions,
+        revalidate: 3600,
+      })
+    ).data.website_setting.website_title;
     return {
       title: `${page.title} - ${title}`,
       description: page.desc,
@@ -55,10 +77,16 @@ export default async function CMSPage({
   let pageData = null;
   const t = await getTranslations();
   try {
-    const apiResponse = await getCmsPage("cms-pages/" + cms);
-    if (apiResponse && apiResponse.data) {
-      pageData = apiResponse.data;
-    }
+    const { url, fetchOptions } = await customFetch("cms-pages/" + cms, {
+      method: "GET",
+    });
+    //const homeData = await getHomeData(url,fetchOptions);
+    const {data} = await serverCachedFetch({
+      url,
+      requestHeaders: fetchOptions,
+      revalidate: 3600,
+    }) as {data:CmsPageContent};
+    pageData = data
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("Error fetching CMS page:", error);

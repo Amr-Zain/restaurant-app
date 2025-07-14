@@ -12,6 +12,7 @@ interface SubModifier {
 }
 
 function CartItem({
+  closeSheet,
   cart_product_id,
   slug,
   title,
@@ -29,6 +30,7 @@ function CartItem({
   price: number;
   cart_product_id: number;
   quantity: number;
+  closeSheet?:()=>void
   isCheckout?: boolean;
 }) {
   const updateItem = useCartStore((state) => state.updateItemQuantity);
@@ -56,7 +58,7 @@ function CartItem({
         <div className="flex grow-1 flex-col gap-2">
           <div className="flex justify-between gap-4">
             <div>
-              <Link href={`/menu/${slug}`}>
+              <Link href={`/menu/${slug}`} onClick={()=>closeSheet&&closeSheet()}>
                 <CardTitle className="text-md line-clamp-1 cursor-pointer">
                   {title}
                 </CardTitle>

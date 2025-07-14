@@ -1,6 +1,19 @@
 import ProfileForm from "@/components/profile/ProfileForm";
-import { getProfile } from "@/services/ApiHandler";
+import { getProfile, getSettingsData } from "@/services/ApiHandler";
+import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const websiteSetting = (await getSettingsData()).website_setting;
+    const t = await getTranslations();
+    return {
+      title: `${t('profile.title')} - ${websiteSetting.website_title}`,
+    };
+  } catch {
+    return {};
+  }
+}
 async function Profile() {
   const profileData = await getProfile();
   return (

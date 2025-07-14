@@ -1,9 +1,21 @@
 import ReservationOrderInfo from "@/components/reservation/ReservationOrderInfo";
-import { getReservations } from "@/services/ApiHandler";
+import { getReservations, getSettingsData } from "@/services/ApiHandler";
 import { Calendar, Clock, CreditCard, MapPin, Phone } from "lucide-react";
+import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const websiteSetting = (await getSettingsData()).website_setting;
+    const t = await getTranslations();
+    return {
+      title: `${t('NAV.Reservation')} - ${websiteSetting.website_title}`,
+    };
+  } catch {
+    return {};
+  }
+}
 export default async function ReservationPage({
   params,
 }: {

@@ -7,7 +7,7 @@ import { appStore } from "@/stores/app";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 
-function Cart({ isCheckout }: { isCheckout?: boolean }) {
+function Cart({ isCheckout, closeSheet }: { isCheckout?: boolean, closeSheet?:()=>void }) {
   const { items, price, currency, totalItems } = useCartStore((state) => state);
   const t = useTranslations();
   const { isPointsCovers, usePoints, points } = appStore(
@@ -51,6 +51,7 @@ function Cart({ isCheckout }: { isCheckout?: boolean }) {
           <div className="max-h-[55vh] overflow-y-auto px-2">
             {items.map((item, i) => (
               <CartItem
+                closeSheet={closeSheet}
                 id={item.product.id}
                 slug={item.product.slug}
                 cart_product_id={item.id}

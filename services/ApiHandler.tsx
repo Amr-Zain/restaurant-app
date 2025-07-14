@@ -1,7 +1,7 @@
-"use server";
 import axiosInstance from "./instance";
 import AppError from "../utils/appError";
 import { transformData } from "@/helper/functions";
+import { unstable_cacheLife as cacheLife } from "next/cache";
 
 export const getServiceBySlug = async (slug: string) => {
   try {
@@ -16,9 +16,13 @@ export const getServiceBySlug = async (slug: string) => {
     }
   }
 };
-export const getHomeData = async () => {
+export const getHomeData = async (url: string, requestHeaders: RequestInit) => {
+  "use cache";
+  cacheLife("hours");
   try {
-    const { data } = await axiosInstance.get("/home");
+    const res = await fetch(url, requestHeaders);
+    const data = await res.json();
+    console.log("requestHeaders");
     return data.data as HomePageData;
   } catch (error) {
     if (error instanceof Error) {
@@ -42,6 +46,8 @@ export const getAboutData = async () => {
   }
 };
 export const getSettingsData = async () => {
+  /*  "use cache";
+  cacheLife("days"); */
   try {
     const { data } = await axiosInstance.get("/web_settings");
     return transformData(data.data);
@@ -51,9 +57,8 @@ export const getSettingsData = async () => {
     } else {
       throw new AppError("Field to fetch home", 500);
     } */
-   console.error(error)
-       throw "error loading data";
-
+    console.error(error);
+    throw "error loading data";
   }
 };
 export const getProfile = async () => {
@@ -84,10 +89,10 @@ export const getCmsPages = async (): Promise<CMSPage[]> => {
     throw "Failed to fetch Sort data";
   }
 };
-
 export const getCmsPage = async (
   url: string,
 ): Promise<{ data: CmsPageContent }> => {
+  /*   "use cache"; */
   try {
     const { data } = await axiosInstance.get(url);
     return (data as { data: CmsPageContent }) || [];
@@ -129,7 +134,7 @@ export const getMenuProducts = async (params: {
     throw "error loading data";
   }
 };
-export const getOffers = async (params?: { lat: number; lng: number }) => {
+export const getOffers = async (params?: { page?: number }) => {
   try {
     const { data } = await axiosInstance.get(`offers`, {
       params,
@@ -146,7 +151,8 @@ export const getOffers = async (params?: { lat: number; lng: number }) => {
     throw "error loading data";
   }
 };
-export const getProfuctDeiltals = async (slug: string) => {
+export const getProductDeiltals = async (slug: string) => {
+  /*  "use cache"; */
   try {
     const { data } = await axiosInstance.get(`product/${slug}`);
     return (data.data as ProductData) || {};
@@ -221,29 +227,32 @@ export const getLoyalCard = async () => {
     return;
   }
 };
-/* export const getSettingsData = async () => {
-  return await axiosInstance.get("web_settings");
-}; */
-// export const getCategoriesData = async () => {
-//   try {
-//     const { data } = await axiosInstance.get("/categories");
-//     return data?.data || [];
-//   } catch {
-//     throw new CustomError("Failed to fetch Categories data", 500, "APIError");
 
-//   }
-// };
-
-// export const getShareData = async () => {
-//   return await axiosInstance.get("/relations");
-// };
-
-//
-
-// export const getTermsData = async () => {
-//   return await axiosInstance.get(`/term`);
-// };
-
-// export const getPrivacyData = async () => {
-//   return await axiosInstance.get(`/policy`);
-// };
+export const serverCachedFetch = async ({
+  url,
+  requestHeaders,
+  revalidate,
+  tags,
+}: {
+  url: string;
+  requestHeaders: RequestInit;
+  revalidate: number;
+  tags?: string[];
+}) => {
+  "use cache";
+  //cacheLife('hours');
+  try {
+    const res = await fetch(url, {
+      ...requestHeaders,
+      next: { revalidate, tags },
+    });
+    const data = await res.json();
+    return data ;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new AppError(error.message, 500);
+    } else {
+      throw new AppError("Field to fetch home", 500);
+    }
+  }
+};

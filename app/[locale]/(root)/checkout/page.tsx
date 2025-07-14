@@ -1,16 +1,49 @@
 import CheckOutForm from "@/components/checkout/CheckOutForm";
-import { getCartServer } from "@/services/ApiHandler";
+import {
+  getCartServer,
+  //getSettingsData,
+  serverCachedFetch,
+} from "@/services/ApiHandler";
 import { getTranslations } from "next-intl/server";
 import Cart from "@/components/cart";
 
-import { FadeIn } from "@/components/animations"; 
+import { FadeIn } from "@/components/animations";
+import { Metadata } from "next";
+import { customFetch } from "@/helper/fetchServerOptions";
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const { url: settingUrl, fetchOptions } = await customFetch(
+      "/web_settings",
+      {
+        method: "GET",
+      },
+    );
+    const title = (
+      await serverCachedFetch({
+        url: settingUrl,
+        requestHeaders: fetchOptions,
+        revalidate: 3600,
+      })
+    ).data.website_setting.website_title;
+    const t = await getTranslations();
+    return {
+      title: `${t("checkout.title")} - ${title}`,
+    };
+  } catch {
+    return {};
+  }
+}
 
-async function CheckOut({ searchParams }: { searchParams: Promise<Record<string, string>> }) {
+async function CheckOut({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
   const cart = await getCartServer();
   const t = await getTranslations();
   const params = await searchParams;
 
-  const lang = t("lang"); 
+  const lang = t("lang");
 
   const formDirection = lang === "rtl" ? "left" : "right";
   const cartDirection = lang === "rtl" ? "right" : "left";

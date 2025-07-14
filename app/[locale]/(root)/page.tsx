@@ -10,12 +10,21 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import HomeSlider from "@/components/home/Slider";
 import ReservationForm from "@/components/reservation/ReservationForm";
-import { getHomeData } from "@/services/ApiHandler";
+import { serverCachedFetch } from "@/services/ApiHandler";
 import { getTranslations } from "next-intl/server";
 import { FadeIn } from "@/components/animations";
+import { customFetch } from "@/helper/fetchServerOptions";
 
 export default async function HomePage() {
-  const homeData = await getHomeData();
+  const { url, fetchOptions } = await customFetch(`home`, {
+    method: "GET",
+  });
+  //const homeData = await getHomeData(url,fetchOptions);
+  const {data:homeData} = await serverCachedFetch({
+    url,
+    requestHeaders: fetchOptions,
+    revalidate: 3600,
+  }) as {data:HomePageData};
   const t = await getTranslations();
   return (
     <div className="space-y-12">
@@ -42,11 +51,7 @@ export default async function HomePage() {
           ))}
         />
       )}
-      <FadeIn
-        direction="up"
-        delay={0.1}
-        className="mx-auto w-full sm:w-[90%]"
-      >
+      <FadeIn direction="up" delay={0.1} className="mx-auto w-full sm:w-[90%]">
         <ReservationForm />
       </FadeIn>
       {homeData?.web_content_link && (

@@ -1,5 +1,6 @@
 // lib/axios.ts
 import axios from 'axios';
+import { getLocale } from 'next-intl/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 const axiosInstance = axios.create({
@@ -22,10 +23,11 @@ axiosInstance.interceptors.request.use(
 
 
         const serverCookies = await cookies();
+        const contextlocale = await getLocale();
 
         const locale = serverCookies.get('NEXT_LOCALE')?.value || 'en';
 
-        config.headers['Accept-Language'] = locale;
+        config.headers['Accept-Language'] = contextlocale || locale;
 
         return config;
     },

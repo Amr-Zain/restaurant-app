@@ -1,10 +1,23 @@
 import HeroSection from "@/components/general/HeroSection";
 import ProductCard from "@/components/menu/ProductCard";
 import { getTranslations } from "next-intl/server";
-import { getOffers } from "@/services/ApiHandler";
+import { getSettingsData, serverCachedFetch } from "@/services/ApiHandler";
 import PaginationControls from "@/components/general/Pagenation";
 import { FadeIn } from "@/components/animations";
+import { Metadata } from "next";
+import { customFetch } from "@/helper/fetchServerOptions";
 
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const websiteSetting = (await getSettingsData()).website_setting;
+    const t = await getTranslations();
+    return {
+      title: `${t('TEXT.offers')} - ${websiteSetting.website_title}`,
+    };
+  } catch {
+    return {};
+  }
+}
 export default async function HomePage({
   searchParams,
 }: {
@@ -13,9 +26,18 @@ export default async function HomePage({
   }>;
 }) {
   const t = await getTranslations();
-  const offers = await getOffers();
   const params = await searchParams;
-
+  //const offers = await getOffers(params);
+  const { url, fetchOptions: ProductOptions } = await customFetch(
+      "offers",
+      { method: "GET" },
+      params as Record<string, string>,
+    );
+  const offers = await serverCachedFetch({
+        url,
+        requestHeaders: ProductOptions,
+        revalidate: 3600,
+      },) as { data: Product[]; meta: Meta; links: Links }
   return (
     <div>
       <HeroSection

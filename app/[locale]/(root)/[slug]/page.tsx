@@ -5,7 +5,7 @@ import HeroSection from "@/components/general/HeroSection";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { customFetch } from "@/helper/fetchServerOptions";
-// import { Metadata } from "next";
+import { Metadata } from "next";
 
 // interface CmsPageForPaths {
 //   slug: string;
@@ -48,41 +48,41 @@ interface ApiResponse {
 //   }
 // }
 
-// export async function generateMetadata({
-//   params,
-// }: {
-//   params: Promise<{ slug: string }>;
-// }): Promise<Metadata> {
-//   const { slug } = await params;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
   
-//   try {
-//     const { url, fetchOptions } = await customFetch("cms-pages/" + slug, {
-//       method: "GET",
-//     });
+  try {
+    const { url, fetchOptions } = await customFetch("cms-pages/" + slug, {
+      method: "GET",
+    });
     
-//     const { data: page }: ApiResponse = await serverCachedFetch({
-//       url,
-//       requestHeaders: fetchOptions,
-//       revalidate: 3600,
-//     });
+    const { data: page }: ApiResponse = await serverCachedFetch({
+      url,
+      requestHeaders: fetchOptions,
+      revalidate: 3600,
+    });
 
-//     return {
-//       title: page?.title || slug,
-//       description: page?.desc || `${slug} page`,
-//       openGraph: {
-//         title: page?.title || slug,
-//         description: page?.desc || `${slug} page`,
-//         images: page?.image ? [page.image] : undefined,
-//       },
-//     };
-//   } catch (error) {
-//     console.error(`Error generating metadata for slug: ${slug}`, error);
-//     return {
-//       title: slug,
-//       description: `${slug} page`,
-//     };
-//   }
-// }
+    return {
+      title: page?.title || slug,
+      description: page?.desc || `${slug} page`,
+      openGraph: {
+        title: page?.title || slug,
+        description: page?.desc || `${slug} page`,
+        images: page?.image ? [page.image] : undefined,
+      },
+    };
+  } catch (error) {
+    console.error(`Error generating metadata for slug: ${slug}`, error);
+    return {
+      title: slug,
+      description: `${slug} page`,
+    };
+  }
+}
 
 export default async function CMSPage({
   params,

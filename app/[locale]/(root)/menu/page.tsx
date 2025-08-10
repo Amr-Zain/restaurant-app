@@ -2,7 +2,6 @@ import HeroSection from "@/components/general/HeroSection";
 import MenuCard from "@/components/menu/ProductCard";
 import { getTranslations } from "next-intl/server";
 import {
-  getSettingsData,
   serverCachedFetch,
 } from "@/services/ApiHandler";
 import FiltersLayout from "@/components/menu/FiltersLayout";
@@ -12,15 +11,10 @@ import { Metadata } from "next";
 import { customFetch } from "@/helper/fetchServerOptions";
 
 export async function generateMetadata(): Promise<Metadata> {
-  try {
-    const websiteSetting = (await getSettingsData()).website_setting;
     const t = await getTranslations();
     return {
-      title: `${t("NAV.menu")} - ${websiteSetting.website_title}`,
+      title: t("NAV.menu"),
     };
-  } catch {
-    return {};
-  }
 }
 export default async function HomePage({
   searchParams,

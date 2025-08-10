@@ -13,7 +13,10 @@ import Theme from "@/components/general/Theme";
 export async function generateMetadata(): Promise<Metadata> {
   const websiteSetting = (await getSettingsData()).website_setting;
   return {
-    title: websiteSetting.website_title,
+    title: {
+    template: `%s | ${websiteSetting.website_title}`,
+    default: websiteSetting.website_title,
+  },
     description: websiteSetting.footer_desc,
     icons: {
       icon: websiteSetting.website_fav_icon,

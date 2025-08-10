@@ -2,32 +2,17 @@ import CheckOutForm from "@/components/checkout/CheckOutForm";
 import {
   getCartServer,
   //getSettingsData,
-  serverCachedFetch,
 } from "@/services/ApiHandler";
 import { getTranslations } from "next-intl/server";
 import Cart from "@/components/cart";
 
 import { FadeIn } from "@/components/animations";
 import { Metadata } from "next";
-import { customFetch } from "@/helper/fetchServerOptions";
 export async function generateMetadata(): Promise<Metadata> {
   try {
-    const { url: settingUrl, fetchOptions } = await customFetch(
-      "/web_settings",
-      {
-        method: "GET",
-      },
-    );
-    const title = (
-      await serverCachedFetch({
-        url: settingUrl,
-        requestHeaders: fetchOptions,
-        revalidate: 3600,
-      })
-    ).data.website_setting.website_title;
     const t = await getTranslations();
     return {
-      title: `${t("checkout.title")} - ${title}`,
+      title: t("checkout.title"),
     };
   } catch {
     return {};

@@ -3,21 +3,15 @@ import HeroSection from "@/components/general/HeroSection";
 import StatusTabs from "@/components/menu/StatusTabs";
 import OrdersList from "@/components/orders/OrdersList";
 import { OrdersLoading } from "@/components/skelton/SkeltonCards";
-import { getSettingsData } from "@/services/ApiHandler";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
-  try {
-    const websiteSetting = (await getSettingsData()).website_setting;
-    const t = await getTranslations();
-    return {
-      title: `${t('NAV.orders')} - ${websiteSetting.website_title}`,
-    };
-  } catch {
-    return {};
-  }
+  const t = await getTranslations();
+  return {
+    title: t("NAV.orders"),
+  };
 }
 export default async function OrdersPage({
   searchParams,

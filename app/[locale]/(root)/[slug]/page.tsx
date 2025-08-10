@@ -1,8 +1,6 @@
 import NotFound from "@/components/NotFound";
 import {
-  //getCmsPage,
   getCmsPages,
-  //getSettingsData,
   serverCachedFetch,
 } from "@/services/ApiHandler";
 import GeneralSection from "@/components/general/GeneralSection";
@@ -19,7 +17,6 @@ interface CmsPageForPaths {
 export async function generateStaticParams(): Promise<CmsPageForPaths[]> {
   try {
     const cmsPages: CmsPageForPaths[] = await getCmsPages();
-    console.log(cmsPages)
     return cmsPages.map((post) => ({
       slug: post.slug,
     }));
@@ -43,19 +40,9 @@ export async function generateMetadata({
       requestHeaders: fetchOptions,
       revalidate: 3600,
     });
-    console.log(page)
-    const { url: settingUrl } = await customFetch("/web_settings", {
-      method: "GET",
-    });
-    const title = (
-      await serverCachedFetch({
-        url: settingUrl,
-        requestHeaders: fetchOptions,
-        revalidate: 3600,
-      })
-    ).data.website_setting.website_title;
+
     return {
-      title: `${page.title} - ${title}`,
+      title: page.title || slug,
       description: page.desc,
       openGraph: {
         images: page.image,

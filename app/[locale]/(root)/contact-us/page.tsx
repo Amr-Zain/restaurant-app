@@ -8,50 +8,28 @@ import { Metadata } from "next";
 import { customFetch } from "@/helper/fetchServerOptions";
 
 export async function generateMetadata(): Promise<Metadata> {
-  try {
-     const { url: settingUrl, fetchOptions } = await customFetch(
-          "/web_settings",
-          {
-            method: "GET",
-          },
-        );
-        const title = (
-          await serverCachedFetch({
-            url: settingUrl,
-            requestHeaders: fetchOptions,
-            revalidate: 3600,
-          })
-        ).data.website_setting.website_title;
-    const t = await getTranslations();
-    return {
-      title: `${t('NAV.contact')} - ${title}`,
-    };
-  } catch {
-    return {};
-  }
+  const t = await getTranslations();
+  return {
+    title: t("NAV.contact"),
+  };
 }
 export default async function AboutPage() {
   const t = await getTranslations();
-  const { url, fetchOptions } = await customFetch(
-      "/stores",
-      {
-        method: "GET",
-      },
-    );
-    const branches = (
-      await serverCachedFetch({
-        url,
-        requestHeaders: fetchOptions,
-        revalidate: 3600,
-      }) as Branch[]
-    );
-    console.log(branches)
+  const { url, fetchOptions } = await customFetch("/stores", {
+    method: "GET",
+  });
+  const branches = (await serverCachedFetch({
+    url,
+    requestHeaders: fetchOptions,
+    revalidate: 3600,
+  })) as Branch[];
+  console.log(branches);
   //const branches = await getBranchs();
-  
+
   const locations = branches.map((branch) => ({
     id: branch.id,
     name: branch.name,
-    address:branch.name,
+    address: branch.name,
     position: { lat: branch.lat, lng: branch.lng! },
   }));
   return (
@@ -61,7 +39,7 @@ export default async function AboutPage() {
         home={t("NAV.home")}
         section={t("NAV.contact")}
         href="/about"
-        dir={t('lang')}
+        dir={t("lang")}
       />
       <div className="p-sec mx-auto space-y-12">
         <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">

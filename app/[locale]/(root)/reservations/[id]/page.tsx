@@ -1,20 +1,15 @@
 import ReservationOrderInfo from "@/components/reservation/ReservationOrderInfo";
-import { getReservations, getSettingsData } from "@/services/ApiHandler";
+import { getReservations } from "@/services/ApiHandler";
 import { Calendar, Clock, CreditCard, MapPin, Phone } from "lucide-react";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
-  try {
-    const websiteSetting = (await getSettingsData()).website_setting;
-    const t = await getTranslations();
-    return {
-      title: `${t('NAV.Reservation')} - ${websiteSetting.website_title}`,
-    };
-  } catch {
-    return {};
-  }
+  const t = await getTranslations();
+  return {
+    title: t("NAV.Reservation"),
+  };
 }
 export default async function ReservationPage({
   params,
@@ -22,7 +17,7 @@ export default async function ReservationPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const t = await getTranslations('reservations');
+  const t = await getTranslations("reservations");
   let data = null;
   try {
     data = await getReservations(id);
@@ -77,7 +72,7 @@ export default async function ReservationPage({
   ];
 
   return (
-    <div className="container sec-p my-10 grid grid-cols-1 gap-6 md:grid-cols-[1fr_380px]">
+    <div className="sec-p container my-10 grid grid-cols-1 gap-6 md:grid-cols-[1fr_380px]">
       <ReservationOrderInfo
         address={address}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -91,8 +86,8 @@ export default async function ReservationPage({
           </h3>
         </div>
         <div className="mb-4 grow-1 p-4">
-          <h3 className="font-semibold text-xl">{t("bookingSummary")}</h3>
-          <div className="flex justify-between font-semibold text-lg p-4 border rounded-3xl gap-2">
+          <h3 className="text-xl font-semibold">{t("bookingSummary")}</h3>
+          <div className="flex justify-between gap-2 rounded-3xl border p-4 text-lg font-semibold">
             <div>{t("confirmationAmount")}</div>
             <div>
               {data.total_amount} {data.currency}

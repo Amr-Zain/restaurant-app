@@ -1,23 +1,18 @@
 import ProfileForm from "@/components/profile/ProfileForm";
-import { getProfile, getSettingsData } from "@/services/ApiHandler";
+import { getProfile } from "@/services/ApiHandler";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
-  try {
-    const websiteSetting = (await getSettingsData()).website_setting;
-    const t = await getTranslations();
-    return {
-      title: `${t('profile.title')} - ${websiteSetting.website_title}`,
-    };
-  } catch {
-    return {};
-  }
+  const t = await getTranslations();
+  return {
+    title: t("profile.title"),
+  };
 }
+
 async function Profile() {
   const profileData = await getProfile();
   return (
- 
     <div className="container">
       <ProfileForm
         defaultValues={{
@@ -28,7 +23,7 @@ async function Profile() {
           address: profileData.default_address?.title,
           avatar: profileData.avatar,
         }}
-        />
+      />
     </div>
   );
 }

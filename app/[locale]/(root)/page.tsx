@@ -20,21 +20,25 @@ export default async function HomePage() {
     method: "GET",
   });
   //const homeData = await getHomeData(url,fetchOptions);
-  const {data:homeData} = await serverCachedFetch({
+  const { data: homeData } = (await serverCachedFetch({
     url,
     requestHeaders: fetchOptions,
     revalidate: 3600,
-  }) as {data:HomePageData};
+  })) as { data: HomePageData };
   const t = await getTranslations();
   return (
     <div className="space-y-12">
       <HomeSlider slides={homeData?.sliders} />
-      {homeData?.products && (
+      {homeData?.offers && (
         <SliderSection
-          title={t("TEXT.viewMenu")}
-          to="/menu"
-          items={homeData.products.map((product, index) => (
-            <MenuCard key={product.id + ` ${index}`} product={product} />
+          title={t("TEXT.offers")}
+          to="/offers"
+          items={homeData.offers.map((product, index) => (
+            <MenuCard
+              isOffer
+              key={product.id + ` ${index}`}
+              product={product}
+            />
           ))}
         />
       )}
@@ -77,19 +81,16 @@ export default async function HomePage() {
         </GeneralSection>
       )}
       <ImagesSection />
-      {homeData?.offers && (
+      {homeData?.products && (
         <SliderSection
-          title={t("TEXT.offers")}
-          to="/offers"
-          items={homeData.offers.map((product, index) => (
-            <MenuCard
-              isOffer
-              key={product.id + ` ${index}`}
-              product={product}
-            />
+          title={t("TEXT.viewMenu")}
+          to="/menu"
+          items={homeData.products.map((product, index) => (
+            <MenuCard key={product.id + ` ${index}`} product={product} />
           ))}
         />
       )}
+
       {homeData?.subscription_content && (
         <GeneralSection item={homeData.subscription_content}>
           <div className="relative">

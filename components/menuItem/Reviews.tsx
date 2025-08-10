@@ -5,7 +5,7 @@ import ReviewStars from "./ReviewStars";
 import { getProductReviews } from "@/services/ApiHandler";
 import { getTranslations } from "next-intl/server";
 
-import { FadeIn } from "@/components/animations"; 
+import { FadeIn } from "@/components/animations";
 
 async function ItemReviews({ itemId }: { itemId: number }) {
   const t = await getTranslations();
@@ -27,11 +27,18 @@ async function ItemReviews({ itemId }: { itemId: number }) {
   return (
     <div>
       <FadeIn direction="up" delay={0.1} duration={0.8}>
-        <h2 className="text-text mb-6 text-3xl md:text-5xl font-bold">{t('labels.customerReview')}</h2>
+        <h2 className="text-text mb-6 text-3xl font-bold md:text-5xl">
+          {t("labels.customerReview")}
+        </h2>
       </FadeIn>
 
       <div className="border-primary/20 container flex flex-col gap-6 rounded-xl border-1 p-6 md:flex-row">
-        <FadeIn direction="left" delay={0.2} duration={0.7} className="mb-8 flex shrink-0 basis-80 flex-col items-center gap-8">
+        <FadeIn
+          direction="left"
+          delay={0.2}
+          duration={0.7}
+          className="mb-8 flex shrink-0 basis-80 flex-col items-center gap-8"
+        >
           <div className="flex flex-shrink-0 flex-col items-center">
             <span className="text-5xl font-extrabold text-gray-900">
               {productRating.toFixed(1)}
@@ -52,12 +59,18 @@ async function ItemReviews({ itemId }: { itemId: number }) {
               ))}
             </div>
             <span className="text-gray-600">
-              ({t('TEXT.reviews', { count: productTotalReviews })})
+              ({t("TEXT.reviews", { count: productTotalReviews })})
             </span>
           </div>
           <div className="w-full shrink-0">
             {ratingBreakdown.map((breakdown, index) => (
-              <FadeIn key={breakdown.rating} direction="left" delay={0.3 + index * 0.1} duration={0.6} className="mb-2 flex items-center gap-2">
+              <FadeIn
+                key={breakdown.rating}
+                direction="left"
+                delay={0.3 + index * 0.1}
+                duration={0.6}
+                className="mb-2 flex items-center gap-2"
+              >
                 <span className="text-text flex w-8 gap-1 text-right font-medium">
                   {breakdown.rating}{" "}
                   <Star
@@ -78,42 +91,54 @@ async function ItemReviews({ itemId }: { itemId: number }) {
           </div>
         </FadeIn>
 
-        <FadeIn direction="right" delay={0.4} duration={0.7} className="grow-1 space-y-6 overflow-y-auto pe-2">
-          {customerReviews.map((review, index) => (
-            <FadeIn key={review.id} direction="right" delay={0.5 + index * 0.1} duration={0.6} className="w-full border-t border-gray-100">
-              <div className="mb-2 flex w-full items-center justify-between">
-                <div className="flex w-full items-start justify-between">
-                  <div className="flex gap-2">
-                    {review.user.avatar ? (
-                      <Image
-                        src={review.user.avatar}
-                        alt={review.user.full_name}
-                        width={40}
-                        height={40}
-                        className="size-12 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex size-10 items-center justify-center rounded-full bg-gray-200 font-semibold text-gray-600">
-                        {review.user.full_name.charAt(0)}
+        <FadeIn
+          direction="right"
+          delay={0.4}
+          duration={0.7}
+          className="grow-1 space-y-6 overflow-y-auto pe-2"
+        >
+          {customerReviews.map(
+            (review, index) =>
+              review.user && (
+                <FadeIn
+                  key={review.id}
+                  direction="right"
+                  delay={0.5 + index * 0.1}
+                  duration={0.6}
+                  className="w-full border-t border-gray-100"
+                >
+                  <div className="mb-2 flex w-full items-center justify-between">
+                    <div className="flex w-full items-start justify-between">
+                      <div className="flex gap-2">
+                        {review.user?.avatar ? (
+                          <Image
+                            src={review.user.avatar}
+                            alt={review.user.full_name}
+                            width={40}
+                            height={40}
+                            className="size-12 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex size-10 items-center justify-center rounded-full bg-gray-200 font-semibold text-gray-600">
+                            {review.user.full_name.charAt(0)}
+                          </div>
+                        )}
+                        <div>
+                          <h4 className="font-semibold text-gray-900">
+                            {review.user.full_name}
+                          </h4>
+                          <ReviewStars productRating={review.rate} />
+                        </div>
                       </div>
-                    )}
-                    <div>
-                      <h4 className="font-semibold text-gray-900">
-                        {review.user.full_name}
-                      </h4>
-                      <ReviewStars productRating={review.rate} />
+                      <span className="text-sm text-gray-500">
+                        {review.created_at}
+                      </span>
                     </div>
                   </div>
-                  <span className="text-sm text-gray-500">
-                    {review.created_at}
-                  </span>
-                </div>
-              </div>
-              <p className="text-sub line-clamp-2">
-                {review.review}
-              </p>
-            </FadeIn>
-          ))}
+                  <p className="text-sub line-clamp-2">{review.review}</p>
+                </FadeIn>
+              ),
+          )}
         </FadeIn>
       </div>
     </div>

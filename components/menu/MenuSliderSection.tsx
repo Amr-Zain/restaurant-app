@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -20,9 +20,9 @@ function SliderSection({
   to: string;
   items: React.ReactNode[];
 }) {
-  const [api, setApi] = useState<CarouselApi>();
+  const [, setApi] = useState<CarouselApi>();
   const t = useTranslations();
-
+/* 
   useEffect(() => {
     if (!api) {
       return;
@@ -35,7 +35,7 @@ function SliderSection({
     return () => {
       clearInterval(interval);
     };
-  }, [api]);
+  }, [api]); */
 
   if (!items.length) return null;
 

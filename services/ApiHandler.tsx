@@ -235,7 +235,7 @@ export const serverCachedFetch = async ({
   tags,
 }: {
   url: string;
-  requestHeaders: RequestInit;
+  requestHeaders?: RequestInit;
   revalidate: number;
   tags?: string[];
 }) => {

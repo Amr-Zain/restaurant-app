@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -22,33 +22,57 @@ function SliderSection({
   items: React.ReactNode[];
 }) {
   const [api, setApi] = useState<CarouselApi>();
+  const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const t = useTranslations();
 
   useEffect(() => {
-    if (!api) {
-      return;
-    }
+    if (!containerRef.current) return;
 
-    const interval = setInterval(() => {
-      api.scrollNext();
-    }, 4000);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.5, 
+      }
+    );
 
-    const handlePointerDown = () => {
-      clearInterval(interval);
-    };
-
-    api.on("pointerDown", handlePointerDown);
+    observer.observe(containerRef.current);
 
     return () => {
-      clearInterval(interval);
-      api.off("pointerDown", handlePointerDown);
+      observer.disconnect();
     };
-  }, [api]);
+  }, []);
+
+  useEffect(() => {
+    if (!api) return;
+
+    let interval: NodeJS.Timeout;
+
+    if (isVisible) {
+      interval = setInterval(() => {
+        api.scrollNext();
+      }, 4000);
+
+      const handlePointerDown = () => {
+        clearInterval(interval);
+      };
+
+      api.on("pointerDown", handlePointerDown);
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+      api.off("pointerDown", () => {});
+    };
+  }, [api, isVisible]);
+
   if (!items.length) return null;
-  const isRtl = t('lang') ==='rtl';
+  const isRtl = t('lang') === 'rtl';
   
   return (
-    <div className="p-sec">
+    <div className="p-sec" ref={containerRef}>
       <FadeIn
         direction="up"
         delay={0.1}
@@ -90,7 +114,7 @@ function SliderSection({
           opts={{
             align: "start",
             loop: true,
-            direction: isRtl?"rtl":'ltr', 
+            direction: isRtl ? "rtl" : "ltr", 
           }}
           className="w-full"
         >

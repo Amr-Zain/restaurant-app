@@ -19,7 +19,7 @@ interface CmsPageForPaths {
 export async function generateStaticParams(): Promise<CmsPageForPaths[]> {
   try {
     const cmsPages: CmsPageForPaths[] = await getCmsPages();
-
+    console.log(cmsPages)
     return cmsPages.map((post) => ({
       slug: post.slug,
     }));
@@ -35,39 +35,22 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   try {
-    //const page = (await getCmsPage("cms-pages/" + cms)).data;
-    //const title = (await getSettingsData()).website_setting.website_title;
-    let page = null;
-    try {
-      const { url } = await customFetch("cms-pages/" + slug, {
-        method: "GET",
-      });
-      //const homeData = await getHomeData(url,fetchOptions);
-      const { data } = await serverCachedFetch({
-        url,
-        //requestHeaders: fetchOptions,
-        revalidate: 3600,
-      });
-      page = data;
-    } catch (error: unknown) {
-      console.error("Error fetching CMS page:", error);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      if (error?.status && error.status === 404) {
-        console.error(`CMS page not found (404) for slug: ${slug}`);
-        notFound();
-      } else {
-        console.error(`An unexpected error occurred for slug: ${slug}`, error);
-      }
-      page = null;
-    }
-
+    const { url, fetchOptions } = await customFetch("cms-pages/" + slug, {
+      method: "GET",
+    });
+    const { data: page } = await serverCachedFetch({
+      url,
+      requestHeaders: fetchOptions,
+      revalidate: 3600,
+    });
+    console.log(page)
     const { url: settingUrl } = await customFetch("/web_settings", {
       method: "GET",
     });
     const title = (
       await serverCachedFetch({
         url: settingUrl,
+        requestHeaders: fetchOptions,
         revalidate: 3600,
       })
     ).data.website_setting.website_title;
@@ -91,13 +74,12 @@ export default async function CMSPage({
   let pageData = null;
   const t = await getTranslations();
   try {
-    const { url } = await customFetch("cms-pages/" + cms, {
+    const { url, fetchOptions } = await customFetch("cms-pages/" + cms, {
       method: "GET",
     });
-    //const homeData = await getHomeData(url,fetchOptions);
     const { data } = (await serverCachedFetch({
       url,
-      //requestHeaders: fetchOptions,
+      requestHeaders: fetchOptions,
       revalidate: 3600,
     })) as { data: CmsPageContent };
     pageData = data;
@@ -120,9 +102,9 @@ export default async function CMSPage({
   return (
     <>
       <HeroSection
-        title={pageData.title}
+        title={pageData.title || cms}
         home={t("NAV.home")}
-        section={pageData.title}
+        section={pageData.title || cms}
         href={pageData.slug}
         dir={t("lang")}
       />

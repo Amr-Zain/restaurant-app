@@ -59,7 +59,7 @@ const GeneralSection = async ({
                 width={560}
                 height={700}
                 src={item.image}
-                alt={item.title}
+                alt={item.title||'Section Image'}
                 className="mx-auto h-[700px] max-h-full w-[560px] max-w-full rounded-t-[300px] rounded-b-[300px] object-cover"
               />
             </FadeIn>

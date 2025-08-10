@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -11,6 +11,7 @@ import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "../Icons";
 import { FadeIn, ScaleIn } from "../animations";
+
 function SliderSection({
   title,
   to,
@@ -20,9 +21,9 @@ function SliderSection({
   to: string;
   items: React.ReactNode[];
 }) {
-  const [, setApi] = useState<CarouselApi>();
+  const [api, setApi] = useState<CarouselApi>();
   const t = useTranslations();
-/* 
+
   useEffect(() => {
     if (!api) {
       return;
@@ -30,15 +31,22 @@ function SliderSection({
 
     const interval = setInterval(() => {
       api.scrollNext();
-    }, 3000);
+    }, 4000);
+
+    const handlePointerDown = () => {
+      clearInterval(interval);
+    };
+
+    api.on("pointerDown", handlePointerDown);
 
     return () => {
       clearInterval(interval);
+      api.off("pointerDown", handlePointerDown);
     };
-  }, [api]); */
-
+  }, [api]);
   if (!items.length) return null;
-
+  const isRtl = t('lang') ==='rtl';
+  
   return (
     <div className="p-sec">
       <FadeIn
@@ -82,6 +90,7 @@ function SliderSection({
           opts={{
             align: "start",
             loop: true,
+            direction: isRtl?"rtl":'ltr', 
           }}
           className="w-full"
         >
@@ -89,12 +98,12 @@ function SliderSection({
             {items.map((item, index) => (
               <CarouselItem
                 key={index}
-                className="basis-4/5 pl-1 sm:basis-1/2 md:basis-1/3 lg:basis-1/3 xl:basis-1/5 2xl:basis-1/6"
+                className="basis-4/5 ps-1 sm:basis-1/2 md:basis-1/3 xl:basis-1/4 2xl:basis-1/5" 
               >
                 <ScaleIn
                   initialScale={0.8}
                   duration={0.5}
-                  delay={0.4 + index * 0.1} 
+                  delay={0.2 + index * 0.1} 
                   className="pb-10"
                 >
                   {item}
@@ -102,8 +111,6 @@ function SliderSection({
               </CarouselItem>
             ))}
           </CarouselContent>
-          {/*  <CarouselPrevious className="hidden sm:flex -left-4 h-10 w-10" />
-          <CarouselNext className="hidden sm:flex -right-4 h-10 w-10" /> */}
         </Carousel>
       </FadeIn>
     </div>

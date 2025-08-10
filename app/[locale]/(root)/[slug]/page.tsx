@@ -1,81 +1,88 @@
 import NotFound from "@/components/NotFound";
-import { getCmsPages, serverCachedFetch } from "@/services/ApiHandler";
+import { serverCachedFetch } from "@/services/ApiHandler";
 import GeneralSection from "@/components/general/GeneralSection";
 import HeroSection from "@/components/general/HeroSection";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Metadata } from "next";
 import { customFetch } from "@/helper/fetchServerOptions";
+// import { Metadata } from "next";
 
-interface CmsPageForPaths {
-  slug: string;
-}
+// interface CmsPageForPaths {
+//   slug: string;
+// }
 
 interface ApiResponse {
   data: CmsPageContent;
 }
 
-export async function generateStaticParams(): Promise<CmsPageForPaths[]> {
-  try {
-    const cmsPages: CmsPageForPaths[] = await getCmsPages();
+// export async function generateStaticParams(): Promise<CmsPageForPaths[]> {
+//   try {
+//      const { url, fetchOptions } = await customFetch("cms-pages/", {
+//       method: "GET",
+//     });
+//     const cmsPages: CmsPageForPaths[] =  await serverCachedFetch({
+//       url,
+//       requestHeaders: fetchOptions,
+//       revalidate: 3600,
+//     });
     
-    if (!cmsPages || cmsPages.length === 0) {
-      console.warn("No CMS pages found, using fallback pages");
-      return [
-        { slug: "privacy-policy" },
-        { slug: "terms-and-conditions" },
-        { slug: "about-us" },
-      ];
-    }
+//     if (!cmsPages || cmsPages.length === 0) {
+//       console.warn("No CMS pages found, using fallback pages");
+//       return [
+//         { slug: "privacy-policy" },
+//         { slug: "terms-and-conditions" },
+//         { slug: "about-us" },
+//       ];
+//     }
     
-    return cmsPages.map((page) => ({
-      slug: page.slug,
-    }));
-  } catch (error) {
-    console.error("Error generating static params for CMS pages:", error);
-    return [
-      { slug: "privacy-policy" },
-      { slug: "terms-and-conditions" },
-      { slug: "about-us" },
-    ];
-  }
-}
+//     return cmsPages.map((page) => ({
+//       slug: page.slug,
+//     }));
+//   } catch (error) {
+//     console.error("Error generating static params for CMS pages:", error);
+//     return [
+//       { slug: "privacy-policy" },
+//       { slug: "terms-and-conditions" },
+//       { slug: "about-us" },
+//     ];
+//   }
+// }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: Promise<{ slug: string }>;
+// }): Promise<Metadata> {
+//   const { slug } = await params;
   
-  try {
-    const { url, fetchOptions } = await customFetch("cms-pages/" + slug, {
-      method: "GET",
-    });
+//   try {
+//     const { url, fetchOptions } = await customFetch("cms-pages/" + slug, {
+//       method: "GET",
+//     });
     
-    const { data: page }: ApiResponse = await serverCachedFetch({
-      url,
-      requestHeaders: fetchOptions,
-      revalidate: 3600,
-    });
+//     const { data: page }: ApiResponse = await serverCachedFetch({
+//       url,
+//       requestHeaders: fetchOptions,
+//       revalidate: 3600,
+//     });
 
-    return {
-      title: page?.title || slug,
-      description: page?.desc || `${slug} page`,
-      openGraph: {
-        title: page?.title || slug,
-        description: page?.desc || `${slug} page`,
-        images: page?.image ? [page.image] : undefined,
-      },
-    };
-  } catch (error) {
-    console.error(`Error generating metadata for slug: ${slug}`, error);
-    return {
-      title: slug,
-      description: `${slug} page`,
-    };
-  }
-}
+//     return {
+//       title: page?.title || slug,
+//       description: page?.desc || `${slug} page`,
+//       openGraph: {
+//         title: page?.title || slug,
+//         description: page?.desc || `${slug} page`,
+//         images: page?.image ? [page.image] : undefined,
+//       },
+//     };
+//   } catch (error) {
+//     console.error(`Error generating metadata for slug: ${slug}`, error);
+//     return {
+//       title: slug,
+//       description: `${slug} page`,
+//     };
+//   }
+// }
 
 export default async function CMSPage({
   params,

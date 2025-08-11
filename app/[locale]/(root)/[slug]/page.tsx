@@ -14,7 +14,8 @@ interface CmsPageForPaths {
 interface ApiResponse {
   data: CmsPageContent;
 }
-
+export const dynamic = 'force-static'
+/* 
 export async function generateStaticParams(): Promise<CmsPageForPaths[]> {
   try {
     const { url, fetchOptions } = await customFetch("cms-pages/", {
@@ -47,7 +48,7 @@ export async function generateStaticParams(): Promise<CmsPageForPaths[]> {
       { slug: "about-us" },
     ];
   }
-}
+} */
 
 export async function generateMetadata({
   params,
@@ -55,7 +56,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-
+  
   try {
     const { url, fetchOptions } = await customFetch("cms-pages/" + slug, {
       method: "GET",
@@ -98,8 +99,6 @@ export default async function CMSPage({
     const { url, fetchOptions } = await customFetch("cms-pages/" + slug, {
       method: "GET",
     });
-
-    console.log("Fetching CMS page:", { slug, url });
 
     const response: ApiResponse = await serverCachedFetch({
       url,
